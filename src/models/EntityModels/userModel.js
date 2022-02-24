@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const statusEnum = require('../../common/enum').getStatusEnum();
 const Schema = mongoose.Schema;
 const fuzzySearching = require('mongoose-fuzzy-searching');
+const userEnum = require('../../common/enum').getUserEnum();
 
 
 const userSchema = new Schema({
@@ -9,19 +10,22 @@ const userSchema = new Schema({
     lastName: { type: String, required: true, uppercase: true },
     email: { type: String, required: true, match: /.+\@.+\..+/, unique: true, lowercase: true },
     password: { type: String, required: true, },
-    profilePicture: { type: String, default: "" },
-    userTypeId: { type: String, required: true},
-    callingCodeId: { type: String, required: true},
-    phoneNo: { type: String, required:true, unique: true},
+    uploadUrl: { type: String, default: "" },
+    uploadId: { type: String, default: "" },
+    userTypeId: { type: String, required: true, default: userEnum.user.value },
+    // callingCodeId: { type: String, required: true },
+    // phoneNo: { type: String, required: true, unique: true },
+    companyRole: { type: String, required: true, unique: true },
+    dateOfBirth: { type: Date, default: "" },
     genderType: { type: Number, default: 0 },
     status: { type: Number, default: statusEnum.inactive.value },
-    token: {type: String,  default: ""},
-    createdAt: { type: Date, default: Date.now},
-    updatedAt: { type: Date, default: Date.now}
+    token: { type: String, default: "" },
+    createdAt: { type: Date, default: Date.now },
+    updatedAt: { type: Date, default: Date.now }
 });
 
 userSchema.plugin(fuzzySearching, { fields: ['firstName', 'lastName', 'username'] })
-const User = mongoose.model('Users', userSchema);
+const User = mongoose.models.Users || mongoose.model('Users', userSchema);
 
 add = async (data) => {
     const user = new User(data);
@@ -30,7 +34,7 @@ add = async (data) => {
 };
 
 update = async (query, data) => {
-    return User.findOneAndUpdate(query, data, {new:true});;
+    return User.findOneAndUpdate(query, data, { new: true });;
 };
 
 find = async (query) => {
@@ -41,11 +45,11 @@ getOne = async (query) => {
 
 };
 
-getActiveUsers = async (perPage, page) => {
+getActiveUsers = async (page, pageSize) => {
     return User.find({ status: statusEnum.active.value }, { _id: 0, __v: 0, password: 0 })
         .sort({ _id: -1 })
         .skip(page)
-        .limit(perPage);
+        .limit(pageSize);
 };
 
 

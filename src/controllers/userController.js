@@ -1,16 +1,22 @@
-const { NullReferenceException, AlreadyExistsException, NotFoundException } = require('../../errors/AppError');
+const { NullReferenceException, AlreadyExistsException, NotFoundException, CustomException } = require('../../errors/AppError');
 const UserModel = require('../models/EntityModels/userModel');
 const SuccessResponse = require('../models/viewModels/responseModel');
 const { status } = require('../common/status');
 const { getGenderEnums } = require('../common/enum');
 const otpService = require('../services/OtpService');
 const emailService = require('../services/EmailService');
-const otpViewModel = require('../models/viewModels/otpViewModel');
 const crypto = require('crypto');
 const AuthController = require('../controllers/authController');
+const { constants } = require('../common/constants');
+const clodinaryService = require('../services/CloudinaryService');
 
 addUser = async (req, res) => {
     try {
+        let val = req.body.email.split("@");
+        val = val[1].toLowerCase();
+        if (val != constants.EMAIL_CHECK) {
+            throw new CustomException("Please use the correct email")
+        }
         if ((req.body.password !== req.body.confirmPassword) || (req.body.email == null)) {
             throw new NullReferenceException("please pass valid passwords");
         }
@@ -46,14 +52,17 @@ addUser = async (req, res) => {
         }
         const otpData = await otpService.signUpOtp(otp);
 
-        otpViewModel.email = user.email;
-        otpViewModel.otpCode = otpData.code;
-        otpViewModel.name = otp.name;
+        const otpViewModel = {
+            email: user.email,
+            otpCode: otpData.code,
+            name: otp.name
+        }
         await emailService.SendRegistrationOtpEmail(otpViewModel);
 
         //phone no otp
 
-        await emailService.SendSuccessfulSignupEmail();
+
+        await emailService.SendSuccessfulSignupEmail(otpViewModel);
         const response = new SuccessResponse(user, 'user created');
         res.status(status.SUCCESS).json({ message: response });
     } catch (err) {
@@ -75,6 +84,41 @@ getUser = async (req, res) => {
 }
 
 
+updateUser = async (req, res) => {
+    try {
+        let user = UserModel.getOne({ id: req.body.id });
+        if (user == null) {
+            throw new NullReferenceException("User not found");
+        }
+        if (req.file != undefined) {
+            const uploadedImage = await clodinaryService.uploadProfileImage(req.file.path);
+            req.body.uploadUrl = uploadedImage.url;
+            req.body.uploadId = uploadedImage.public_id;
+        } else {
+            req.body.uploadUrl = "";
+            req.body.uploadId = "";
+        }
+
+        user = await UserModel.update({ _id: req.body.id }, req.body);
+
+        const response = new SuccessResponse(user, 'updated user details');
+        res.status(status.SUCCESS).json({ message: response });
+    } catch (error) {
+        res.status(status.ERROR).json({ message: error.message });
+    }
+};
+
+getUsers = async (req, res) => {
+    try {
+        let kycs = await UserModel.getActiveUsers({}, req.params.page, req.params.pageSize);
+        let response = new SuccessResponse(kycs, "All Users");
+        res.status(status.SUCCESS).json({ messge: response });
+    } catch (error) {
+        res.status(status.ERROR).json({ message: error.message });
+    }
+};
+
+
 testEmail = async (req, res) => {
     await emailService.Test();
     res.status(200).json({ message: 'yes' });
@@ -88,6 +132,8 @@ hasher = (req) => {
 
 module.exports = {
     addUser,
+    updateUser,
+    getUsers,
     testEmail,
     hasher
 }

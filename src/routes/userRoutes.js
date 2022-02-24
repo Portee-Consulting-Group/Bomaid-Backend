@@ -1,5 +1,6 @@
 const UserController = require('../controllers/userController');
 const AuthValidationMiddleware = require('../middleware/authValidationMiddleware');
+const upload = require('../common/multer');
 
 /**
  * @swagger
@@ -15,17 +16,17 @@ const AuthValidationMiddleware = require('../middleware/authValidationMiddleware
  *     example: doe
  *    email:
  *     type: string
- *     example: john@gmail.com
- *    callingCodeId:
- *     type: string
- *    phoneNo:
- *     type: string
- *     example: 1323242
+ *     example: john@bomaid.co.bw
  *    genderType:
  *     type: number
  *     example: 1
- *    userTypeId:
+ *    dateOfBirth:
+ *     type: date
+ *     pattern: /([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/
+ *     example: "2022-05-17"
+ *    companyRole:
  *     type: string
+ *     example: Head of product
  *    password:
  *     type: string
  *     example: 12345   
@@ -47,7 +48,7 @@ const AuthValidationMiddleware = require('../middleware/authValidationMiddleware
  *    
  */
 
-exports.routesConfig = function(app){
+exports.routesConfig = function (app) {
     /**
     * @swagger
     * /user/signup/local:
@@ -72,6 +73,78 @@ exports.routesConfig = function(app){
     ]);
 
     /**
+     * @swagger
+     * /user/update:
+     *  patch:
+     *   summary: update user
+     *   tags:
+     *     - user
+     *   requestBody:
+     *    content:
+     *     multipart/form-data:
+     *      schema: 
+     *       type: object
+     *       properties:
+     *        id:
+     *         type: string
+     *        firstName:
+     *         type: string
+     *        lastName:
+     *         type: string
+     *        companyRole:
+     *         type: string
+     *        profileImage:
+     *         type: string
+     *         format: binary 
+     *  
+     *   security:
+     *     - bearerAuth: []
+     *   responses:
+     *      200:
+     *       description: successful response
+     *      400:
+     *       description: request failed
+     *   
+     */
+    app.patch('/user/update', upload.single('profileImage'), [
+        // AuthValidationMiddleware.validJWTNeeded,
+        UserController.updateUser
+    ]);
+
+
+    /**
+     * @swagger
+     * /user/getAll/{page}/{pageSize}:
+     *  get:
+     *   summary: get all users
+     *   tags:  
+     *     - user
+     *   parameters:
+     *    - in: path
+     *      name: page
+     *      schema:
+     *       type: number
+     *       example: 0
+     *      required: true
+     *    - in: path
+     *      name: pageSize
+     *      schema:
+     *       type: number
+     *       example: 10
+     *      required: true
+     *   responses:
+     *      200:
+     *       description: successful response
+     *      400:
+     *       description: request failed
+     *    
+     */
+    app.get('/user/getAll/:page/:pageSize', [
+        UserController.getUsers
+    ]);
+
+
+    /**
     * @swagger
     * /user/email:
     *  post:
@@ -87,4 +160,6 @@ exports.routesConfig = function(app){
     app.post('/user/email', [
         UserController.testEmail
     ]);
+
+
 }

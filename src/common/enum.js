@@ -1,5 +1,5 @@
 const Enum = require('enum');
-const userTypeEnums = new Enum({ 'salesPerson': 1, 'owner': 2, 'admin': 3 }, { ignoreCase: true });
+const userTypeEnums = new Enum({ 'user': 1, 'owner': 2, 'admin': 3 }, { ignoreCase: true });
 const statusEnums = new Enum({ 'active': 1, 'inactive': 2 });
 const otpEnums = new Enum({ 'registration': 1, 'resetPassword': 2, 'kyc': 3 });
 const paymentMethodEnums = new Enum({ 'cash': 1, 'tab': 2, 'card': 3 });

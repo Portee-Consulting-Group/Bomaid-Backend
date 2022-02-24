@@ -6,18 +6,18 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_SECRET
 });
 
-const uploadkycImage = async (image) => {
+const uploadUserGoalImage = async (image) => {
     try {
-        let result = await cloudinary.uploader.upload(image, { folder: 'kyc_images' });
+        let result = await cloudinary.uploader.upload(image, { folder: 'bomaid_user_goal_images' });
         return result;
-    } catch (err) {
+    } catch (error) {
         throw err;
     }
-};
+}
 
-const uploadProductImage = async (image) => {
+const uploadGoalTypeImage = async (image) => {
     try {
-        let result = await cloudinary.uploader.upload(image, { folder: 'product_images' });
+        let result = await cloudinary.uploader.upload(image, { folder: 'bomaid_goal_type_images' });
         return result;
     } catch (error) {
         throw err;
@@ -25,7 +25,9 @@ const uploadProductImage = async (image) => {
 }
 
 
+
+
 module.exports = {
-    uploadkycImage,
-    uploadProductImage
+    uploadUserGoalImage,
+    uploadGoalTypeImage
 };

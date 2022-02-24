@@ -115,10 +115,14 @@ app.get('/email', (req, res) => {
 const AuthRouter = require('./src/routes/authRoutes');
 const UserRouter = require('./src/routes/userRoutes');
 const OtpRouter = require('./src/routes/otpRoutes');
+const GoalTypeRouter =require('./src/routes/goalTypeRoutes');
+const UserGoalRouter = require('./src/routes/userGoalRoutes');
 
 UserRouter.routesConfig(app);
 AuthRouter.routesConfig(app);
 OtpRouter.routesConfig(app);
+GoalTypeRouter.routesConfig(app);
+UserGoalRouter.routesConfig(app);
 
 //Cron jobs
 invalidOtpCronJob;
