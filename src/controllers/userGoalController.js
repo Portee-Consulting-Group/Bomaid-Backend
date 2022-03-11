@@ -26,8 +26,7 @@ addGoal = async (req, res) => {
             req.body.uploadUrl = uploadedImage.url;
             req.body.uploadId = uploadedImage.public_id;
         } else {
-            req.body.uploadUrl = "";
-            req.body.uploadId = "";
+            throw new NullReferenceException("Image is required");
         }
         goal = await UserGoalModel.add(req.body);
         let response = new SuccessResponse(goal, "goal added");
@@ -48,8 +47,8 @@ updateGoal = async (req, res) => {
             req.body.uploadUrl = uploadedImage.url;
             req.body.uploadId = uploadedImage.public_id;
         } else {
-            req.body.uploadUrl = "";
-            req.body.uploadId = "";
+            // req.body.uploadUrl = "";
+            // req.body.uploadId = "";
         }
         goal = await UserGoalModel.update({ _id: req.body.goalId }, req.body);
         let response = new SuccessResponse(goal, "goal updated");
