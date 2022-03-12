@@ -1,7 +1,7 @@
 const { NullReferenceException } = require('../../errors/AppError');
 const { status } = require('../common/status');
 const UserGoalModel = require('../models/EntityModels/userGoalModel');
-const UserModel = require('../models/EntityModels/UserModel');
+const UserModel = require('../models/EntityModels/userModel');
 const GoalTypeModel = require('../models/EntityModels/goalTypeModel');
 const SuccessResponse = require('../models/viewModels/responseModel');
 const clodinaryService = require('../services/CloudinaryService');
