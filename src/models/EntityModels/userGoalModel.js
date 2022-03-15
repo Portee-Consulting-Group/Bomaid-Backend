@@ -5,7 +5,8 @@ const statusEnum = require('../../common/enum').getStatusEnum();
 const userGoalSchema = new Schema({
     name: { type: String, required: true },
     description: { type: String, required: true },
-    userId: { type: String, required: true },
+    userId: { type: String, required: true },    
+    goalTypeId: { type: String, required: true },
     status: { type: Number, default: statusEnum.active.value },
     reminderTimes: [{ type: String }],
     uploadUrl: { type: String, default: "" },
