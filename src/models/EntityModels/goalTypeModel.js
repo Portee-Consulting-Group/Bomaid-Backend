@@ -5,7 +5,6 @@ const statusEnum = require('../../common/enum').getStatusEnum();
 const goalTypeSchema = new Schema({
     name: { type: String, required: true },
     description: { type: String, required: true },
-    goalTypeId: { type: String, required: true },
     uploadUrl: { type: String, default: "" },
     uploadId: { type: String, default: "" },
     value: { type: String, required: true, unique: true },
