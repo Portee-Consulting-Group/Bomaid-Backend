@@ -76,7 +76,7 @@ updateGoalValue = async (req, res) => {
 
 getGoals = async (req, res) => {
     try {
-        var goals = await UserGoalModel.getGoals({}, req.page, req.pageSize);
+        var goals = await UserGoalModel.getGoals({}, req.params.page, req.params.pageSize);
         let response = new SuccessResponse(goals, "user goals")
         res.status(status.SUCCESS).json(response);
     } catch (err) {

@@ -5,7 +5,7 @@ const statusEnum = require('../../common/enum').getStatusEnum();
 
 
 const circleMemberSchema = new Schema({
-    title: { type: String, required: true },
+    circleId: { type: String, required: true },
     description: { type: String, required: true },
     status: { type: Number, required: true, default: statusEnum.active.value },
     type: { type: Number, required: true },
@@ -21,7 +21,7 @@ insert = (circleMemberData) => {
     return circleMember;
 };
 
-findCode = async (query) => {
+findMember = async (query) => {
     const value = await CircleMember.findOne(query);
     if (value == null) {
         return null;
@@ -40,7 +40,7 @@ update = async (query, circleMemberData) => {
 
 module.exports = {
     insert,
-    findCode,
+    findMember,
     update,
     getAllMembers
 }
