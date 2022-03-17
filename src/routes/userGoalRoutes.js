@@ -51,7 +51,16 @@ const AuthValidationMiddleware = require('../middleware/authValidationMiddleware
  *    userGoalImage:
  *     type: string
  *     format: binary  
- *    
+ * 
+ *  updateGoalValue: 
+ *   type: object
+ *   properties:
+ *    goalId:
+ *     type: string
+ *     example: 7939729 
+ *    goalValue:
+ *     type: number
+ *     example: 10
  */
 
 
@@ -102,8 +111,33 @@ exports.routesConfig = function (app) {
      *      400:
      *       description: request failed
      */
-    app.patch('/userGoal/update', upload.single('userGoalImage'), [
+     app.patch('/userGoal/update', upload.single('userGoalImage'), [
         UserGoalController.updateGoal
+    ]);
+
+    /**
+     * @swagger
+     * /userGoal/updateGoalValue:
+     *  patch:
+     *   summary: update goal value
+     *   tags: 
+     *    - userGoal
+     *   requestBody: 
+     *    required: true
+     *    content:
+     *     application/json:
+     *      schema:
+     *        $ref: '#/definitions/updateGoalValue'
+     *   security:
+     *     - bearerAuth: []
+     *   responses:
+     *      200:
+     *       description: successful response
+     *      400:
+     *       description: request failed
+     */
+     app.patch('/userGoal/updateGoalValue',  [
+        UserGoalController.updateGoalValue
     ]);
 
 

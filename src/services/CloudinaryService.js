@@ -23,11 +23,20 @@ const uploadGoalTypeImage = async (image) => {
         throw err;
     }
 }
+const uploadProfileImage = async (image) => {
+    try {
+        let result = await cloudinary.uploader.upload(image, { folder: 'bomaid_profile_images' });
+        return result;
+    } catch (error) {
+        throw err;
+    }
+}
 
 
 
 
 module.exports = {
     uploadUserGoalImage,
-    uploadGoalTypeImage
+    uploadGoalTypeImage,
+    uploadProfileImage
 };

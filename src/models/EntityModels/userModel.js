@@ -15,7 +15,7 @@ const userSchema = new Schema({
     userTypeId: { type: String, required: true, default: userEnum.user.value },
     // callingCodeId: { type: String, required: true },
     // phoneNo: { type: String, required: true, unique: true },
-    companyRole: { type: String, required: true, unique: true },
+    companyRole: { type: String, required: true},
     dateOfBirth: { type: Date, default: "" },
     genderType: { type: Number, default: 0 },
     status: { type: Number, default: statusEnum.inactive.value },

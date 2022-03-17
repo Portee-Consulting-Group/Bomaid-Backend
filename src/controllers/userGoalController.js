@@ -9,8 +9,8 @@ const clodinaryService = require('../services/CloudinaryService');
 
 addGoal = async (req, res) => {
     try {
-        let type = await GoalTypeModel.find({_id: req.body.goalTypeId});
-        if(type == null){
+        let type = await GoalTypeModel.find({ _id: req.body.goalTypeId });
+        if (type == null) {
             throw new NullReferenceException("Type not found");
         }
         let user = await UserModel.find({ _id: req.body.userId });
@@ -58,6 +58,22 @@ updateGoal = async (req, res) => {
     }
 }
 
+updateGoalValue = async (req, res) => {
+    try {
+        let goal = await UserGoalModel.find({ _id: req.body.goalId });
+        if (goal == null) {
+            throw new NullReferenceException("Goal not found");
+        }
+        req.body.goalValue += goal.goalValue;
+        goal = await UserGoalModel.update({ _id: req.body.goalId }, req.body);
+        let response = new SuccessResponse(goal, "goal updated");
+        res.status(status.SUCCESS).json(response);
+    } catch (err) {
+
+        res.status(status.ERROR).json({ error: err.message });
+    }
+}
+
 getGoals = async (req, res) => {
     try {
         var goals = await UserGoalModel.getGoals({}, req.page, req.pageSize);
@@ -71,5 +87,6 @@ getGoals = async (req, res) => {
 module.exports = {
     addGoal,
     updateGoal,
-    getGoals
+    getGoals,
+    updateGoalValue
 }
