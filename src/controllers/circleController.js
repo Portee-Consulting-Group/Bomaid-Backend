@@ -1,7 +1,6 @@
 const { NullReferenceException, AlreadyExistsException } = require('../../errors/AppError');
 const { status } = require('../common/status');
 const CircleModel = require('../models/EntityModels/circleModel');
-const CircleMemberModel = require('../models/EntityModels/circleMemberModel');
 const UserModel = require('../models/EntityModels/userModel');
 const SuccessResponse = require('../models/viewModels/responseModel');
 const clodinaryService = require('../services/CloudinaryService');

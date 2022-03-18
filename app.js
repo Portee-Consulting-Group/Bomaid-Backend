@@ -118,6 +118,7 @@ const OtpRouter = require('./src/routes/otpRoutes');
 const GoalTypeRouter =require('./src/routes/goalTypeRoutes');
 const UserGoalRouter = require('./src/routes/userGoalRoutes');
 const CircleRouter = require('./src/routes/circleRoutes');
+const FitRouter = require('./src/routes/fitRoutes');
 
 UserRouter.routesConfig(app);
 AuthRouter.routesConfig(app);
@@ -125,6 +126,7 @@ OtpRouter.routesConfig(app);
 GoalTypeRouter.routesConfig(app);
 UserGoalRouter.routesConfig(app);
 CircleRouter.routesConfig(app);
+FitRouter.routesConfig(app);
 //Cron jobs
 invalidOtpCronJob;
 

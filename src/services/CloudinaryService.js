@@ -40,6 +40,15 @@ const uploadCircleImage = async (image) => {
     }
 }
 
+const uploadFitImage = async (image) => {
+    try {
+        let result = await cloudinary.uploader.upload(image, { folder: 'bomaid_fit_images' });
+        return result;
+    } catch (error) {
+        throw err;
+    }
+}
+
 
 
 
@@ -47,5 +56,6 @@ module.exports = {
     uploadUserGoalImage,
     uploadGoalTypeImage,
     uploadProfileImage,
-    uploadCircleImage
+    uploadCircleImage,
+    uploadFitImage
 };
