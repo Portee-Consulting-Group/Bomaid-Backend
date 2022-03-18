@@ -16,15 +16,25 @@ addCircle = async (req, res) => {
         if (user == null) {
             throw new NullReferenceException("User not found");
         }
-        let members = req.body.members.split(",")
+        if (req.body.members != '') {
 
-        for (const member of members) {
-            let user = await UserModel.find({ _id: member });
-            if (user == null) {
-                throw new NullReferenceException(`user with id ${member} not found`);
+            let members = req.body.members.split(",")
+
+            for (const member of members) {
+                if (member == '') {
+                    continue;
+                }
+                let user = await UserModel.find({ _id: member });
+                if (user == null) {
+                    throw new NullReferenceException(`user with id ${member} not found`);
+                }
             }
+            members.push(req.body.adminId);
+            req.body.members = members;
+        }else{
+            req.body.members = [req.body.adminId];
         }
-        req.body.members = members;
+
 
         if (req.file != undefined) {
             const uploadedImage = await clodinaryService.uploadUserGoalImage(req.file.path);
@@ -45,7 +55,34 @@ addCircle = async (req, res) => {
 
 addMember = async (req, res) => {
     try {
+        let circle = await CircleModel.findCircle({ _id: req.body.circleId });
+        if (circle == null) {
+            throw new NullReferenceException("Circle not found");
+        }
+        let members = req.body.members;
 
+        for (const member of members) {
+            let user = await UserModel.find({ _id: member });
+            if (user == null) {
+                throw new NullReferenceException(`user with id ${member} not found`);
+            }
+        }
+
+        for (const member of circle.members) {
+            let value = await members.includes(member);
+            if (value == true) {
+                throw new AlreadyExistsException(`Member with id ${member} already added`);
+            }
+        }
+        let newVal = circle.members.push(...req.body.members);
+        circle.members;
+
+        circle = await CircleModel.update({ _id: req.body.circleId },
+            {
+                members: circle.members
+            });
+        let response = new SuccessResponse(circle, "circle updated");
+        res.status(status.SUCCESS).json(response);
     } catch (err) {
         res.status(status.ERROR).json({ error: err.message });
     }
