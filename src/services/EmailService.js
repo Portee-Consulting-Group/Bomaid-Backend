@@ -1,5 +1,6 @@
 const nodemailer = require('nodemailer');
 const { google } = require('googleapis');
+const sgMail = require('@sendgrid/mail');
 
 async function setUpTransporter() {
 
@@ -108,21 +109,18 @@ async function SendOtpPasswordResetEmail(otpObject) {
 
 
 async function Test() {
-    const transporter = await setUpTransporter();
-    const mailOptions = {
-        from: 'Bomaid',
-        to: 'somatic20@gmail.com',
-        subject: 'Successful sign up',
-        text: 'Welcome to bomaid dude'
-    };
-    transporter.sendMail(mailOptions, function (err, info) {
-        if (err) {
-            console.log(err);
-        } else {
-            console.log('Email sent: ' + info.response);
-        }
-    });
-    // transporter.close();
+    try {
+        const msg = {
+            to: 'somatic20@gmail.com',
+            from: 'somatic20@yahoo.com',
+            subject: 'Successful sign up',
+            text: 'Welcome to bomaid dude'
+        };
+        sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+        await sgMail.send(msg);
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 module.exports = {

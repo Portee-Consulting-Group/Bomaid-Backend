@@ -26,7 +26,6 @@ const AuthValidationMiddleware = require('../middleware/authValidationMiddleware
  *     type: array
  *     items:
  *       type: string
- *     example: ["12:00", "14:00"]
  *    endDate:
  *     type: date
  *     pattern: /([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/

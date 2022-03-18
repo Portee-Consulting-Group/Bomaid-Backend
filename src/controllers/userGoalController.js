@@ -17,7 +17,7 @@ addGoal = async (req, res) => {
         if (user == null) {
             throw new NullReferenceException("User not found");
         }
-        if (req.body.reminderTimes != '') {
+        if (typeof req.body.reminderTimes === 'string') {
             let reminders = req.body.reminderTimes.split(",");
             req.body.reminderTimes = reminders;
         }

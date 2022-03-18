@@ -17,7 +17,7 @@ addCircle = async (req, res) => {
         }
         if (req.body.members != '') {
 
-            let members = req.body.members.split(",")
+            let members = req.body.members
 
             for (const member of members) {
                 if (member == '') {
