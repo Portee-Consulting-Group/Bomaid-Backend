@@ -7,40 +7,45 @@ const statusEnum = require('../../common/enum').getStatusEnum();
 const challengeSchema = new Schema({
     title: { type: String, required: true },
     description: { type: String, required: true },
+    goalTypeId: { type: String, required: true },
+    challengeTarget: { type: Number, required: true },
     status: { type: Number, required: true, default: statusEnum.active.value },
-    targetValue: { type: Number, default: 0 },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now }
 });
 
-const Circle = mongoose.model('Challenges', challengeSchema);
+const Challenge = mongoose.model('Challenges', challengeSchema);
 
-insert = (circleData) => {
-    const circle = new Circle(circleData);
-    circle.save();
-    return circle;
+insert = (data) => {
+    const challenge = new Challenge(data);
+    challenge.save();
+    return challenge;
 };
 
-findCode = async (query) => {
-    const circleValue = await Circle.findOne(query);
-    if (circleValue == null) {
+findChallenge = async (query) => {
+    const value = await Challenge.findOne(query);
+    if (value == null) {
         return null;
     }
-    return circleValue;
+    return value;
 };
 
-getAllCodes = async (query) => {
-    const circles = await Circle.find(query);
-    return circles;
-}
-
-update = async (query, circleData) => {
-    return Circle.findOneAndUpdate(query, circleData, { new: true });
+getAllChallenges = async (query, page, pageSize) => {
+    return Challenge.find(query)
+        .sort({ _id: -1 })
+        .skip(page)
+        .limit(pageSize);
 };
+
+update = async (query, data) => {
+    return Challenge.findOneAndUpdate(query, data, { new: true });
+};
+
+
 
 module.exports = {
     insert,
-    findCode,
+    findChallenge,
     update,
-    getAllCodes
-}
+    getAllChallenges
+};

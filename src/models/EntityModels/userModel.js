@@ -38,7 +38,7 @@ update = async (query, data) => {
 };
 
 find = async (query) => {
-    return User.findOne(query, {password: 0});
+    return User.findOne(query);
 };
 
 

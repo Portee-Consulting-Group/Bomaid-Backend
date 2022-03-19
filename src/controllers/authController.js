@@ -9,6 +9,7 @@ local_login = async (req, res) => {
     try {
         const tokenObject = await generateJwtToken(req.body.email);
         const user = await UserModel.update({ email: req.body.email }, { token: tokenObject })
+        user.password = undefined;
         let response = new SuccessResponse(user, "Successful login");
         res.status(status.SUCCESS).json({ message: response });
     } catch (error) {

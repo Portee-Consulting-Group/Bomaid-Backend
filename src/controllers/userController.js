@@ -76,6 +76,7 @@ getUser = async (req, res) => {
         if (user == null) {
             throw new NotFoundException("User not found");
         }
+        user.password = undefined;
         const response = new SuccessResponse(user, 'user details');
         res.status(status.SUCCESS).json({ message: response });
     } catch (error) {
