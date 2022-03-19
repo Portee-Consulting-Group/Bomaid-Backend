@@ -99,18 +99,19 @@ updateMemberData = async (req, res) => {
             throw new CustomException("Results cannot be empty");
         }
         for (const item of challengeResults) {
-            if (item.userId == '' || item.value == '') {
-                throw new CustomException("pass accurate data");
-            }
             if (!circle.members.includes(item.userId)) {
                 throw new NullReferenceException("User must belong to this circle");
             }
-            if (circleChallenge.includes(item.userId)) {
-                let user = circleChallenge.find(item.userId);
-                let index = circleChallenge.indexOf(item.userId);
+        }
+        for (const item of challengeResults) {
+            if (item.userId == '' || item.value == '') {
+                throw new CustomException("pass accurate data");
+            }
+            if (circleChallenge.results.some(e => e.userId === item.userId)) {
+                let user = circleChallenge.results.find(e => e.userId == item.userId);
+                let index = circleChallenge.results.indexOf(e => e.userId == item.userId)+1;
                 user.value += item.value;
                 circleChallenge.results[index].value = user.value
-
             } else {
                 circleChallenge.results.push(item);
             }

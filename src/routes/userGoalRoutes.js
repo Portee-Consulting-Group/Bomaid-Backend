@@ -29,7 +29,7 @@ const AuthValidationMiddleware = require('../middleware/authValidationMiddleware
  *    endDate:
  *     type: date
  *     pattern: /([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/
- *     example: "2022-05-17"
+ *     example: 2022-05-17
  *    userGoalImage:
  *     type: string
  *     format: binary  

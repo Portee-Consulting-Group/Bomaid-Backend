@@ -55,15 +55,12 @@ const AuthValidationMiddleware = require('../middleware/authValidationMiddleware
  *  addCircleChallenge:
  *   type: object
  *   properties:
- *    results:
- *     type: array
- *     items: object
  *    endTime:
  *     type: string
  *     example: 22:00
  *    endDate:
  *     type: date
- *     example: lets see how fast you run
+ *     example: 2022-05-17
  *    challengeId:
  *     type: string
  *     example: 6292982
@@ -74,9 +71,30 @@ const AuthValidationMiddleware = require('../middleware/authValidationMiddleware
  *     required: true
  * 
  * 
+ *  updateMemberData:
+ *   type: object
+ *   properties:
+ *    circleChallengeId:
+ *     type: string
+ *     example: 6292982
+ *     required: true
+ *    results:
+ *     type: array
+ *     items:
+ *       type: object
+ *       properties:
+ *        userId:
+ *         type: string
+ *         example: 133
+ *         required: true
+ *        value:
+ *         type: string
+ *         example: 133
+ *         required: true
+ *     example:
+ *      - userId: "232332"
+ *        value: 12
  */
-
-
  exports.routesConfig = function (app) {
     /**
      * @swagger
@@ -166,13 +184,13 @@ const AuthValidationMiddleware = require('../middleware/authValidationMiddleware
      * @swagger
      * /circlechallenge/add:
      *  post:
-     *   summary: add challenge
+     *   summary: add circle challenge
      *   tags: 
      *    - challenge
      *   requestBody:
      *    required: true
      *    content:
-     *     multipart/form-data:
+     *     application/json:
      *      schema:
      *        $ref: '#/definitions/addCircleChallenge'
      *   security:
@@ -191,7 +209,7 @@ const AuthValidationMiddleware = require('../middleware/authValidationMiddleware
 
     /**
      * @swagger
-     * /circlechallenge/udateMember:
+     * /circlechallenge/updateMember:
      *  patch:
      *   summary: update circle challenge
      *   tags: 
@@ -199,9 +217,9 @@ const AuthValidationMiddleware = require('../middleware/authValidationMiddleware
      *   requestBody:
      *    required: true
      *    content:
-     *     multipart/form-data:
+     *     application/json:
      *      schema:
-     *        $ref: '#/definitions/updateChallenge'
+     *        $ref: '#/definitions/updateMemberData'
      *   security:
      *     - bearerAuth: []
      *   responses:
@@ -210,7 +228,7 @@ const AuthValidationMiddleware = require('../middleware/authValidationMiddleware
      *      400:
      *       description: request failed
      */
-    app.patch('/circlechallenge/udateMember', [
+    app.patch('/circlechallenge/updateMember', [
        ChallengeController.updateMemberData
     ]);
 
