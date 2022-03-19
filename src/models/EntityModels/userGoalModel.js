@@ -33,9 +33,6 @@ find = async (query) => {
     return UserGoal.findOne(query);
 };
 
-getOne = async (query) => {
-};
-
 getGoals = async (query, page, pageSize) => {
     return UserGoal.find(query)
         .sort({ _id: -1 })
@@ -51,7 +48,6 @@ module.exports = {
     add,
     update,
     find,
-    getOne,
     getGoals,
     getActiveTypes
 }

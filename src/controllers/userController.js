@@ -87,7 +87,7 @@ getUser = async (req, res) => {
 
 updateUser = async (req, res) => {
     try {
-        let user = UserModel.getOne({ id: req.body.id });
+        let user = UserModel.find({ id: req.body.id });
         if (user == null) {
             throw new NullReferenceException("User not found");
         }
