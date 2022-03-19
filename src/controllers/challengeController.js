@@ -109,7 +109,7 @@ updateMemberData = async (req, res) => {
             }
             if (circleChallenge.results.some(e => e.userId === item.userId)) {
                 let user = circleChallenge.results.find(e => e.userId == item.userId);
-                let index = circleChallenge.results.indexOf(e => e.userId == item.userId)+1;
+                let index = circleChallenge.results.findIndex(e => e.userId == item.userId);
                 user.value += item.value;
                 circleChallenge.results[index].value = user.value
             } else {
