@@ -8,7 +8,7 @@ const circleChallengeSchema = new Schema({
     results: { type: Array },
     challengeId: { type: String, required: true },
     circleId: { type: String, required: true },
-    endTime: { type: Number },
+    endTime: { type: String },
     endDate: { type: Date },
     status: { type: Number, required: true, default: statusEnum.active.value },
     createdAt: { type: Date, default: Date.now },

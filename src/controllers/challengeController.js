@@ -90,18 +90,35 @@ updateMemberData = async (req, res) => {
         if (circleChallenge == null) {
             throw new NullReferenceException("Circle challenge not found");
         }
-        if (req.body.results.length < 1) {
+        let circle = await CircleModel.findCircle({ _id: circleChallenge.circleId });
+        if (circle == null) {
+            throw new NullReferenceException("Circle not found");
+        }
+        let challengeResults = req.body.results;
+        if (challengeResults.length < 1) {
             throw new CustomException("Results cannot be empty");
         }
-        // for (const iterator of req.body.results) {
-        //     if () {
+        for (const item of challengeResults) {
+            if (item.userId == '' || item.value == '') {
+                throw new CustomException("pass accurate data");
+            }
+            if (!circle.members.includes(item.userId)) {
+                throw new NullReferenceException("User must belong to this circle");
+            }
+            if (circleChallenge.includes(item.userId)) {
+                let user = circleChallenge.find(item.userId);
+                let index = circleChallenge.indexOf(item.userId);
+                user.value += item.value;
+                circleChallenge.results[index].value = user.value
 
-        //     }
-        // }
+            } else {
+                circleChallenge.results.push(item);
+            }
+        }
 
         let data = await CircleChallengeModel.update({ _id: req.body.circleChallengeId },
             {
-
+                results: circleChallenge.results
             });
 
         let response = new SuccessResponse(data, "data")
@@ -124,5 +141,8 @@ getCircleChallenges = async (req, res) => {
 module.exports = {
     addChallenge,
     updateChallenges,
-    getChallenges
+    getChallenges,
+    addCircleChallenge,
+    updateMemberData,
+    getCircleChallenges
 }
