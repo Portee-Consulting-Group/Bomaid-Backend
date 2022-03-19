@@ -111,6 +111,32 @@ exports.routesConfig = function (app) {
         UserController.updateUser
     ]);
 
+    /**
+     * @swagger
+     * /user/getUser/{email}:
+     *  get:
+     *   summary: get user details
+     *   tags:  
+     *     - user
+     *   parameters:
+     *    - in: path
+     *      name: email
+     *      schema:
+     *       type: string
+     *       example: user@bomaid.co.bw
+     *      required: true
+     *   responses:
+     *      200:
+     *       description: successful response
+     *      400:
+     *       description: request failed
+     *    
+     * 
+     */
+    app.get('/user/getUser/:email', [
+        UserController.getUser
+    ]);
+
 
     /**
      * @swagger

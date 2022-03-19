@@ -72,7 +72,7 @@ addUser = async (req, res) => {
 
 getUser = async (req, res) => {
     try {
-        let user = await UserModel.find({ email: req.body.email });
+        let user = await UserModel.find({ email: req.params.email });
         if (user == null) {
             throw new NotFoundException("User not found");
         }
@@ -133,6 +133,7 @@ hasher = (req) => {
 module.exports = {
     addUser,
     updateUser,
+    getUser,
     getUsers,
     testEmail,
     hasher

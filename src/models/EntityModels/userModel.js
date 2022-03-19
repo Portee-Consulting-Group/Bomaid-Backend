@@ -38,15 +38,12 @@ update = async (query, data) => {
 };
 
 find = async (query) => {
-    return User.findOne(query);
+    return User.findOne(query, {password: 0});
 };
 
-getOne = async (query) => {
-
-};
 
 getActiveUsers = async (page, pageSize) => {
-    return User.find({ status: statusEnum.active.value }, { _id: 0, __v: 0, password: 0 })
+    return User.find({ status: statusEnum.active.value }, { __v: 0, password: 0 })
         .sort({ _id: -1 })
         .skip(page)
         .limit(pageSize);
@@ -57,6 +54,5 @@ module.exports = {
     add,
     update,
     find,
-    getOne,
     getActiveUsers
 }
