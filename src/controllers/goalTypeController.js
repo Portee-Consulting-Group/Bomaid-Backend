@@ -11,8 +11,8 @@ addGoalType = async (req, res) => {
         if(type != null){
             throw new AlreadyExistsException("Goal type already exists");
         }
-        if (req.file != undefined) {
-            const uploadedImage = await clodinaryService.uploadGoalTypeImage(req.file.path);
+        if (req.body.goalTypeImage != undefined) {
+            const uploadedImage = await clodinaryService.uploadGoalTypeImage(req.body.goalTypeImage);
             req.body.uploadUrl = uploadedImage.url;
             req.body.uploadId = uploadedImage.public_id;
         } else {

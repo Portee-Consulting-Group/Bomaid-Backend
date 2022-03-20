@@ -19,7 +19,7 @@ const AuthValidationMiddleware = require('../middleware/authValidationMiddleware
  *     example: 1
  *    goalTypeImage:
  *     type: string
- *     format: binary  
+ *     example: 2899289  
  */
 
 
@@ -34,7 +34,7 @@ exports.routesConfig = function (app) {
      *   requestBody:
      *    required: true
      *    content:
-     *     multipart/form-data:
+     *     application/json:
      *      schema:
      *        $ref: '#/definitions/addGoalType'
      *   responses:
@@ -43,7 +43,7 @@ exports.routesConfig = function (app) {
      *      400:
      *       description: request failed
      */
-    app.post('/goalType/add', upload.single('goalTypeImage'), [
+    app.post('/goalType/add', [
         GoalTypeController.addGoalType
     ]);
 

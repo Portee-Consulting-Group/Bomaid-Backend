@@ -56,7 +56,7 @@ const swaggerOptions = {
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 app.use("/ms/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
-
+app.use(express.json({limit: '50mb'})); //increase json limit
 app.use(express.static(__dirname));
 app.use(cors());
 app.use(bodyParser.json());
