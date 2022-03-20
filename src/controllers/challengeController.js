@@ -19,8 +19,8 @@ addChallenge = async (req, res) => {
             throw new AlreadyExistsException("Challenge has been added");
         }
 
-        if (req.file != undefined) {
-            const uploadedImage = await clodinaryService.uploadChallengeImage(req.file.path);
+        if (req.body.challengeImage != undefined) {
+            const uploadedImage = await clodinaryService.uploadChallengeImage(req.body.challengeImage);
             req.body.uploadUrl = uploadedImage.url;
             req.body.uploadId = uploadedImage.public_id;
         } else {
@@ -41,8 +41,8 @@ updateChallenges = async (req, res) => {
         if (challenge == null) {
             throw new NullReferenceException("Challenge not found");
         }
-        if (req.file != undefined) {
-            const uploadedImage = await clodinaryService.uploadChallengeImage(req.file.path);
+        if (req.body.challengeImage != undefined) {
+            const uploadedImage = await clodinaryService.uploadChallengeImage(req.body.challengeImage);
             req.body.uploadUrl = uploadedImage.url;
             req.body.uploadId = uploadedImage.public_id;
         }

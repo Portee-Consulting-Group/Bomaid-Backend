@@ -32,7 +32,7 @@ const AuthValidationMiddleware = require('../middleware/authValidationMiddleware
  *     example: 2022-05-17
  *    userGoalImage:
  *     type: string
- *     format: binary  
+ *     example: data:image/jpeg;base64   
  * 
  * 
  *  updateuserGoal: 
@@ -49,7 +49,7 @@ const AuthValidationMiddleware = require('../middleware/authValidationMiddleware
  *     example: 1
  *    userGoalImage:
  *     type: string
- *     format: binary  
+ *     example: data:image/jpeg;base64   
  * 
  *  updateGoalValue: 
  *   type: object
@@ -74,7 +74,7 @@ exports.routesConfig = function (app) {
      *   requestBody:
      *    required: true
      *    content:
-     *     multipart/form-data:
+     *     application/json:
      *      schema:
      *        $ref: '#/definitions/adduserGoal'
      *   security:
@@ -85,7 +85,7 @@ exports.routesConfig = function (app) {
      *      400:
      *       description: request failed
      */
-    app.post('/userGoal/add', upload.single('userGoalImage'), [
+    app.post('/userGoal/add', [
         UserGoalController.addGoal
     ]);
 
@@ -99,7 +99,7 @@ exports.routesConfig = function (app) {
      *   requestBody:
      *    required: true
      *    content:
-     *     multipart/form-data:
+     *     application/json:
      *      schema:
      *        $ref: '#/definitions/updateuserGoal'
      *   security:
@@ -110,7 +110,7 @@ exports.routesConfig = function (app) {
      *      400:
      *       description: request failed
      */
-     app.patch('/userGoal/update', upload.single('userGoalImage'), [
+    app.patch('/userGoal/update', [
         UserGoalController.updateGoal
     ]);
 
@@ -135,7 +135,7 @@ exports.routesConfig = function (app) {
      *      400:
      *       description: request failed
      */
-     app.patch('/userGoal/updateGoalValue',  [
+    app.patch('/userGoal/updateGoalValue', [
         UserGoalController.updateGoalValue
     ]);
 
@@ -167,7 +167,7 @@ exports.routesConfig = function (app) {
      *       description: request failed
      *    
      */
-     app.get('/userGoal/getAll/:page/:pageSize',[
+    app.get('/userGoal/getAll/:page/:pageSize', [
         // AuthValidationMiddleware.validJWTNeeded,
         // AuthPermissionMiddleware.adminLevelRequired,
         UserGoalController.getGoals

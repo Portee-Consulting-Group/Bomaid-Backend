@@ -91,8 +91,8 @@ updateUser = async (req, res) => {
         if (user == null) {
             throw new NullReferenceException("User not found");
         }
-        if (req.file != undefined) {
-            const uploadedImage = await clodinaryService.uploadProfileImage(req.file.path);
+        if (req.body.profileImage != undefined) {
+            const uploadedImage = await clodinaryService.uploadProfileImage(req.body.profileImage);
             req.body.uploadUrl = uploadedImage.url;
             req.body.uploadId = uploadedImage.public_id;
         } else {

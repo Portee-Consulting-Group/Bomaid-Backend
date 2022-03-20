@@ -30,8 +30,8 @@ updateFit = async (req, res) => {
         if (fit == null) {
             throw new NullReferenceException("Fit not found");
         }
-        if (req.file != undefined) {
-            const uploadedImage = await clodinaryService.uploadFitImage(req.file.path);
+        if (req.body.fitImage != undefined) {
+            const uploadedImage = await clodinaryService.uploadFitImage(req.body.fitImage);
             req.body.uploadUrl = uploadedImage.url;
             req.body.uploadId = uploadedImage.public_id;
         } else {

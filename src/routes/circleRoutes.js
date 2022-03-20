@@ -22,7 +22,7 @@ const AuthValidationMiddleware = require('../middleware/authValidationMiddleware
  *     required: true
  *    circleImage:
  *     type: string
- *     format: binary  
+ *     example: data:image/jpeg;base64   
  *    members:
  *     type: array
  *     items:
@@ -54,7 +54,7 @@ exports.routesConfig = function (app) {
      *   requestBody:
      *    required: true
      *    content:
-     *     multipart/form-data:
+     *     application/json:
      *      schema:
      *        $ref: '#/definitions/addCircle'
      *   security:
@@ -65,7 +65,7 @@ exports.routesConfig = function (app) {
      *      400:
      *       description: request failed
      */
-    app.post('/circle/add', upload.single('circleImage'), [
+    app.post('/circle/add', [
         CircleController.addCircle
     ]);
 

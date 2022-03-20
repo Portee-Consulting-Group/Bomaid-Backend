@@ -73,7 +73,7 @@ exports.routesConfig = function (app) {
      *   requestBody:
      *    required: true
      *    content:
-     *     multipart/form-data:
+     *     application/json:
      *      schema:
      *       type: object
      *       properties:
@@ -82,7 +82,7 @@ exports.routesConfig = function (app) {
      *         example: 231232mm 
      *        fitImage:
      *         type: string
-     *         format: binary  
+     *         example: data:image/jpeg;base64    
      *       
      *   security:
      *     - bearerAuth: []
@@ -93,7 +93,7 @@ exports.routesConfig = function (app) {
      *       description: request failed
      * 
      */
-    app.patch('/fit/update', upload.single('fitImage'), [
+    app.patch('/fit/update', [
         FitController.updateFit
     ]);
 

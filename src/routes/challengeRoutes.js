@@ -18,7 +18,7 @@ const AuthValidationMiddleware = require('../middleware/authValidationMiddleware
  *     required: true
  *    challengeImage:
  *     type: string
- *     format: binary  
+ *     example: data:image/jpeg;base64  
  *     required: true
  *    goalTypeId:
  *     type: string
@@ -46,7 +46,7 @@ const AuthValidationMiddleware = require('../middleware/authValidationMiddleware
  *     required: true
  *    challengeImage:
  *     type: string
- *     format: binary  
+ *     example: data:image/jpeg;base64  
  *    challengeTarget:
  *     type: Number
  *     example: 10
@@ -106,7 +106,7 @@ const AuthValidationMiddleware = require('../middleware/authValidationMiddleware
      *   requestBody:
      *    required: true
      *    content:
-     *     multipart/form-data:
+     *     application/json:
      *      schema:
      *        $ref: '#/definitions/addChallenge'
      *   security:
@@ -117,7 +117,7 @@ const AuthValidationMiddleware = require('../middleware/authValidationMiddleware
      *      400:
      *       description: request failed
      */
-    app.post('/challenge/add', upload.single('challengeImage'), [
+    app.post('/challenge/add', [
        ChallengeController.addChallenge
     ]);
 
@@ -131,7 +131,7 @@ const AuthValidationMiddleware = require('../middleware/authValidationMiddleware
      *   requestBody:
      *    required: true
      *    content:
-     *     multipart/form-data:
+     *     application/json:
      *      schema:
      *        $ref: '#/definitions/updateChallenge'
      *   security:

@@ -19,7 +19,7 @@ const AuthValidationMiddleware = require('../middleware/authValidationMiddleware
  *     example: 1
  *    goalTypeImage:
  *     type: string
- *     example: 2899289  
+ *     example: data:image/jpeg;base64   
  */
 
 

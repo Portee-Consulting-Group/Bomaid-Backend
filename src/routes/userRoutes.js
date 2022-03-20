@@ -81,7 +81,7 @@ exports.routesConfig = function (app) {
      *     - user
      *   requestBody:
      *    content:
-     *     multipart/form-data:
+     *     application/json:
      *      schema: 
      *       type: object
      *       properties:
@@ -95,7 +95,7 @@ exports.routesConfig = function (app) {
      *         type: string
      *        profileImage:
      *         type: string
-     *         format: binary 
+     *         example: data:image/jpeg;base64  
      *  
      *   security:
      *     - bearerAuth: []
@@ -106,7 +106,7 @@ exports.routesConfig = function (app) {
      *       description: request failed
      *   
      */
-    app.patch('/user/update', upload.single('profileImage'), [
+    app.patch('/user/update', [
         // AuthValidationMiddleware.validJWTNeeded,
         UserController.updateUser
     ]);

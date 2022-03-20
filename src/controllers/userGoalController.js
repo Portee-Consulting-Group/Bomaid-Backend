@@ -21,8 +21,8 @@ addGoal = async (req, res) => {
             let reminders = req.body.reminderTimes.split(",");
             req.body.reminderTimes = reminders;
         }
-        if (req.file != undefined) {
-            const uploadedImage = await clodinaryService.uploadUserGoalImage(req.file.path);
+        if (req.body.userGoalImage != undefined) {
+            const uploadedImage = await clodinaryService.uploadUserGoalImage(req.body.userGoalImage);
             req.body.uploadUrl = uploadedImage.url;
             req.body.uploadId = uploadedImage.public_id;
         } else {
@@ -42,8 +42,8 @@ updateGoal = async (req, res) => {
         if (goal == null) {
             throw new NullReferenceException("Goal not found");
         }
-        if (req.file != undefined) {
-            const uploadedImage = await clodinaryService.uploadUserGoalImage(req.file.path);
+        if (req.body.userGoalImage != undefined) {
+            const uploadedImage = await clodinaryService.uploadUserGoalImage(req.body.userGoalImage);
             req.body.uploadUrl = uploadedImage.url;
             req.body.uploadId = uploadedImage.public_id;
         } else {
