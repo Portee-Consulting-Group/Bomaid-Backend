@@ -58,9 +58,9 @@ passwordResetOtp = async (otpViewModel) => {
 invalidateOtp = async () => {
     let otps = await OtpModel.getAllCodes({ status: statusEnums.active.value });
     if (otps.length > 0) {
-        otps.forEach(element => {
-            OtpModel.update({ _id: element.id }, { status: statusEnums.inactive.value });
-        });
+        for (const element of otps) {
+            await OtpModel.update({ _id: element.id }, { status: statusEnums.inactive.value });
+        }
     }
 };
 
