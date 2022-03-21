@@ -32,6 +32,37 @@ sendRegistrationOtpCode = async (req, res) => {
     }
 }
 
+verifyEmailConfirmationOtp = async (req, res) => {
+    try {
+        let user = await UserModel.find({ email: req.body.email });
+        if (user == null) {
+            throw new NotFoundException("User not found");
+        }
+        req.body.email = user.email;
+        req.body.type = otpEnums.registration.value;
+        let otpStatus = await verifyOtpCode(req);
+        if (otpStatus) {
+            let userQuery = { email: user.email };
+            let userData = { status: statusEnum.active.value }
+
+            let userResponse = await UserModel.update(userQuery, userData);
+            if (userResponse == null) {
+                throw new NullReferenceException("user update failed after otp");
+            }
+            const otpViewModel = {
+                email: user.email,
+                name: `${user.firstName} ${user.lastName}`
+            };
+            emailService.SendOtpConfirmationEmail(otpViewModel);
+            res.status(status.SUCCESS).json({ "success": "Otp code confirmed" });
+        } else {
+            throw new CustomException("Confirmation failed");
+        }
+    } catch (error) {
+        res.status(status.ERROR).json({ message: error.message });
+    }
+};
+
 verifyPhoneConfirmationOtp = async (req, res) => {
     try {
         let user = await UserModel.find({ phoneNo: req.body.phoneNo, callingCodeId: req.body.callingCodeId });
@@ -144,6 +175,7 @@ sendPasswordResetCode = async (req, res) => {
 module.exports = {
     sendRegistrationOtpCode,
     verifyPhoneConfirmationOtp,
+    verifyEmailConfirmationOtp,
     verifyPasswordResetOtp,
     sendPasswordResetCode
 };
