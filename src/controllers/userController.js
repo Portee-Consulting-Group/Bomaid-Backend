@@ -95,9 +95,6 @@ updateUser = async (req, res) => {
             const uploadedImage = await clodinaryService.uploadProfileImage(req.body.profileImage);
             req.body.uploadUrl = uploadedImage.url;
             req.body.uploadId = uploadedImage.public_id;
-        } else {
-            req.body.uploadUrl = "";
-            req.body.uploadId = "";
         }
 
         user = await UserModel.update({ _id: req.body.id }, req.body);
