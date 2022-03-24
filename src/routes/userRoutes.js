@@ -27,6 +27,9 @@ const upload = require('../common/multer');
  *    companyRole:
  *     type: string
  *     example: Head of product
+ *    profileImage:
+ *     type: string
+ *     example: data:image/jpeg;base64
  *    password:
  *     type: string
  *     example: 12345   

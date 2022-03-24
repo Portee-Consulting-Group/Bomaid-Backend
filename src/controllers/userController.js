@@ -25,10 +25,16 @@ addUser = async (req, res) => {
             throw new AlreadyExistsException("User with that email and phone no already exists");
         }
 
-
         const genders = getGenderEnums();
         if (genders.get(Number(req.body.genderType)) == undefined) {
             throw new NotFoundException("gender not found");
+        }
+
+
+        if (req.body.profileImage != undefined) {
+            const uploadedImage = await clodinaryService.uploadProfileImage(req.body.profileImage);
+            req.body.uploadUrl = uploadedImage.url;
+            req.body.uploadId = uploadedImage.public_id;
         }
 
         let { salt, hash } = hasher(req);
