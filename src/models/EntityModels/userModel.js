@@ -6,8 +6,8 @@ const userEnum = require('../../common/enum').getUserEnum();
 
 
 const userSchema = new Schema({
-    firstName: { type: String, required: true, uppercase: true },
-    lastName: { type: String, required: true, uppercase: true },
+    firstName: { type: String, required: true },
+    lastName: { type: String, required: true },
     email: { type: String, required: true, match: /.+\@.+\..+/, unique: true, lowercase: true },
     password: { type: String, required: true, },
     uploadUrl: { type: String, default: "" },

@@ -114,8 +114,8 @@ updateUser = async (req, res) => {
 
 getUsers = async (req, res) => {
     try {
-        let kycs = await UserModel.getActiveUsers({}, req.params.page, req.params.pageSize);
-        let response = new SuccessResponse(kycs, "All Users");
+        let users = await UserModel.getActiveUsers({}, req.params.page, req.params.pageSize);
+        let response = new SuccessResponse(users, "All Users");
         res.status(status.SUCCESS).json({ messge: response });
     } catch (error) {
         res.status(status.ERROR).json({ message: error.message });
