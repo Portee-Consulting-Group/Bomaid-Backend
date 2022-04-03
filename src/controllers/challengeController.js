@@ -75,6 +75,7 @@ addCircleChallenge = async (req, res) => {
         if (circle == null) {
             throw new NullReferenceException("circle not found");
         }
+        req.body.goalTypeId = challenge.goalTypeId;
         let data = await CircleChallengeModel.insert(req.body);
         let response = new SuccessResponse(data, "data")
         res.status(status.SUCCESS).json(response);

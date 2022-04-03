@@ -5,13 +5,18 @@ const statusEnum = require('../../common/enum').getStatusEnum();
 
 
 const fitSchema = new Schema({
-    fitValue: {type: Number, required: true},
-    calories: {type: Number, default: 0},
-    bpm: {type: Number, default: 0},
-    elavation: {type: Number, default: 0},
-    avgPace: {type: Number, default: 0},
+    fitValue: { type: Number, required: true },
+    calories: { type: Number, default: 0 },
+    bpm: { type: Number, default: 0 },
+    elavation: { type: Number, default: 0 },
+    avgPace: { type: Number, default: 0 },
     goalTypeId: { type: String, required: true },
     userId: { type: String, required: true },
+    statistic: { type: Number, default: 1, required: true },
+    startLong: { type: Number, default: 0 },
+    endLong: { type: Number, default: 0 },
+    startLat: { type: Number, default: 0 },
+    endLat: { type: Number, default: 0 },
     uploadUrl: { type: String, default: "" },
     uploadId: { type: String, default: "" },
     status: { type: Number, required: true, default: statusEnum.active.value },
@@ -35,6 +40,14 @@ findFit = async (query) => {
     return value;
 };
 
+findAll = async (query) => {
+    const value = await Fit.find(query);
+    if (value == null) {
+        return [];
+    }
+    return value;
+}
+
 getAllFits = async (query, page, pageSize) => {
     return Fit.find(query)
         .sort({ _id: -1 })
@@ -51,6 +64,7 @@ update = async (query, fitData) => {
 module.exports = {
     insert,
     findFit,
+    findAll,
     update,
     getAllFits
 };

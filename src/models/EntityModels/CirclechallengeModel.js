@@ -5,8 +5,9 @@ const statusEnum = require('../../common/enum').getStatusEnum();
 
 
 const circleChallengeSchema = new Schema({
-    results: { type: Array },
+    results: { type: Array }, //{userId: "oeuoueo", value: 12}
     challengeId: { type: String, required: true },
+    goalTypeId: { type: String, required: true },
     circleId: { type: String, required: true },
     endTime: { type: String },
     endDate: { type: Date },
@@ -31,6 +32,14 @@ findCircleChallenge = async (query) => {
     return value;
 };
 
+findAll = async (query) => {
+    const value = await CircleChallenge.find(query);
+    if (value == null) {
+        return [];
+    }
+    return value;
+}
+
 getResults = async (query, page, pageSize) => {
     return CircleChallenge.find(query)
         .sort({ _id: -1 })
@@ -45,6 +54,7 @@ update = async (query, data) => {
 module.exports = {
     insert,
     findCircleChallenge,
+    findAll,
     update,
     getResults
 };

@@ -142,12 +142,17 @@ exports.routesConfig = function (app) {
 
     /**
      * @swagger
-     * /userGoal/getAll/{page}/{pageSize}:
+     * /userGoal/getAll/{userId}/{page}/{pageSize}:
      *  get:
-     *   summary: get all types
+     *   summary: get all user goals
      *   tags:  
      *     - userGoal
      *   parameters:
+     *    - in: path
+     *      name: userId
+     *      schema:
+     *       type: string
+     *      required: true
      *    - in: path
      *      name: page
      *      schema:
@@ -167,7 +172,7 @@ exports.routesConfig = function (app) {
      *       description: request failed
      *    
      */
-    app.get('/userGoal/getAll/:page/:pageSize', [
+    app.get('/userGoal/getAll/:userId/:page/:pageSize', [
         // AuthValidationMiddleware.validJWTNeeded,
         // AuthPermissionMiddleware.adminLevelRequired,
         UserGoalController.getGoals

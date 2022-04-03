@@ -9,6 +9,7 @@ const genderEnums = new Enum({ 'male': 1, 'female': 2 });
 const kycEnums = new Enum({ 'botswanaId': 1, 'IntlPassport': 2 });
 const productTypeEnums = new Enum({ 'main': 1, 'option': 2 });
 const paymentGatewayEnums = new Enum({ 'visa': 1 });
+const statisticEnums = new Enum({ 'good': 1, 'average': 2, 'bad': 3 });
 
 exports.getPaymentMethodEnums = () => {
     return paymentMethodEnums;
@@ -48,4 +49,8 @@ exports.getKycEnums = () => {
 
 exports.getPaymentGatewayEnums = () => {
     return paymentGatewayEnums;
+}
+
+exports.getStatisticEnums = () => {
+    return statisticEnums;
 }

@@ -1,4 +1,4 @@
-const { NullReferenceException } = require('../../errors/AppError');
+const { NullReferenceException, AlreadyExistsException } = require('../../errors/AppError');
 const { status } = require('../common/status');
 const UserGoalModel = require('../models/EntityModels/userGoalModel');
 const UserModel = require('../models/EntityModels/userModel');
@@ -17,6 +17,10 @@ addGoal = async (req, res) => {
         if (user == null) {
             throw new NullReferenceException("User not found");
         }
+
+        const goalAlreadyAdded = await UserGoalModel.find({userId: req.body.userId, goalTypeId: req.body.goalTypeId});
+        if(goalAlreadyAdded != null) throw new AlreadyExistsException("Goal type already added for user");
+        
         if (typeof req.body.reminderTimes === 'string') {
             let reminders = req.body.reminderTimes.split(",");
             req.body.reminderTimes = reminders;
@@ -76,7 +80,7 @@ updateGoalValue = async (req, res) => {
 
 getGoals = async (req, res) => {
     try {
-        var goals = await UserGoalModel.getGoals({}, req.params.page, req.params.pageSize);
+        var goals = await UserGoalModel.getGoals({userId: req.params.userId}, req.params.page, req.params.pageSize);
         let response = new SuccessResponse(goals, "user goals")
         res.status(status.SUCCESS).json(response);
     } catch (err) {

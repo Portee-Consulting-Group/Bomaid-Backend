@@ -1,10 +1,12 @@
-const { NullReferenceException, AlreadyExistsException } = require('../../errors/AppError');
+const { NullReferenceException, AlreadyExistsException, CustomException } = require('../../errors/AppError');
 const { status } = require('../common/status');
 const FitModel = require('../models/EntityModels/fitModel');
 const UserModel = require('../models/EntityModels/userModel');
 const GoalTypeModel = require('../models/EntityModels/goalTypeModel');
+const UserGoalModel = require('../models/EntityModels/userGoalModel');
 const SuccessResponse = require('../models/viewModels/responseModel');
 const clodinaryService = require('../services/CloudinaryService');
+const statisticEnum = require('../common/enum').getStatisticEnums();
 
 addFit = async (req, res) => {
     try {
@@ -12,10 +14,29 @@ addFit = async (req, res) => {
         if (user == null) {
             throw new NullReferenceException("User not found");
         }
-        let goaltype = await GoalTypeModel.find({_id: req.body.goalTypeId});
-        if(goaltype == null) {
+        let goaltype = await GoalTypeModel.find({ _id: req.body.goalTypeId });
+        if (goaltype == null) {
             throw new NullReferenceException("goal type not found");
         }
+
+        const userGoal = await UserGoalModel.find({ goalTypeId: req.body.goalTypeId });
+        if (userGoal == null) {
+            req.body.statistic = statisticEnum.good.value;
+        } else {
+            const value = Math.round((req.body.fitValue / goaltype.target) * 100); //convert fit points to percentage to seee where user statistic lies
+            if (value >= 70 || value >= 100) {
+                req.body.statistic = statisticEnum.good.value;
+            } else if (value >= 30 && value < 70) {
+                req.body.statistic = statisticEnum.average.value;
+            } else if (value >= 0 && value < 30) {
+                req.body.statistic = statisticEnum.bad.value;
+            }
+            else {
+                throw new CustomException("Pass correct value");
+            }
+
+        }
+
         let fit = await FitModel.insert(req.body);
         let response = new SuccessResponse(fit, "fit added");
         res.status(status.SUCCESS).json(response);

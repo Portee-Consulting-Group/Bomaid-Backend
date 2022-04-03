@@ -24,6 +24,18 @@ const AuthValidationMiddleware = require('../middleware/authValidationMiddleware
  *    avgPace:
  *     type: number
  *     example: 3
+ *    startLong:
+ *     type: number
+ *     example: 3
+ *    endLong:
+ *     type: number
+ *     example: 3
+ *    startLat:
+ *     type: number
+ *     example: 3
+ *    endLat:
+ *     type: number
+ *     example: 3
  *    goalTypeId:
  *     type: string
  *     example: 8327299
