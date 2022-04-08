@@ -175,8 +175,43 @@ exports.routesConfig = function (app) {
      *       description: request failed
      *    
      */
-    app.get('/fit/getAllFits/:page/:pageSize', [
+     app.get('/fit/getAllFits/:page/:pageSize', [
         FitController.getAllFits
+    ]);
+    /**
+     * @swagger
+     * /fit/getAllFitsByGoalType/{goalTypeId}/{page}/{pageSize}:
+     *  get:
+     *   summary: get all fits by goal type
+     *   tags:  
+     *     - fit
+     *   parameters:
+     *    - in: path
+     *      name: goalTypeId
+     *      schema:
+     *       type: string
+     *      required: true
+     *    - in: path
+     *      name: page
+     *      schema:
+     *       type: number
+     *       example: 0
+     *      required: true
+     *    - in: path
+     *      name: pageSize
+     *      schema:
+     *       type: number
+     *       example: 10
+     *      required: true
+     *   responses:
+     *      200:
+     *       description: successful response
+     *      400:
+     *       description: request failed
+     *    
+     */
+    app.get('/fit/getAllFitsByGoalType/:goalTypeId/:page/:pageSize', [
+        FitController.getAllFitsByGoalType
     ]);
 
     /**

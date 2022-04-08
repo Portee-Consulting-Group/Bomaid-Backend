@@ -118,10 +118,21 @@ getAllFits = async (req, res) => {
     }
 };
 
+getAllFitsByGoalType = async (req, res) => {
+    try {
+        var fits = await FitModel.getAllFits({goalTypeId: req.params.goalTypeId}, req.params.page, req.params.pageSize);
+        let response = new SuccessResponse(fits, "all fits")
+        res.status(status.SUCCESS).json(response);
+    } catch (err) {
+        res.status(status.ERROR).json({ error: err.message });
+    }
+};
+
 module.exports = {
     addFit,
     updateFit,
     getFits,
     getAllFits,
+    getAllFitsByGoalType,
     getFitStatistics
 };

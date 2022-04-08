@@ -26,6 +26,8 @@ const AuthValidationMiddleware = require('../middleware/authValidationMiddleware
  *   properties: 
  *    title:
  *     type: string
+ *    adminId:
+ *     type: string
  *    userId:
  *     type: array
  *     items:

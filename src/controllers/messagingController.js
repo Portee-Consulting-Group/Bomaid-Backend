@@ -8,12 +8,19 @@ const clodinaryService = require('../services/CloudinaryService');
 
 createGroup = async (req, res) => {
     try {
+        let admin = await UserModel.find({ _id: req.body.adminId });
+        if (admin == null) {
+            throw new NullReferenceException("User not found");
+        }
+        req.body.senderId = req.body.adminId;
+
         for (let user of req.body.userId) {
             user = await UserModel.find({ _id: user });
             if (user == null) {
                 throw new NullReferenceException("User not found");
             }
         }
+        req.body.members = req.body.userId;
         req.body.type = messageEnums.group.value;
         let chatRoom = await ChatRoomModel.insert(req.body);
         let response = new SuccessResponse(chatRoom, "chat group created");
@@ -63,6 +70,17 @@ sendMessage = async (req, res) => {
         res.status(status.ERROR).json({ error: error.message });
     }
 };
+
+sendGroupMessage = async(req, res) => {
+    try {
+        let group = await ChatRoomModel.findChatRoom({_id: req.body.groupId});
+        if(group == null){
+            throw new NullReferenceException("Group not found");
+        }
+    } catch (error) {
+        res.status(status.ERROR).json({ error: error.message });
+    }
+}
 
 module.exports = {
     createGroup,

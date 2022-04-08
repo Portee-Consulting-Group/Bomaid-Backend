@@ -93,6 +93,10 @@ const io = socketIO(server, {
     }
 });
 
+module.exports = {
+    io
+};
+
 
 //handles both express and socke.io
 server.listen(process.env.PORT, function () {
