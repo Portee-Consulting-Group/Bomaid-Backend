@@ -19,6 +19,7 @@ const fitSchema = new Schema({
     endLat: { type: Number, default: 0 },
     uploadUrl: { type: String, default: "" },
     uploadId: { type: String, default: "" },
+    duration: {type: String, default: ""},
     status: { type: Number, required: true, default: statusEnum.active.value },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now }

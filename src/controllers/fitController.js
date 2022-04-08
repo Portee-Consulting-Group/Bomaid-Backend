@@ -66,6 +66,38 @@ updateFit = async (req, res) => {
     }
 };
 
+getFitStatistics = async (req, res) => {
+    try {
+        let user = await UserModel.find({ _id: req.params.userId });
+        if (user == null) {
+            throw new NullReferenceException("User not found");
+        }
+
+        const statistics = [];
+        const goalTypes = await GoalTypeModel.findAll({});
+
+        for (const goalType of goalTypes) {
+            const fit = await FitModel.findAll({ userId: req.params.userId, goalTypeId: goalType._id });
+            let sum = 0;
+
+            for (const data of fit) {
+                sum += data.fitValue;
+            }
+
+
+            let fitStat = {
+                goalTypeId: goalType._id,
+                statistic: sum
+            };
+            statistics.push(fitStat);
+        }
+        let response = new SuccessResponse(statistics, "user fit statistics")
+        res.status(status.SUCCESS).json(response);
+    } catch (err) {
+        res.status(status.ERROR).json({ error: err.message });
+    }
+}
+
 getFits = async (req, res) => {
     try {
         var fits = await FitModel.getAllFits({ userId: req.params.userId }, req.params.page, req.params.pageSize);
@@ -90,5 +122,6 @@ module.exports = {
     addFit,
     updateFit,
     getFits,
-    getAllFits
+    getAllFits,
+    getFitStatistics
 };

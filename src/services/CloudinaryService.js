@@ -10,7 +10,7 @@ const uploadUserGoalImage = async (image) => {
     try {
         let result = await cloudinary.uploader.upload(image, { folder: 'bomaid_user_goal_images' });
         return result;
-    } catch (error) {
+    } catch (err) {
         throw err;
     }
 }
@@ -19,7 +19,7 @@ const uploadGoalTypeImage = async (image) => {
     try {
         let result = await cloudinary.uploader.upload(image, { folder: 'bomaid_goal_type_images' });
         return result;
-    } catch (error) {
+    } catch (err) {
         throw err;
     }
 }
@@ -27,7 +27,7 @@ const uploadProfileImage = async (image) => {
     try {
         let result = await cloudinary.uploader.upload(image, { folder: 'bomaid_profile_images' });
         return result;
-    } catch (error) {
+    } catch (err) {
         throw err;
     }
 }
@@ -35,7 +35,7 @@ const uploadCircleImage = async (image) => {
     try {
         let result = await cloudinary.uploader.upload(image, { folder: 'bomaid_circle_images' });
         return result;
-    } catch (error) {
+    } catch (err) {
         throw err;
     }
 }
@@ -44,7 +44,7 @@ const uploadFitImage = async (image) => {
     try {
         let result = await cloudinary.uploader.upload(image, { folder: 'bomaid_fit_images' });
         return result;
-    } catch (error) {
+    } catch (err) {
         throw err;
     }
 }
@@ -53,7 +53,16 @@ const uploadChallengeImage = async (image) => {
     try {
         let result = await cloudinary.uploader.upload(image, { folder: 'bomaid_challenge_images' });
         return result;
-    } catch (error) {
+    } catch (err) {
+        throw err;
+    }
+}
+
+const uploadChatFile = async (file)=> {
+    try {
+        let result = await cloudinary.uploader.upload(file, { folder: 'bomaid_chat_file' });
+        return result;
+    } catch (err) {
         throw err;
     }
 }
@@ -67,5 +76,6 @@ module.exports = {
     uploadProfileImage,
     uploadCircleImage,
     uploadFitImage,
-    uploadChallengeImage
+    uploadChallengeImage,
+    uploadChatFile
 };

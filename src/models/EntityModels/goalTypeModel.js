@@ -33,6 +33,10 @@ find = async (query) => {
     return GoalType.findOne(query);
 };
 
+findAll = async (query) => {
+    return GoalType.find(query);
+};
+
 getActiveTypes = async (page, pageSize) => {
     return GoalType.find({ status: statusEnum.active.value })
         .sort({ _id: -1 })
@@ -44,5 +48,6 @@ module.exports = {
     add,
     update,
     find,
+    findAll,
     getActiveTypes
 }

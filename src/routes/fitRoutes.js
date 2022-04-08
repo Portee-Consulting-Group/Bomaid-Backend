@@ -36,6 +36,9 @@ const AuthValidationMiddleware = require('../middleware/authValidationMiddleware
  *    endLat:
  *     type: number
  *     example: 3
+ *    duration:
+ *     type: string
+ *     example: 3:10
  *    goalTypeId:
  *     type: string
  *     example: 8327299
@@ -174,5 +177,29 @@ exports.routesConfig = function (app) {
      */
     app.get('/fit/getAllFits/:page/:pageSize', [
         FitController.getAllFits
+    ]);
+
+    /**
+     * @swagger
+     * /fit/getFitStatistics/{userId}:
+     *  get:
+     *   summary: get fit  statistic
+     *   tags:  
+     *     - fit
+     *   parameters:
+     *    - in: path
+     *      name: userId
+     *      schema:
+     *       type: string
+     *      required: true
+     *   responses:
+     *      200:
+     *       description: successful response
+     *      400:
+     *       description: request failed
+     *    
+     */
+    app.get('/fit/getFitStatistics/:userId', [
+        FitController.getFitStatistics
     ]);
 };
