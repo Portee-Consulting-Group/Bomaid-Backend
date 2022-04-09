@@ -10,8 +10,6 @@ const chatRoomSchema = new Schema({
     receiverId: {type: String},
     members: [{ type: String }],
     type: {type: Number, required: true},
-    uploadUrl: { type: String, default: "" },
-    uploadId: { type: String, default: "" },
     status: { type: Number, required: true, default: statusEnum.active.value },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now }
@@ -33,6 +31,14 @@ findChatRoom = async (query) => {
     return value;
 };
 
+findAll = async (query) => {
+    const value = await ChatRoom.find(query);
+    if (value == null) {
+        return null;
+    }
+    return value;
+};
+
 getAllChatRooms = async (query, page, pageSize) => {
     return ChatRoom.find(query)
         .sort({ _id: -1 })
@@ -48,6 +54,7 @@ update = async (query, data) => {
 
 module.exports = {
     insert,
+    findAll,
     findChatRoom,
     update,
     getAllChatRooms

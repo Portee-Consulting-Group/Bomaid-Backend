@@ -55,14 +55,12 @@ sendMessage = async (req, res) => {
         let filesUrl = []
         for (const iterator of object) {
             if (iterator != undefined) {
-                const uploadedImage = await clodinaryService.uploadChallengeImage(iterator);
-                filesUrl.push({
-                    uploadUrl: uploadedImage.url,
-                    uploadId: uploadedImage.public_id
-                });
+                const uploadedImage = await clodinaryService.uploadChatFilek(iterator);
+                filesUrl.push(uploadedImage.url,
+                );
             }
         }
-        //push to socket.io for frontend
+               //push to socket.io for frontend
         // let chatRoom = await ChatRoomModel.insert(req.body);
         let response = new SuccessResponse(chatRoom, "chat created");
         res.status(status.SUCCESS).json(response);
@@ -82,7 +80,25 @@ sendGroupMessage = async(req, res) => {
     }
 }
 
+getChats = async (req, res) => {
+    try {
+        const groups = await ChatRoomModel.findAll({
+            $or: [
+                {senderId: req.params.userId},
+                {receiverId: req.params.userId},
+                {members: req.params.userId},
+            ]
+            });
+        
+        let response = new SuccessResponse(groups, "user groups");
+        res.status(status.SUCCESS).json(response);
+    } catch (error) {
+        res.status(status.ERROR).json({ error: error.message });
+    }
+}
+
 module.exports = {
     createGroup,
-    sendMessage
+    sendMessage,
+    getChats
 };
