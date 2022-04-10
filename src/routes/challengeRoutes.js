@@ -271,4 +271,61 @@ const AuthValidationMiddleware = require('../middleware/authValidationMiddleware
         // AuthPermissionMiddleware.adminLevelRequired,
         ChallengeController.getCircleChallenges
     ]);
+
+    /**
+     * @swagger
+     * /challenge/getCircleRanking/{challengeId}:
+     *  get:
+     *   summary: get all circle ranks in a challenge
+     *   tags:  
+     *     - challenge
+     *   parameters:
+     *    - in: path
+     *      name: challengeId
+     *      schema:
+     *       type: string
+     *      required: true
+     *   responses:
+     *      200:
+     *       description: successful response
+     *      400:
+     *       description: request failed
+     *    
+     */
+     app.get('/challenge/getCircleRanking/:challengeId',[
+        // AuthValidationMiddleware.validJWTNeeded,
+        // AuthPermissionMiddleware.adminLevelRequired,
+        ChallengeController.getCircleRanks
+    ]);
+
+    /**
+     * @swagger
+     * /challenge/getIndividualFitData/{circleId}/{challengeId}:
+     *  get:
+     *   summary: get all circle ranks in a challenge
+     *   tags:  
+     *     - challenge
+     *   parameters:
+     *    - in: path
+     *      name: challengeId
+     *      schema:
+     *       type: string
+     *      required: true
+     *    - in: path
+     *      name: circleId
+     *      schema:
+     *       type: string
+     *      required: true
+     *   responses:
+     *      200:
+     *       description: successful response
+     *      400:
+     *       description: request failed
+     *    
+     */
+     app.get('/challenge/getIndividualFitData/:circleId/:challengeId',[
+        // AuthValidationMiddleware.validJWTNeeded,
+        // AuthPermissionMiddleware.adminLevelRequired,
+        ChallengeController.getIndividualFitData
+    ]);
  }

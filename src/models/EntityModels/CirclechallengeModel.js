@@ -12,6 +12,7 @@ const circleChallengeSchema = new Schema({
     endTime: { type: String },
     endDate: { type: Date },
     status: { type: Number, required: true, default: statusEnum.active.value },
+    aggregatedResult: {type: Number, default: 0},
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now }
 });

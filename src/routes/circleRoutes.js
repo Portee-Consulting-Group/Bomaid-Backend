@@ -170,4 +170,63 @@ exports.routesConfig = function (app) {
         // AuthPermissionMiddleware.adminLevelRequired,
         CircleController.getAdminCircles
     ]);
+    /**
+     * @swagger
+     * /circle/getAllCircles/{page}/{pageSize}:
+     *  get:
+     *   summary: get all circles
+     *   tags:  
+     *     - circle
+     *   parameters:
+     *    - in: path
+     *      name: page
+     *      schema:
+     *       type: number
+     *       example: 0
+     *      required: true
+     *    - in: path
+     *      name: pageSize
+     *      schema:
+     *       type: number
+     *       example: 10
+     *      required: true
+     *   responses:
+     *      200:
+     *       description: successful response
+     *      400:
+     *       description: request failed
+     *    
+     */
+     app.get('/circle/getAllCircles/:page/:pageSize',[
+        // AuthValidationMiddleware.validJWTNeeded,
+        // AuthPermissionMiddleware.adminLevelRequired,
+        CircleController.getAllCircles
+    ]);
+
+    /**
+     * @swagger
+     * /circle/getCircleMembers/{circleId}:
+     *  get:
+     *   summary: get all circle members
+     *   tags:  
+     *     - circle
+     *   parameters:
+     *    - in: path
+     *      name: circleId
+     *      schema:
+     *       type: string
+     *      required: true
+     *   responses:
+     *      200:
+     *       description: successful response
+     *      400:
+     *       description: request failed
+     *    
+     */
+     app.get('/circle/getCircleMembers/:circleId',[
+        // AuthValidationMiddleware.validJWTNeeded,
+        // AuthPermissionMiddleware.adminLevelRequired,
+        CircleController.getMembers
+    ]);
+
 };

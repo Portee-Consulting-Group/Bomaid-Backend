@@ -14,9 +14,9 @@ addUser = async (req, res) => {
     try {
         let val = req.body.email.split("@");
         val = val[1].toLowerCase();
-        if (val != constants.EMAIL_CHECK) {
-            throw new CustomException("Please use the correct email")
-        }
+        // if (val != constants.EMAIL_CHECK) {
+        //     throw new CustomException("Please use the correct email")
+        // }
         if ((req.body.password !== req.body.confirmPassword) || (req.body.email == null)) {
             throw new NullReferenceException("please pass valid passwords");
         }

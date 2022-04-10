@@ -107,10 +107,35 @@ getUserCircles = async (req, res) => {
     }
 };
 
+getMembers = async (req, res) => {
+    try {
+        var circle = await CircleModel.findCircle({ _id: req.params.circleId });
+        let members = circle.members;
+        let response = new SuccessResponse(members, "circle members");
+        res.status(status.SUCCESS).json(response);
+        
+    } catch (err) {
+        res.status(status.ERROR).json({ error: err.message });
+    }
+}
+
+getAllCircles = async (req, res) => {
+    try {
+        let circles = await CircleModel.getAllCircles({}, req.params.page, req.params.pageSize)
+        let response = new SuccessResponse(circles, "circle members");
+        res.status(status.SUCCESS).json(response);
+    } catch (err) {
+        res.status(status.ERROR).json({ error: err.message });
+        
+    }
+}
+
 module.exports = {
     addCircle,
     addMember,
     getAdminCircles,
-    getUserCircles
+    getUserCircles,
+    getMembers,
+    getAllCircles
 };
 
