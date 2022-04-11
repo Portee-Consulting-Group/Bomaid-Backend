@@ -16,6 +16,9 @@ const AuthValidationMiddleware = require('../middleware/authValidationMiddleware
  *     type: string
  *     example: for tracking finance cycling trips
  *     required: true
+ *    theme:
+ *     type: string
+ *     example: blue
  *    adminId:
  *     type: string
  *     example: 6292982

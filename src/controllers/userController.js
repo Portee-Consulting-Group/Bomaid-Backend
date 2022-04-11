@@ -89,6 +89,19 @@ getUser = async (req, res) => {
         res.status(status.ERROR).json({ message: error.message });
     }
 }
+getUserById = async (req, res) => {
+    try {
+        let user = await UserModel.find({ _id: req.params.userId });
+        if (user == null) {
+            throw new NotFoundException("User not found");
+        }
+        user.password = undefined;
+        const response = new SuccessResponse(user, 'user details');
+        res.status(status.SUCCESS).json({ message: response });
+    } catch (error) {
+        res.status(status.ERROR).json({ message: error.message });
+    }
+}
 
 
 updateUser = async (req, res) => {
@@ -140,6 +153,7 @@ module.exports = {
     getUser,
     getUsers,
     testEmail,
-    hasher
+    hasher,
+    getUserById
 }
 

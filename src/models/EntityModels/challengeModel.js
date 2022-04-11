@@ -7,10 +7,12 @@ const statusEnum = require('../../common/enum').getStatusEnum();
 const challengeSchema = new Schema({
     title: { type: String, required: true, lowercase: true},
     description: { type: String, required: true },
+    info: { type: String, required: true },
     goalTypeId: { type: String, required: true },
     challengeTarget: { type: Number, required: true },
     uploadUrl: { type: String, default: "" },
     uploadId: { type: String, default: "" },
+    endDate: {type:String, default: "" },
     status: { type: Number, required: true, default: statusEnum.active.value },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now }
@@ -26,6 +28,14 @@ insert = (data) => {
 
 findChallenge = async (query) => {
     const value = await Challenge.findOne(query);
+    if (value == null) {
+        return null;
+    }
+    return value;
+};
+
+findAll = async (query) => {
+    const value = await Challenge.find(query);
     if (value == null) {
         return null;
     }
@@ -48,6 +58,7 @@ update = async (query, data) => {
 module.exports = {
     insert,
     findChallenge,
+    findAll,
     update,
     getAllChallenges
 };

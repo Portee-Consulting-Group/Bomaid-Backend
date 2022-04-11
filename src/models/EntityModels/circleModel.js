@@ -9,6 +9,7 @@ const circleSchema = new Schema({
     description: { type: String, required: true },
     adminId: { type: String, required: true },
     members: [{type: String}],
+    theme: { type: String, default: "" },
     uploadUrl: { type: String, default: "" },
     uploadId: { type: String, default: "" },
     status: { type: Number, required: true, default: statusEnum.active.value },

@@ -1,6 +1,8 @@
 const { NullReferenceException, AlreadyExistsException } = require('../../errors/AppError');
 const { status } = require('../common/status');
 const CircleModel = require('../models/EntityModels/circleModel');
+const ChallengeModel = require('../models/EntityModels/challengeModel');
+const CircleChallengeModel = require('../models/EntityModels/CirclechallengeModel');
 const UserModel = require('../models/EntityModels/userModel');
 const SuccessResponse = require('../models/viewModels/responseModel');
 const clodinaryService = require('../services/CloudinaryService');
@@ -44,6 +46,16 @@ addCircle = async (req, res) => {
         }
 
         circle = await CircleModel.insert(req.body);
+        //add circle to every challenge
+        let challenges = await ChallengeModel.findAll({});
+        for (const challenge of challenges) {
+            await CircleChallengeModel.insert({
+                challengeId: challenge._id,
+                goalTypeId: challenge.goalTypeId,
+                circleId: circle._id
+            });
+        }
+
         let response = new SuccessResponse(circle, "circle added");
         res.status(status.SUCCESS).json(response);
 
@@ -110,7 +122,15 @@ getUserCircles = async (req, res) => {
 getMembers = async (req, res) => {
     try {
         var circle = await CircleModel.findCircle({ _id: req.params.circleId });
-        let members = circle.members;
+        let members = [];
+        for (const member of circle.members) {
+            let data = await UserModel.find({_id: member});
+            data.password = undefined;
+            data.token = undefined;
+            members.push(data);
+        }
+
+
         let response = new SuccessResponse(members, "circle members");
         res.status(status.SUCCESS).json(response);
         

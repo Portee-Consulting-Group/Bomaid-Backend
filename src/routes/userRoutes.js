@@ -140,6 +140,31 @@ exports.routesConfig = function (app) {
         UserController.getUser
     ]);
 
+    /**
+     * @swagger
+     * /user/getUserById/{userId}:
+     *  get:
+     *   summary: get user details by id
+     *   tags:  
+     *     - user
+     *   parameters:
+     *    - in: path
+     *      name: userId
+     *      schema:
+     *       type: string
+     *      required: true
+     *   responses:
+     *      200:
+     *       description: successful response
+     *      400:
+     *       description: request failed
+     *    
+     * 
+     */
+    app.get('/user/getUserById/:userId', [
+        UserController.getUserById
+    ]);
+
 
     /**
      * @swagger

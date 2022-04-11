@@ -16,6 +16,10 @@ const AuthValidationMiddleware = require('../middleware/authValidationMiddleware
  *     type: string
  *     example: lets see how fast you run
  *     required: true
+ *    info:
+ *     type: string
+ *     example: Info about challenge
+ *     required: true
  *    challengeImage:
  *     type: string
  *     example: data:image/jpeg;base64  
@@ -28,6 +32,9 @@ const AuthValidationMiddleware = require('../middleware/authValidationMiddleware
  *     type: Number
  *     example: 10
  *     required: true
+ *    endDate:
+ *     type: date
+ *     example: 2022-05-17
  * 
  *  updateChallenge:
  *   type: object

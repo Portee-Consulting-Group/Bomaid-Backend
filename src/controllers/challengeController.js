@@ -5,14 +5,14 @@ const ChallengeModel = require('../models/EntityModels/challengeModel');
 const FitModel = require('../models/EntityModels/fitModel');
 const CircleModel = require('../models/EntityModels/circleModel');
 const CircleChallengeModel = require('../models/EntityModels/CirclechallengeModel');
-const GoalTypeeModel = require('../models/EntityModels/goalTypeModel');
+const GoalTypeModel = require('../models/EntityModels/goalTypeModel');
 const SuccessResponse = require('../models/viewModels/responseModel');
 const clodinaryService = require('../services/CloudinaryService');
 
 
 addChallenge = async (req, res) => {
     try {
-        const goalType = await GoalTypeeModel.find({ _id: req.body.goalTypeId });
+        const goalType = await GoalTypeModel.find({ _id: req.body.goalTypeId });
         if (goalType == null) {
             throw new NullReferenceException("goal type not found");
         }
@@ -59,8 +59,15 @@ updateChallenges = async (req, res) => {
 
 getChallenges = async (req, res) => {
     try {
-        const challenge = await ChallengeModel.getAllChallenges({}, req.params.page, req.params.pageSize);
-        let response = new SuccessResponse(challenge, "all challenges")
+        const challenges = await ChallengeModel.getAllChallenges({}, req.params.page, req.params.pageSize);
+        let data = [];
+        for (const challenge of challenges) {
+            let goalObj;
+            let goalType = await GoalTypeModel.find({ _id: challenge.goalTypeId });
+            goalObj = Object.assign({}, challenge._doc, { goalName: goalType.name });
+            data.push(goalObj);
+        }
+        let response = new SuccessResponse(data, "all challenges")
         res.status(status.SUCCESS).json(response);
     } catch (err) {
         res.status(status.ERROR).json({ error: err.message });
