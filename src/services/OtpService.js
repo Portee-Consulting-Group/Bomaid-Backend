@@ -18,7 +18,6 @@ signUpOtp = async (model) => {
     if (otpValue == null) {
         throw new NullReferenceException("otp not created");
     }
-    await emailService.SendOtpConfirmationEmail({email: model.email, otpCode: otpValue.code})
     return otpValue;
 }
 

@@ -53,7 +53,7 @@ verifyEmailConfirmationOtp = async (req, res) => {
                 email: user.email,
                 name: `${user.firstName} ${user.lastName}`
             };
-            emailService.SendOtpConfirmationEmail(otpViewModel);
+            await emailService.SendSuccessfulSignupEmail(otpViewModel);
             res.status(status.SUCCESS).json({ "success": "Otp code confirmed" });
         } else {
             throw new CustomException("Confirmation failed");
@@ -84,7 +84,7 @@ verifyPhoneConfirmationOtp = async (req, res) => {
                 email: user.email,
                 name: `${user.firstName} ${user.lastName}`
             };
-            emailService.SendOtpConfirmationEmail(otpViewModel);
+            await emailService.SendSuccessfulSignupEmail(otpViewModel);
             res.status(status.SUCCESS).json({ "success": "Otp code confirmed" });
         } else {
             throw new CustomException("Confirmation failed");

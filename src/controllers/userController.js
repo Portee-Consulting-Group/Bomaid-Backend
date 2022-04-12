@@ -31,7 +31,7 @@ addUser = async (req, res) => {
         }
 
 
-        if (req.body.profileImage != undefined) {
+        if (req.body.profileImage != undefined || req.body.profileImage !== '' ) {
             const uploadedImage = await clodinaryService.uploadProfileImage(req.body.profileImage);
             req.body.uploadUrl = uploadedImage.url;
             req.body.uploadId = uploadedImage.public_id;

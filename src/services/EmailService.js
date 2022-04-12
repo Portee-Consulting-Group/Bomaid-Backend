@@ -40,7 +40,7 @@ async function SendSuccessfulSignupEmail(emailObject) {
             from: process.env.SENDER_EMAIL,
             to: emailObject.email,
             subject: 'Successful sign up',
-            text: `Welcome to spaces ${emailObject.name}`
+            text: `Welcome to bomaid ${emailObject.name}`
         };
         await sgMail.send(msg);
     } catch (error) {
@@ -56,21 +56,6 @@ async function SendRegistrationOtpEmail(otpObject) {
             to: otpObject.email,
             subject: 'Confrm email',
             text: `Please use this otp to confirm email ${otpObject.otpCode}`
-        };
-        await sgMail.send(msg);
-    } catch (error) {
-        return error;
-    }
-}
-
-async function SendOtpConfirmationEmail(otpObject) {
-    try {
-        const sgMail = await setUpTransporter();
-        const msg = {
-            from: process.env.SENDER_EMAIL,
-            to: otpObject.email,
-            subject: 'Email confirmed',
-            text: `Welcome to spaces ${otpObject.name}`
         };
         await sgMail.send(msg);
     } catch (error) {
@@ -111,7 +96,6 @@ async function Test() {
 
 module.exports = {
     SendSuccessfulSignupEmail,
-    SendOtpConfirmationEmail,
     SendRegistrationOtpEmail,
     SendOtpPasswordResetEmail,
     Test
