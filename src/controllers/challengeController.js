@@ -183,14 +183,21 @@ getIndividualFitData = async (req, res) => {
 
         for (const member of circleMembers) {
             let fit = await FitModel.findFit({ userId: member, goalTypeId: circle.goalTypeId });
+            let user = await UserModel.find({_id: member});
+            user.password = undefined;
+            user.token = undefined;
+            if(user == null){
+                contine;
+            }
             if (fit == null) {
                 memberData.push({
-                    userId: member,
+                    userData: user,
                     fitValue: 0
                 });
             }
+            
             memberData.push({
-                userId: member,
+                userData: user,
                 fitValue: fit.fitValue
             });
         }
