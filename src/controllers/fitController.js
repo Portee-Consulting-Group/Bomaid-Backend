@@ -3,6 +3,7 @@ const { status } = require('../common/status');
 const FitModel = require('../models/EntityModels/fitModel');
 const UserModel = require('../models/EntityModels/userModel');
 const GoalTypeModel = require('../models/EntityModels/goalTypeModel');
+const CirclechallengeModel = require('../models/EntityModels/CirclechallengeModel');
 const UserGoalModel = require('../models/EntityModels/userGoalModel');
 const SuccessResponse = require('../models/viewModels/responseModel');
 const clodinaryService = require('../services/CloudinaryService');
@@ -34,10 +35,29 @@ addFit = async (req, res) => {
             else {
                 throw new CustomException("Pass correct value");
             }
-
         }
 
         let fit = await FitModel.insert(req.body);
+
+        //update all circlechallenge user belongs to
+        let circleChallenges = await CirclechallengeModel.findAll({ "results.userId": req.body.userId });
+        for (const circle of circleChallenges) {
+            let circleChallengeResult = circle.aggregatedResult;
+            if (circle.results.some(e => e.userId === req.body.userId)) {
+                let user = circle.results.find(e => e.userId == req.body.userId);
+                let index = circle.results.findIndex(e => e.userId == req.body.userId);
+                user.value += req.body.fitValue;
+                circle.results[index].value = user.value
+                circleChallengeResult += req.body.fitValue;
+            }
+            let data = await CirclechallengeModel.update({ _id: circle._id },
+                {
+                    results: circle.results,
+                    aggregatedResult: circleChallengeResult
+                });
+        }
+
+
         let response = new SuccessResponse(fit, "fit added");
         res.status(status.SUCCESS).json(response);
     } catch (err) {
@@ -120,7 +140,7 @@ getAllFits = async (req, res) => {
 
 getAllFitsByGoalType = async (req, res) => {
     try {
-        var fits = await FitModel.getAllFits({goalTypeId: req.params.goalTypeId}, req.params.page, req.params.pageSize);
+        var fits = await FitModel.getAllFits({ goalTypeId: req.params.goalTypeId }, req.params.page, req.params.pageSize);
         let response = new SuccessResponse(fits, "all fits")
         res.status(status.SUCCESS).json(response);
     } catch (err) {

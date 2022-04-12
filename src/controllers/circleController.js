@@ -55,7 +55,6 @@ addCircle = async (req, res) => {
                 circleId: circle._id
             });
         }
-
         let response = new SuccessResponse(circle, "circle added");
         res.status(status.SUCCESS).json(response);
 
