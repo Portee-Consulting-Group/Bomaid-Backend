@@ -37,27 +37,33 @@ addFit = async (req, res) => {
             }
         }
 
-        let fit = await FitModel.insert(req.body);
-
         //update all circlechallenge user belongs to
-        let circleChallenges = await CirclechallengeModel.findAll({ "results.userId": req.body.userId, goalTypeId: req.body.goalTypeId });
-        for (const circle of circleChallenges) {
-            let circleChallengeResult = circle.aggregatedResult;
-            if (circle.results.some(e => e.userId === req.body.userId)) {
-                let user = circle.results.find(e => e.userId == req.body.userId);
-                let index = circle.results.findIndex(e => e.userId == req.body.userId);
-                user.value += req.body.fitValue;
-                circle.results[index].value = user.value
-                circleChallengeResult += req.body.fitValue;
+        let circles = await CirclechallengeModel.findAll({ "results.userId": req.body.userId });
+        let circleChallenges = []
+        for (const iterator of circles) {
+            if (iterator.goalTypeId === req.body.goalTypeId) {
+                circleChallenges.push(iterator);
             }
-            let data = await CirclechallengeModel.update({ _id: circle._id },
-                {
-                    results: circle.results,
-                    aggregatedResult: circleChallengeResult
-                });
+        }
+        if (circleChallenges !== undefined && circleChallenges.length > 0) {
+            for (const circle of circleChallenges) {
+                let circleChallengeResult = circle.aggregatedResult;
+                if (circle.results.some(e => e.userId === req.body.userId)) {
+                    let user = circle.results.find(e => e.userId == req.body.userId);
+                    let index = circle.results.findIndex(e => e.userId == req.body.userId);
+                    user.value += req.body.fitValue;
+                    circle.results[index].value = user.value
+                    circleChallengeResult += req.body.fitValue;
+                }
+                let data = await CirclechallengeModel.update({ _id: circle._id },
+                    {
+                        results: circle.results,
+                        aggregatedResult: circleChallengeResult
+                    });
+            }
         }
 
-
+        let fit = await FitModel.insert(req.body);
         let response = new SuccessResponse(fit, "fit added");
         res.status(status.SUCCESS).json(response);
     } catch (err) {
