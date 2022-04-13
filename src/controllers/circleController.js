@@ -32,7 +32,7 @@ addCircle = async (req, res) => {
             }
             members.push(req.body.adminId);
             req.body.members = members;
-        }else{
+        } else {
             req.body.members = [req.body.adminId];
         }
 
@@ -47,11 +47,20 @@ addCircle = async (req, res) => {
 
         circle = await CircleModel.insert(req.body);
         //add circle to every challenge
+        let results = [];
+        for (const member of req.body.members) {
+            results.push({
+                userId: member,
+                value: 0
+            });
+        }
+
         let challenges = await ChallengeModel.findAll({});
         for (const challenge of challenges) {
             await CircleChallengeModel.insert({
                 challengeId: challenge._id,
                 goalTypeId: challenge.goalTypeId,
+                results: results,
                 circleId: circle._id
             });
         }
@@ -84,13 +93,30 @@ addMember = async (req, res) => {
                 throw new AlreadyExistsException(`Member with id ${member} already added`);
             }
         }
-        let newVal = circle.members.push(...req.body.members);
-        circle.members;
+        circle.members.concat(req.body.members);
 
         circle = await CircleModel.update({ _id: req.body.circleId },
             {
                 members: circle.members
             });
+
+        //assign new members to default fit value
+        const memberResults = [];
+        for (const member of members) {
+            memberResults.push({
+                userId: member,
+                value: 0
+            });
+        }
+        //add new member results to circle challenge
+        let circleChallenges = await CircleChallengeModel.findAll({ circleId: req.body.circleId });
+        for (const challenge of circleChallenges) {
+            let result = challenge.results.concat(memberResults);
+            await CircleChallengeModel.update({ _id: challenge._id }, {
+                results: result
+            });
+        }
+
         let response = new SuccessResponse(circle, "circle updated");
         res.status(status.SUCCESS).json(response);
     } catch (err) {
@@ -123,7 +149,7 @@ getMembers = async (req, res) => {
         var circle = await CircleModel.findCircle({ _id: req.params.circleId });
         let members = [];
         for (const member of circle.members) {
-            let data = await UserModel.find({_id: member});
+            let data = await UserModel.find({ _id: member });
             data.password = undefined;
             data.token = undefined;
             members.push(data);
@@ -132,7 +158,7 @@ getMembers = async (req, res) => {
 
         let response = new SuccessResponse(members, "circle members");
         res.status(status.SUCCESS).json(response);
-        
+
     } catch (err) {
         res.status(status.ERROR).json({ error: err.message });
     }
@@ -145,7 +171,7 @@ getAllCircles = async (req, res) => {
         res.status(status.SUCCESS).json(response);
     } catch (err) {
         res.status(status.ERROR).json({ error: err.message });
-        
+
     }
 }
 

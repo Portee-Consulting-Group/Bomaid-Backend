@@ -40,7 +40,7 @@ addFit = async (req, res) => {
         let fit = await FitModel.insert(req.body);
 
         //update all circlechallenge user belongs to
-        let circleChallenges = await CirclechallengeModel.findAll({ "results.userId": req.body.userId });
+        let circleChallenges = await CirclechallengeModel.findAll({ "results.userId": req.body.userId, goalTypeId: req.body.goalTypeId });
         for (const circle of circleChallenges) {
             let circleChallengeResult = circle.aggregatedResult;
             if (circle.results.some(e => e.userId === req.body.userId)) {
