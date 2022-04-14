@@ -41,6 +41,14 @@ findFit = async (query) => {
     return value;
 };
 
+findRecentFit = async (query) => {
+    const value = await Fit.find(query).sort({ createdAt: 'desc' });
+    if (value == null) {
+        return null;
+    }
+    return value;
+};
+
 findAll = async (query) => {
     const value = await Fit.find(query);
     if (value == null) {
@@ -67,5 +75,6 @@ module.exports = {
     findFit,
     findAll,
     update,
-    getAllFits
+    getAllFits,
+    findRecentFit
 };

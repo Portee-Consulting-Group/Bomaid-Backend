@@ -1,4 +1,4 @@
-const { NullReferenceException, AlreadyExistsException, CustomException } = require('../../errors/AppError');
+const { NullReferenceException, AlreadyExistsException, CustomException, NotFoundException } = require('../../errors/AppError');
 const { status } = require('../common/status');
 const UserModel = require('../models/EntityModels/userModel');
 const ChallengeModel = require('../models/EntityModels/challengeModel');
@@ -8,6 +8,7 @@ const CircleChallengeModel = require('../models/EntityModels/CirclechallengeMode
 const GoalTypeModel = require('../models/EntityModels/goalTypeModel');
 const SuccessResponse = require('../models/viewModels/responseModel');
 const clodinaryService = require('../services/CloudinaryService');
+const { NotBeforeError } = require('jsonwebtoken');
 
 
 addChallenge = async (req, res) => {
@@ -176,30 +177,56 @@ getIndividualFitData = async (req, res) => {
         let circle = await CircleChallengeModel.findCircleChallenge({ circleId: req.params.circleId, challengeId: req.params.challengeId });
         let memberData = [];
         let circleMembers = [];
+        if (circle.results.length < 1) {
+            throw new NotFoundException("No members found");
+        }
         circle.results.forEach((result) => {
             circleMembers.push(result.userId);
         });
 
+        var dateObj = new Date();
+        var month = dateObj.getUTCMonth() + 1; //months from 1-12
+        var day = dateObj.getUTCDate();
+        day +=1;
+        var year = dateObj.getUTCFullYear();
+
+        let startDate = year + "-" + month + "-" + '1';
+        let endDate = year + "-" + month + "-" + day;
 
         for (const member of circleMembers) {
-            let fit = await FitModel.findFit({ userId: member, goalTypeId: circle.goalTypeId });
-            let user = await UserModel.find({_id: member});
+            let fit = await FitModel.findRecentFit({
+                userId: member, goalTypeId: circle.goalTypeId
+                ,
+                createdAt: {
+                    $gte: new Date(startDate).setHours(00, 00, 00),
+                    $lt: new Date(endDate).setHours(23, 59, 59)
+                }
+            });
+            let user = await UserModel.find({ _id: member });
             user.password = undefined;
             user.token = undefined;
-            if(user == null){
+            if (user == null) {
                 contine;
             }
-            if (fit == null) {
+
+            
+            if (fit == null || fit.length == 0) {
                 memberData.push({
                     userData: user,
-                    fitValue: 0
+                    fitValue: 0,
+                    totalFitValue: 0
+                });
+            } else {
+                let totalFit = 0;
+                fit.forEach(p=>{
+                    totalFit += p.fitValue;
+                })
+                memberData.push({
+                    userData: user,
+                    fitValue: fit[0].fitValue,
+                    totalFitValue: totalFit//sum of fit values
                 });
             }
-            
-            memberData.push({
-                userData: user,
-                fitValue: fit.fitValue
-            });
         }
 
         memberData.sort((a, b) => {

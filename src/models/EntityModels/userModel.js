@@ -40,6 +40,9 @@ update = async (query, data) => {
 find = async (query) => {
     return User.findOne(query);
 };
+findAll = async (query) => {
+    return User.find(query);
+};
 
 
 getActiveUsers = async (page, pageSize) => {
@@ -54,5 +57,6 @@ module.exports = {
     add,
     update,
     find,
+    findAll,
     getActiveUsers
 }
