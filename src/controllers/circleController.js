@@ -38,7 +38,7 @@ addCircle = async (req, res) => {
 
 
         if (req.body.circleImage != undefined) {
-            const uploadedImage = await clodinaryService.uploadUserGoalImage(req.body.circleImage);
+            const uploadedImage = await clodinaryService.uploadCircleImage(req.body.circleImage);
             req.body.uploadUrl = uploadedImage.url;
             req.body.uploadId = uploadedImage.public_id;
         } else {
