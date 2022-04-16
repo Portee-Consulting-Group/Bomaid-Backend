@@ -127,6 +127,7 @@ const SurveyRouter = require('./src/routes/surveyRoutes');
 const ChallengeRouter = require('./src/routes/challengeRoutes');
 const PointRouter = require('./src/routes/pointRoutes');
 const MessageRouter = require('./src/routes/messagingRoutes');
+const FeedRouter = require('./src/routes/feedRoutes');
 
 UserRouter.routesConfig(app);
 AuthRouter.routesConfig(app);
@@ -139,6 +140,7 @@ SurveyRouter.routesConfig(app);
 ChallengeRouter.routesConfig(app);
 PointRouter.routesConfig(app);
 MessageRouter.routesConfig(app);
+FeedRouter.routesConfig(app);
 //Cron jobs
 invalidOtpCronJob;
 

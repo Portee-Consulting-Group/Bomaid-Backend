@@ -67,6 +67,15 @@ const uploadChatFile = async (file)=> {
     }
 }
 
+const uploadFeedImage = async (file)=> {
+    try {
+        let result = await cloudinary.uploader.upload(file, { folder: 'bomaid_feed_file' });
+        return result;
+    } catch (err) {
+        throw err;
+    }
+}
+
 
 
 
@@ -77,5 +86,6 @@ module.exports = {
     uploadCircleImage,
     uploadFitImage,
     uploadChallengeImage,
-    uploadChatFile
+    uploadChatFile,
+    uploadFeedImage
 };
