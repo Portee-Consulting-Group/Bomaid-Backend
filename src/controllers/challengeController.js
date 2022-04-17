@@ -174,7 +174,7 @@ getCircleRanks = async (req, res) => {
 
 getIndividualFitData = async (req, res) => {
     try {
-        let circle = await CircleChallengeModel.findCircleChallenge({ circleId: req.params.circleId, challengeId: req.params.challengeId });
+        let circle = await CircleChallengeModel.findCircleChallenge({ circleId: req.params.circleId, goalTypeId: req.params.goalTypeId });
         let memberData = [];
         let circleMembers = [];
         if (circle.results.length < 1) {
