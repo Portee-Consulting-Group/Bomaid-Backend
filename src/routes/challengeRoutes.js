@@ -307,14 +307,14 @@ const AuthValidationMiddleware = require('../middleware/authValidationMiddleware
 
     /**
      * @swagger
-     * /challenge/getIndividualFitData/{circleId}/{challengeId}:
+     * /challenge/getIndividualFitData/{circleId}/{goalTypeId}:
      *  get:
      *   summary: get all circle ranks in a challenge
      *   tags:  
      *     - challenge
      *   parameters:
      *    - in: path
-     *      name: challengeId
+     *      name: goalTypeId
      *      schema:
      *       type: string
      *      required: true
@@ -330,7 +330,7 @@ const AuthValidationMiddleware = require('../middleware/authValidationMiddleware
      *       description: request failed
      *    
      */
-     app.get('/challenge/getIndividualFitData/:circleId/:challengeId',[
+     app.get('/challenge/getIndividualFitData/:circleId/:goalTypeId',[
         // AuthValidationMiddleware.validJWTNeeded,
         // AuthPermissionMiddleware.adminLevelRequired,
         ChallengeController.getIndividualFitData
