@@ -18,12 +18,15 @@ sendRegistrationOtpCode = async (req, res) => {
         }
         const otpViewModel = {
             email: user.email, //change to phone no
-            name: `${user.firstName} ${user.lastName}`
+            name: `${user.firstName} ${user.lastName}`,
+            otpCode: ''
         };
-        let response = await otpService.signUpOtp(otpViewModel);
-        if (response == null) {
+        let otpData = await otpService.signUpOtp(otpViewModel);
+        if (otpData == null) {
             throw new NullReferenceException();
         } else {
+            otpViewModel.otpCode = otpData.code;
+            await emailService.SendRegistrationOtpEmail(otpViewModel);
             let response = new SuccessResponse(null, "Otp send to phone no will expire in 10 minutes");
             res.status(status.SUCCESS).json(response);
         }
