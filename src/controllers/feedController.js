@@ -58,8 +58,20 @@ getUserFeeds = async (req, res) => {
 
 getFeeds = async (req, res) => {
     try {
-        var types = await FeedModel.getFeeds({}, req.page, req.pageSize);
-        let response = new SuccessResponse(types, "feeds")
+        var feeds = await FeedModel.getFeeds({}, req.page, req.pageSize);
+        let allFeeds = [];
+
+        for (const feed of feeds) {
+            let user = await UserModel.find({ _id: feed.userId });
+            let profilePic = user.uploadUrl;
+            let data = {
+                profilePic,
+                feed
+            };
+            allFeeds.push(data);
+        }
+
+        let response = new SuccessResponse(allFeeds, "feeds")
         res.status(status.SUCCESS).json(response);
     } catch (err) {
         res.status(status.ERROR).json({ error: err.message });
