@@ -300,16 +300,16 @@ const AuthValidationMiddleware = require('../middleware/authValidationMiddleware
      *    
      */
      app.get('/challenge/getCircleRanking/:challengeId',[
-        // AuthValidationMiddleware.validJWTNeeded,
-        // AuthPermissionMiddleware.adminLevelRequired,
-        ChallengeController.getCircleRanks
-    ]);
+      // AuthValidationMiddleware.validJWTNeeded,
+      // AuthPermissionMiddleware.adminLevelRequired,
+      ChallengeController.getCircleRanks
+  ]);
 
     /**
      * @swagger
-     * /challenge/getIndividualFitData/{circleId}/{goalTypeId}:
+     * /challenge/getCircleRanksByGoalTypeId/{goalTypeId}:
      *  get:
-     *   summary: get all circle ranks in a challenge
+     *   summary: get all circle ranks in a challenge by goal type id
      *   tags:  
      *     - challenge
      *   parameters:
@@ -318,21 +318,72 @@ const AuthValidationMiddleware = require('../middleware/authValidationMiddleware
      *      schema:
      *       type: string
      *      required: true
-     *    - in: path
-     *      name: circleId
-     *      schema:
-     *       type: string
-     *      required: true
      *   responses:
      *      200:
      *       description: successful response
      *      400:
      *       description: request failed
-     *    
      */
-     app.get('/challenge/getIndividualFitData/:circleId/:goalTypeId',[
-        // AuthValidationMiddleware.validJWTNeeded,
-        // AuthPermissionMiddleware.adminLevelRequired,
-        ChallengeController.getIndividualFitData
-    ]);
+     app.get('/challenge/getCircleRanksByGoalTypeId/:goalTypeId',[
+      // AuthValidationMiddleware.validJWTNeeded,
+      // AuthPermissionMiddleware.adminLevelRequired,
+      ChallengeController.getCircleRanksByGoalTypeId
+  ]);
+
+  /**
+   * @swagger
+   * /challenge/getIndividualFitData/{circleId}/{goalTypeId}:
+   *  get:
+   *   summary: get all individual fit data by circleId and goalTypeId
+   *   tags:  
+   *     - challenge
+   *   parameters:
+   *    - in: path
+   *      name: goalTypeId
+   *      schema:
+   *       type: string
+   *      required: true
+   *    - in: path
+   *      name: circleId
+   *      schema:
+   *       type: string
+   *      required: true
+   *   responses:
+   *      200:
+   *       description: successful response
+   *      400:
+   *       description: request failed
+   *    
+   */
+   app.get('/challenge/getIndividualFitData/:circleId/:goalTypeId',[
+      // AuthValidationMiddleware.validJWTNeeded,
+      // AuthPermissionMiddleware.adminLevelRequired,
+      ChallengeController.getIndividualFitData
+  ]);
+
+  /**
+   * @swagger
+   * /challenge/getIndividualFitDataByGoalTypeId/{circleId}/{goalTypeId}:
+   *  get:
+   *   summary: get individual fit data by goal type
+   *   tags:  
+   *     - challenge
+   *   parameters:
+   *    - in: path
+   *      name: goalTypeId
+   *      schema:
+   *       type: string
+   *      required: true
+   *   responses:
+   *      200:
+   *       description: successful response
+   *      400:
+   *       description: request failed
+   *    
+   */
+   app.get('/challenge/getIndividualFitDataByGoalTypeId/:goalTypeId',[
+      // AuthValidationMiddleware.validJWTNeeded,
+      // AuthPermissionMiddleware.adminLevelRequired,
+      ChallengeController.getIndividualFitDataByGoalTypeId
+  ]);
  }

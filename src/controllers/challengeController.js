@@ -171,6 +171,18 @@ getCircleRanks = async (req, res) => {
         res.status(status.ERROR).json({ error: err.message });
     }
 }
+getCircleRanksByGoalTypeId = async (req, res) => {
+    try {
+        let circles = await CircleChallengeModel.findAll({ goalTypeId: req.params.goalTypeId });
+        circles.sort((a, b) => {
+            return b.aggregatedResult - a.aggregatedResult
+        });
+        let response = new SuccessResponse(circles, "circle ranks");
+        res.status(status.SUCCESS).json(response);
+    } catch (err) {
+        res.status(status.ERROR).json({ error: err.message });
+    }
+}
 
 getIndividualFitData = async (req, res) => {
     try {
@@ -180,58 +192,7 @@ getIndividualFitData = async (req, res) => {
         if (circle.results.length < 1) {
             throw new NotFoundException("No members found");
         }
-        circle.results.forEach((result) => {
-            circleMembers.push(result.userId);
-        });
-
-        var dateObj = new Date();
-        var month = dateObj.getUTCMonth() + 1; //months from 1-12
-        var day = dateObj.getUTCDate();
-        day +=1;
-        var year = dateObj.getUTCFullYear();
-
-        let startDate = year + "-" + month + "-" + '1';
-        let endDate = year + "-" + month + "-" + day;
-
-        for (const member of circleMembers) {
-            let fit = await FitModel.findRecentFit({
-                userId: member, goalTypeId: circle.goalTypeId
-                ,
-                createdAt: {
-                    $gte: new Date(startDate).setHours(00, 00, 00),
-                    $lt: new Date(endDate).setHours(23, 59, 59)
-                }
-            });
-            let user = await UserModel.find({ _id: member });
-            user.password = undefined;
-            user.token = undefined;
-            if (user == null) {
-                contine;
-            }
-
-            
-            if (fit == null || fit.length == 0) {
-                memberData.push({
-                    userData: user,
-                    fitValue: 0,
-                    totalFitValue: 0
-                });
-            } else {
-                let totalFit = 0;
-                fit.forEach(p=>{
-                    totalFit += p.fitValue;
-                })
-                memberData.push({
-                    userData: user,
-                    fitValue: fit[0].fitValue,
-                    totalFitValue: totalFit//sum of fit values
-                });
-            }
-        }
-
-        memberData.sort((a, b) => {
-            return b.fitValue - a.fitValue;
-        });
+        await formatIndividualData(circle, circleMembers, memberData);
 
         let response = new SuccessResponse(memberData, "circle member fit values");
         res.status(status.SUCCESS).json(response);
@@ -239,6 +200,78 @@ getIndividualFitData = async (req, res) => {
         res.status(status.ERROR).json({ error: err.message });
     }
 };
+
+getIndividualFitDataByGoalTypeId = async (req, res) => {
+    try {
+        let circle = await CircleChallengeModel.findCircleChallenge({ goalTypeId: req.params.goalTypeId });
+        let memberData = [];
+        let circleMembers = [];
+        if (circle.results.length < 1) {
+            throw new NotFoundException("No members found");
+        }
+        await formatIndividualData(circle, circleMembers, memberData);
+
+        let response = new SuccessResponse(memberData, "circle member fit values");
+        res.status(status.SUCCESS).json(response);
+    } catch (err) {
+        res.status(status.ERROR).json({ error: err.message });
+    }
+};
+
+async function formatIndividualData(circle, circleMembers, memberData) {
+    circle.results.forEach((result) => {
+        circleMembers.push(result.userId);
+    });
+
+    var dateObj = new Date();
+    var month = dateObj.getUTCMonth() + 1; //months from 1-12
+    var day = dateObj.getUTCDate();
+    day += 1;
+    var year = dateObj.getUTCFullYear();
+
+    let startDate = year + "-" + month + "-" + '1';
+    let endDate = year + "-" + month + "-" + day;
+
+    for (const member of circleMembers) {
+        let fit = await FitModel.findRecentFit({
+            userId: member, goalTypeId: circle.goalTypeId,
+
+            createdAt: {
+                $gte: new Date(startDate).setHours(00, 00, 00),
+                $lt: new Date(endDate).setHours(23, 59, 59)
+            }
+        });
+        let user = await UserModel.find({ _id: member });
+        user.password = undefined;
+        user.token = undefined;
+        if (user == null) {
+            contine;
+        }
+
+
+        if (fit == null || fit.length == 0) {
+            memberData.push({
+                userData: user,
+                fitValue: 0,
+                totalFitValue: 0
+            });
+        } else {
+            let totalFit = 0;
+            fit.forEach(p => {
+                totalFit += p.fitValue;
+            });
+            memberData.push({
+                userData: user,
+                fitValue: fit[0].fitValue,
+                totalFitValue: totalFit //sum of fit values
+            });
+        }
+    }
+
+    memberData.sort((a, b) => {
+        return b.fitValue - a.fitValue;
+    });
+}
 
 module.exports = {
     addChallenge,
@@ -248,5 +281,7 @@ module.exports = {
     updateMemberData,
     getCircleChallenges,
     getCircleRanks,
-    getIndividualFitData
+    getCircleRanksByGoalTypeId,
+    getIndividualFitData,
+    getIndividualFitDataByGoalTypeId
 }

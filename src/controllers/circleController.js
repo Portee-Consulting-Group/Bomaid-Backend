@@ -93,11 +93,11 @@ addMember = async (req, res) => {
                 throw new AlreadyExistsException(`Member with id ${member} already added`);
             }
         }
-        circle.members.concat(req.body.members);
+        members = circle.members.concat(req.body.members);
 
         circle = await CircleModel.update({ _id: req.body.circleId },
             {
-                members: circle.members
+                members: members
             });
 
         //assign new members to default fit value
