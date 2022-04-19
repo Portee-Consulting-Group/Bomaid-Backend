@@ -363,7 +363,7 @@ const AuthValidationMiddleware = require('../middleware/authValidationMiddleware
 
   /**
    * @swagger
-   * /challenge/getIndividualFitDataByGoalTypeId/{circleId}/{goalTypeId}:
+   * /challenge/getIndividualFitDataByGoalTypeId/{goalTypeId}:
    *  get:
    *   summary: get individual fit data by goal type
    *   tags:  

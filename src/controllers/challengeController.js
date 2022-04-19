@@ -162,10 +162,22 @@ getCircleChallenges = async (req, res) => {
 getCircleRanks = async (req, res) => {
     try {
         let circles = await CircleChallengeModel.findAll({ challengeId: req.params.challengeId });
-        circles.sort((a, b) => {
+        let newCircles = [];
+        for (const circle of circles) {
+            const circleModel = await CircleModel.findCircle({ _id: circle.circleId });
+            let circleName = ''
+            if (circleModel != null) {
+                circleName = circleModel.title
+                newCircles.push({
+                    circleName: circleName,
+                    circleData: circle
+                });
+            }
+        }
+        newCircles.sort((a, b) => {
             return b.aggregatedResult - a.aggregatedResult
         });
-        let response = new SuccessResponse(circles, "circle ranks");
+        let response = new SuccessResponse(newCircles, "circle ranks");
         res.status(status.SUCCESS).json(response);
     } catch (err) {
         res.status(status.ERROR).json({ error: err.message });
@@ -174,10 +186,22 @@ getCircleRanks = async (req, res) => {
 getCircleRanksByGoalTypeId = async (req, res) => {
     try {
         let circles = await CircleChallengeModel.findAll({ goalTypeId: req.params.goalTypeId });
-        circles.sort((a, b) => {
+        let newCircles = [];
+        for (const circle of circles) {
+            const circleModel = await CircleModel.findCircle({ _id: circle.circleId });
+            let circleName = ''
+            if (circleModel != null) {
+                circleName = circleModel.title
+                newCircles.push({
+                    circleName: circleName,
+                    circleData: circle
+                });
+            }
+        }
+        newCircles.sort((a, b) => {
             return b.aggregatedResult - a.aggregatedResult
         });
-        let response = new SuccessResponse(circles, "circle ranks");
+        let response = new SuccessResponse(newCircles, "circle ranks");
         res.status(status.SUCCESS).json(response);
     } catch (err) {
         res.status(status.ERROR).json({ error: err.message });
