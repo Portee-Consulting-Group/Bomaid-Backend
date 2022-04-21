@@ -277,7 +277,8 @@ async function formatIndividualData(circle, circleMembers, memberData) {
             memberData.push({
                 userData: user,
                 fitValue: 0,
-                totalFitValue: 0
+                totalFitValue: 0,
+                dataAdded: fit.createdAt
             });
         } else {
             let totalFit = 0;
@@ -287,13 +288,14 @@ async function formatIndividualData(circle, circleMembers, memberData) {
             memberData.push({
                 userData: user,
                 fitValue: fit[0].fitValue,
-                totalFitValue: totalFit //sum of fit values
+                totalFitValue: totalFit, //sum of fit values
+                dataAdded: fit.createdAt
             });
         }
     }
 
     memberData.sort((a, b) => {
-        return b.fitValue - a.fitValue;
+        return b.totalFitValue - a.totalFitValue;
     });
 }
 

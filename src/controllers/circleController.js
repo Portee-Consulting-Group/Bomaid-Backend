@@ -85,9 +85,6 @@ addMember = async (req, res) => {
             if (user == null) {
                 throw new NullReferenceException(`user with id ${member} not found`);
             }
-        }
-
-        for (const member of circle.members) {
             let value = await members.includes(member);
             if (value == true) {
                 throw new AlreadyExistsException(`Member with id ${member} already added`);
