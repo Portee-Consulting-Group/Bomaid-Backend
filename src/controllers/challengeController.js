@@ -274,12 +274,7 @@ async function formatIndividualData(circle, circleMembers, memberData) {
 
 
         if (fit == null || fit.length == 0) {
-            memberData.push({
-                userData: user,
-                fitValue: 0,
-                totalFitValue: 0,
-                dataAdded: fit.createdAt
-            });
+            continue;
         } else {
             let totalFit = 0;
             fit.forEach(p => {
@@ -289,7 +284,7 @@ async function formatIndividualData(circle, circleMembers, memberData) {
                 userData: user,
                 fitValue: fit[0].fitValue,
                 totalFitValue: totalFit, //sum of fit values
-                dataAdded: fit.createdAt
+                dataAdded: fit[0].createdAt
             });
         }
     }
