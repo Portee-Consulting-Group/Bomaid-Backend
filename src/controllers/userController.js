@@ -96,6 +96,7 @@ getUserById = async (req, res) => {
             throw new NotFoundException("User not found");
         }
         user.password = undefined;
+        user.token = undefined;
         const response = new SuccessResponse(user, 'user details');
         res.status(status.SUCCESS).json({ message: response });
     } catch (error) {

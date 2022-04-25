@@ -61,11 +61,13 @@ addFit = async (req, res) => {
                         aggregatedResult: circleChallengeResult
                     });
             }
-        }
 
-        let fit = await FitModel.insert(req.body);
-        let response = new SuccessResponse(fit, "fit added");
-        res.status(status.SUCCESS).json(response);
+            let fit = await FitModel.insert(req.body);
+            let response = new SuccessResponse(fit, "fit added");
+            res.status(status.SUCCESS).json(response);
+        }else{
+            res.status(status.ERROR).json({ error: "Failed to add fit" });
+        }
     } catch (err) {
         res.status(status.ERROR).json({ error: err.message });
     }

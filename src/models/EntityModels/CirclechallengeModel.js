@@ -5,14 +5,17 @@ const statusEnum = require('../../common/enum').getStatusEnum();
 
 
 const circleChallengeSchema = new Schema({
-    results: { type: Array }, //{userId: "oeuoueo", value: 12}
+    results: [{
+        userId: String,
+        value: Number
+    }], //{userId: "oeuoueo", value: 12}
     challengeId: { type: String, required: true },
     goalTypeId: { type: String, required: true },
     circleId: { type: String, required: true },
     // endTime: { type: String },
     // endDate: { type: Date },
     status: { type: Number, required: true, default: statusEnum.active.value },
-    aggregatedResult: {type: Number, default: 0},
+    aggregatedResult: { type: Number, default: 0 },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now }
 });

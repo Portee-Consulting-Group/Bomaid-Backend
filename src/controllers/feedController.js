@@ -63,7 +63,7 @@ getFeeds = async (req, res) => {
 
         for (const feed of feeds) {
             let user = await UserModel.find({ _id: feed.userId });
-            let profilePic = user.uploadUrl;
+            let profilePic = user.uploadUrl != null ? user.uploadUrl : "";
             let data = {
                 profilePic,
                 feed

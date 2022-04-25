@@ -1,4 +1,4 @@
-const { NullReferenceException, AlreadyExistsException } = require('../../errors/AppError');
+const { NullReferenceException, AlreadyExistsException, CustomException } = require('../../errors/AppError');
 const { status } = require('../common/status');
 const CircleModel = require('../models/EntityModels/circleModel');
 const ChallengeModel = require('../models/EntityModels/challengeModel');
@@ -37,11 +37,12 @@ addCircle = async (req, res) => {
         }
 
 
-        if (req.body.circleImage != undefined) {
+        if (req.body.circleImage != undefined && req.body.circleImage != '') {
             const uploadedImage = await clodinaryService.uploadCircleImage(req.body.circleImage);
             req.body.uploadUrl = uploadedImage.url;
             req.body.uploadId = uploadedImage.public_id;
-        } else {
+        } 
+        else {
             throw new NullReferenceException("Image is required");
         }
 
@@ -49,6 +50,8 @@ addCircle = async (req, res) => {
         //add circle to every challenge
         let results = [];
         for (const member of req.body.members) {
+            let memberType = typeof member;
+            if(memberType != "string") throw new CustomException*"Member must be a string"; //check to know why user object is added to db at times
             results.push({
                 userId: member,
                 value: 0
@@ -85,16 +88,16 @@ addMember = async (req, res) => {
             if (user == null) {
                 throw new NullReferenceException(`user with id ${member} not found`);
             }
-            let value = await members.includes(member);
+            let value = await circle.members.includes(member);
             if (value == true) {
                 throw new AlreadyExistsException(`Member with id ${member} already added`);
             }
         }
-        members = circle.members.concat(req.body.members);
+        let allMembers = circle.members.concat(req.body.members);
 
         circle = await CircleModel.update({ _id: req.body.circleId },
             {
-                members: members
+                members: allMembers
             });
 
         //assign new members to default fit value

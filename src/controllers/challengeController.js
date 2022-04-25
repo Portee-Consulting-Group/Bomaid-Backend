@@ -258,18 +258,19 @@ async function formatIndividualData(circle, circleMembers, memberData) {
 
     for (const member of circleMembers) {
         let fit = await FitModel.findRecentFit({
-            userId: member, goalTypeId: circle.goalTypeId,
-
+            userId: member,
+            goalTypeId: circle.goalTypeId,
             createdAt: {
                 $gte: new Date(startDate).setHours(00, 00, 00),
                 $lt: new Date(endDate).setHours(23, 59, 59)
             }
         });
         let user = await UserModel.find({ _id: member });
-        user.password = undefined;
-        user.token = undefined;
         if (user == null) {
-            contine;
+            continue;
+        } else {
+            user.password = undefined;
+            user.token = undefined;
         }
 
 
