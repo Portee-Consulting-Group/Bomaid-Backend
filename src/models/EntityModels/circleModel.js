@@ -44,11 +44,16 @@ update = async (query, circleData) => {
     return Circle.findOneAndUpdate(query, circleData, { new: true });
 };
 
+deleteCircle = async (circleId) => {
+    return Circle.deleteOne({id: circleId})
+}
+
 
 
 module.exports = {
     insert,
     findCircle,
     update,
-    getAllCircles
+    getAllCircles,
+    deleteCircle
 };

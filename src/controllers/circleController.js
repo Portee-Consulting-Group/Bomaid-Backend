@@ -41,7 +41,7 @@ addCircle = async (req, res) => {
             const uploadedImage = await clodinaryService.uploadCircleImage(req.body.circleImage);
             req.body.uploadUrl = uploadedImage.url;
             req.body.uploadId = uploadedImage.public_id;
-        } 
+        }
         else {
             throw new NullReferenceException("Image is required");
         }
@@ -51,7 +51,7 @@ addCircle = async (req, res) => {
         let results = [];
         for (const member of req.body.members) {
             let memberType = typeof member;
-            if(memberType != "string") throw new CustomException*"Member must be a string"; //check to know why user object is added to db at times
+            if (memberType != "string") throw new CustomException * "Member must be a string"; //check to know why user object is added to db at times
             results.push({
                 userId: member,
                 value: 0
@@ -60,12 +60,17 @@ addCircle = async (req, res) => {
 
         let challenges = await ChallengeModel.findAll({});
         for (const challenge of challenges) {
-            await CircleChallengeModel.insert({
-                challengeId: challenge._id,
-                goalTypeId: challenge.goalTypeId,
-                results: results,
-                circleId: circle._id
-            });
+            try {
+                await CircleChallengeModel.insert({
+                    challengeId: challenge._id,
+                    goalTypeId: challenge.goalTypeId,
+                    results: results,
+                    circleId: circle._id
+                });
+            } catch (err) {
+                await CircleModel.deleteCircle(circle._id);
+                throw new CustomException("Adding circle challenge failed, circle deleted")
+            }
         }
         let response = new SuccessResponse(circle, "circle added");
         res.status(status.SUCCESS).json(response);
