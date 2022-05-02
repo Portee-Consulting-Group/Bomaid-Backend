@@ -12,7 +12,10 @@ const messages = {
     sendChat: 'SEND_CHAT'
 };
 
+const POINT_UNIT = 1250;
+
 module.exports = {
     constants,
-    messages
+    messages,
+    POINT_UNIT
 };

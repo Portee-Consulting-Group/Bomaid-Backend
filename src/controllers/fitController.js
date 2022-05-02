@@ -7,6 +7,7 @@ const CirclechallengeModel = require('../models/EntityModels/CirclechallengeMode
 const UserGoalModel = require('../models/EntityModels/userGoalModel');
 const SuccessResponse = require('../models/viewModels/responseModel');
 const clodinaryService = require('../services/CloudinaryService');
+const { POINT_UNIT } = require('../common/constants');
 const statisticEnum = require('../common/enum').getStatisticEnums();
 
 addFit = async (req, res) => {
@@ -115,7 +116,8 @@ getFitStatistics = async (req, res) => {
 
             let fitStat = {
                 goalTypeId: goalType._id,
-                statistic: sum
+                statistic: sum,
+                points: Math.floor(sum/POINT_UNIT) 
             };
             statistics.push(fitStat);
         }

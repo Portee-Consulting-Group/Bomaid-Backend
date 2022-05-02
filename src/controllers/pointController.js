@@ -49,7 +49,7 @@ calculateUserPoint = async (req, res) => {
         }
 
         //calculate point
-        points = Math.round(distance / goaltype.unitPoint); // divide total distance by unitpoint of a goal type
+        points = Math.floor(distance / goaltype.unitPoint); // divide total distance by unitpoint of a goal type
 
         let pointModel = await PointModel.find({ userId: req.body.userId, goalTypeId: req.body.goalTypeId });
         if (pointModel == null) {
