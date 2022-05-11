@@ -71,9 +71,9 @@ exports.routesConfig = function (app) {
     *      400:
     *       description: request failed
     */
-    app.post('/user/signup/local', [
-        UserController.addUser
-    ]);
+    // app.post('/user/signup/local', [
+    //     UserController.addUser
+    // ]);
 
     /**
      * @swagger
