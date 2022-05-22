@@ -74,17 +74,23 @@ exports.routesConfig = function (app) {
 
     /**
      * @swagger
-     * /circle/addMember:
-     *  post:
-     *   summary: add member
+     * /circle/leaveCircle/{circleId}/{userId}:
+     *  get:
+     *   summary: remove member
      *   tags: 
      *    - circle
-     *   requestBody:
-     *    required: true
-     *    content:
-     *     application/json:
+     *   parameters:
+     *    - in: path
+     *      name: circleId
      *      schema:
-     *        $ref: '#/definitions/addMember'
+     *       type: string
+     *      required: true
+     *    - in: path
+     *      name: userId
+     *      schema:
+     *       type: string
+     *       example: 0
+     *      required: true
      *   security:
      *     - bearerAuth: []
      *   responses:
@@ -94,8 +100,45 @@ exports.routesConfig = function (app) {
      *       description: request failed
      *  
      */
-    app.post('/circle/addMember', [
-        CircleController.addMember
+    app.get('/circle/leaveCircle/:circleId/:userId', [
+        CircleController.leaveCircle
+    ]);
+    /**
+     * @swagger
+     * /circle/getUserCircles/{userId}/{page}/{pageSize}:
+     *  get:
+     *   summary: get all user circles
+     *   tags:  
+     *     - circle
+     *   parameters:
+     *    - in: path
+     *      name: userId
+     *      schema:
+     *       type: string
+     *      required: true
+     *    - in: path
+     *      name: page
+     *      schema:
+     *       type: number
+     *       example: 0
+     *      required: true
+     *    - in: path
+     *      name: pageSize
+     *      schema:
+     *       type: number
+     *       example: 10
+     *      required: true
+     *   responses:
+     *      200:
+     *       description: successful response
+     *      400:
+     *       description: request failed
+     *    
+     */
+     app.get('/circle/getUserCircles/:userId/:page/:pageSize',[
+        // AuthValidationMiddleware.validJWTNeeded,
+        // AuthPermissionMiddleware.adminLevelRequired,
+        CircleController.getUserCircles
     ]);
 
     /**

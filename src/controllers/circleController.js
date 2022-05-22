@@ -129,6 +129,25 @@ addMember = async (req, res) => {
     }
 };
 
+leaveCircle = async (req, res) => {
+    try {
+        const circle = await CircleModel.findCircle({ _id: req.params.circleId });
+        if (circle == null) throw new NullReferenceException("Circle not found ")
+        let index = circle.members.indexOf(req.params.userId)
+        if (index < 0) throw new NullReferenceException("User not found")
+
+        circle.members.splice(index, 1)
+        let newCircle = circle.members
+        await CircleModel.update({ _id: req.params.circleId }, {
+            members: newCircle
+        })
+        let response = new SuccessResponse(circle, "user left circle");
+        res.status(status.SUCCESS).json(response);
+    } catch (err) {
+        res.status(status.ERROR).json({ error: err.message });
+    }
+}
+
 getAdminCircles = async (req, res) => {
     try {
         var circles = await CircleModel.getAllCircles({ adminId: req.params.adminId }, req.params.page, req.params.pageSize);
@@ -183,6 +202,7 @@ getAllCircles = async (req, res) => {
 module.exports = {
     addCircle,
     addMember,
+    leaveCircle,
     getAdminCircles,
     getUserCircles,
     getMembers,
