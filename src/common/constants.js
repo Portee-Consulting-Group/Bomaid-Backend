@@ -5,17 +5,18 @@ const constants = {
     EMAIL_CHECK: "bomaid.co.bw"
 };
 
-const messages = {
-    chat: 'CHAT_ROOM',
-    group: 'GROUP_CHAT_ROOM',
-    newChat: 'NEW_CHAT',
-    sendChat: 'SEND_CHAT'
+const messageEnums = {
+    getChats: 'GET_CHATS',
+    groupChat: 'GROUP_CHAT',
+    userChat: 'USER_CHAT',
+    sendChat: 'SEND_CHAT',
+    sendGroupChat: 'SEND_GROUP_CHAT',
 };
 
 const POINT_UNIT = 1250;
 
 module.exports = {
     constants,
-    messages,
+    messageEnums,
     POINT_UNIT
 };

@@ -6,9 +6,8 @@ const statusEnum = require('../../common/enum').getStatusEnum();
 
 const chatRoomSchema = new Schema({
     title: { type: String },
-    senderId: {type: String, required: true},
-    receiverId: {type: String},
     members: [{ type: String }],
+    adminId: {type: String },
     type: {type: Number, required: true},
     status: { type: Number, required: true, default: statusEnum.active.value },
     createdAt: { type: Date, default: Date.now },

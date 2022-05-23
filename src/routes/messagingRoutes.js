@@ -28,9 +28,9 @@ const AuthValidationMiddleware = require('../middleware/authValidationMiddleware
  *     type: string
  *    adminId:
  *     type: string
- *    userId:
+ *    members:
  *     type: array
- *     items:
+ *     items: 
  *       type: string
  */
 exports.routesConfig = function (app){
@@ -81,9 +81,9 @@ exports.routesConfig = function (app){
      *       description: request failed
      * 
      */
-    app.post('/chat/sendMessage', [
-        MessagingController.sendMessage
-    ])
+    // app.post('/chat/sendMessage', [
+    //     MessagingController.sendMessage
+    // ])
 
     /**
      * @swagger
@@ -116,8 +116,8 @@ exports.routesConfig = function (app){
      *      400:
      *       description: request failed
      */
-    app.get('/chat/getChats/:userId/:page/:pageSize', [
-        MessagingController.getChats
-    ]);
+    // app.get('/chat/getChats/:userId/:page/:pageSize', [
+    //     MessagingController.getChats
+    // ]);
 
 };
