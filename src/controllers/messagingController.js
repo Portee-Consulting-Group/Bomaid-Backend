@@ -40,10 +40,22 @@ sendMessage = async (data) => {
                 members: data.members,
                 type: messageEnums.chat.value
             });
+            if (chat._id != null) {
+                const result = await MessageModel.insert({
+                    chatId: chat._id,
+                    senderId: data.senderId,
+                    message: data.message
+                });
+                return result;
+            }
         } else {
             chat = await ChatRoomModel.findChatRoom({ _id: data.chatId });
             if (chat == null) throw new NullReferenceException("Chat room not found");
-            const result = await MessageModel.insert(data);
+            const result = await MessageModel.insert({
+                chatId: chat._id,
+                senderId: data.senderId,
+                message: data.message
+            });
             return result;
         }
     } catch (error) {
@@ -64,7 +76,7 @@ sendGroupMessage = async (data) => {
 }
 
 getMessages = async (data) => {
-    let messages = await MessageModel.findAll({chatId: data })
+    let messages = await MessageModel.findAll({ chatId: data })
     return messages;
 }
 

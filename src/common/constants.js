@@ -6,11 +6,12 @@ const constants = {
 };
 
 const messageEnums = {
-    getChats: 'GET_CHATS',
-    groupChat: 'GROUP_CHAT',
-    userChat: 'USER_CHAT',
-    sendChat: 'SEND_CHAT',
-    sendGroupChat: 'SEND_GROUP_CHAT',
+    getChats: 'GET_CHATS', //get all messages
+    groupChat: 'GROUP_CHAT', //receive group message
+    userChat: 'USER_CHAT', // receive user message
+    sendChat: 'SEND_CHAT', // send user chat
+    sendGroupChat: 'SEND_GROUP_CHAT', //send group chat
+    disconnect: 'disconnect'
 };
 
 const POINT_UNIT = 1250;
