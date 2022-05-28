@@ -100,23 +100,24 @@ server.listen(process.env.PORT, function () {
 //setup socket connection
 // var server = http.createServer(app);
 sio.on("connection", function (socket) {
-    console.log("Made socket conn")
+    // console.log("Made socket conn")
     //chat message
     socket.on(messageEnums.sendChat, async (data) => {
         console.log('new message from user', data);
         const msg = await messageController.sendMessage(data);
-        socket.emit(messageEnums.userChat, msg);
+        sio.emit(messageEnums.userChat, msg);
     });
     //group chat message
     socket.on(messageEnums.sendGroupChat, async(data) => {
         console.log('new message from group', data);
         const msg = await messageController.sendGroupMessage(data);
-        socket.emit(messageEnums.groupChat, msg);
+        sio.emit(messageEnums.groupChat, msg);
     });
     //all chats
     socket.on(messageEnums.getChats, async (data) => {
         let result = await messageController.getMessages(data);
-        socket.emit(messageEnums.getChats, result)
+        sio.emit(messageEnums.getChats, result)
+        // socket.disconnect(true);
     });
 
     // socket.on(messageEnums.disconnect, (reason) => {

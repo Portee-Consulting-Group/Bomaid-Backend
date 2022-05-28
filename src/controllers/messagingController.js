@@ -40,7 +40,7 @@ sendMessage = async (data) => {
                 members: data.members,
                 type: messageEnums.chat.value
             });
-            if (chat._id != null) {
+            if (chat != null) {
                 const result = await MessageModel.insert({
                     chatId: chat._id,
                     senderId: data.senderId,
@@ -52,7 +52,7 @@ sendMessage = async (data) => {
             chat = await ChatRoomModel.findChatRoom({ _id: data.chatId });
             if (chat == null) throw new NullReferenceException("Chat room not found");
             const result = await MessageModel.insert({
-                chatId: chat._id,
+                chatId: data.chatId,
                 senderId: data.senderId,
                 message: data.message
             });
