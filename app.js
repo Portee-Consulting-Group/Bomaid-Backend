@@ -108,7 +108,7 @@ sio.on("connection", function (socket) {
         sio.emit(messageEnums.userChat, msg);
     });
     //group chat message
-    socket.on(messageEnums.sendGroupChat, async(data) => {
+    socket.on(messageEnums.sendGroupChat, async (data) => {
         console.log('new message from group', data);
         const msg = await messageController.sendGroupMessage(data);
         sio.emit(messageEnums.groupChat, msg);
@@ -120,13 +120,14 @@ sio.on("connection", function (socket) {
         // socket.disconnect(true);
     });
 
-    // socket.on(messageEnums.disconnect, (reason) => {
-    //     if (reason !== "io server disconnect") {
-    //       // the disconnection was initiated by the server, you need to reconnect manually
-    //       socket.connect();
-    //     }
-    //     // else the socket will automatically try to reconnect
-    //   });
+    socket.on('error', function (err) {
+        if (err.description) throw err.description;
+        else throw err; // Or whatever you want to do
+    });
+
+    socket.on(messageEnums.disconnect, (reason) => {
+        socket.disconnect();
+    });
 });
 
 
