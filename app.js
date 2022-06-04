@@ -14,6 +14,8 @@ const { invalidOtpCronJob } = require('./src/services/CronJobService.js');
 const { messageEnums } = require('./src/common/constants.js');
 const messageController = require('./src/controllers/messagingController.js');
 
+
+
 setEnvironment();
 connectDB();
 
@@ -99,36 +101,36 @@ server.listen(process.env.PORT, function () {
 
 //setup socket connection
 // var server = http.createServer(app);
-sio.on("connection", function (socket) {
-    // console.log("Made socket conn")
-    //chat message
-    socket.on(messageEnums.sendChat, async (data) => {
-        console.log('new message from user', data);
-        const msg = await messageController.sendMessage(data);
-        sio.emit(messageEnums.userChat, msg);
-    });
-    //group chat message
-    socket.on(messageEnums.sendGroupChat, async (data) => {
-        console.log('new message from group', data);
-        const msg = await messageController.sendGroupMessage(data);
-        sio.emit(messageEnums.groupChat, msg);
-    });
-    //all chats
-    socket.on(messageEnums.getChats, async (data) => {
-        let result = await messageController.getMessages(data);
-        sio.emit(messageEnums.getChats, result)
-        // socket.disconnect(true);
-    });
+// sio.on("connection", function (socket) {
+//     // console.log("Made socket conn")
+//     //chat message
+//     socket.on(messageEnums.sendChat, async (data) => {
+//         console.log('new message from user', data);
+//         const msg = await messageController.sendMessage(data);
+//         sio.emit(messageEnums.userChat, msg);
+//     });
+//     //group chat message
+//     socket.on(messageEnums.sendGroupChat, async (data) => {
+//         console.log('new message from group', data);
+//         const msg = await messageController.sendGroupMessage(data);
+//         sio.emit(messageEnums.groupChat, msg);
+//     });
+//     //all chats
+//     socket.on(messageEnums.getChats, async (data) => {
+//         let result = await messageController.getMessages(data);
+//         sio.emit(messageEnums.getChats, result)
+//         // socket.disconnect(true);
+//     });
 
-    socket.on('error', function (err) {
-        if (err.description) throw err.description;
-        else throw err; // Or whatever you want to do
-    });
+//     socket.on('error', function (err) {
+//         if (err.description) throw err.description;
+//         else throw err; // Or whatever you want to do
+//     });
 
-    socket.on(messageEnums.disconnect, (reason) => {
-        socket.disconnect();
-    });
-});
+//     socket.on(messageEnums.disconnect, (reason) => {
+//         socket.disconnect();
+//     });
+// });
 
 
 //routes config
@@ -180,3 +182,4 @@ function setEnvironment() {
         dotenv.config({ path: './config/config.test.env' });
     }
 }
+

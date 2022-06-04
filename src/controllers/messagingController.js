@@ -6,6 +6,8 @@ const MessageModel = require('../models/EntityModels/messageModel');
 const messageEnums = require('../common/enum').getMessageEnums();
 const SuccessResponse = require('../models/viewModels/responseModel');
 const clodinaryService = require('../services/CloudinaryService');
+const app = require("../../app");
+const { sendChat, sendGroupChat } = require('../services/messagingService');
 
 createGroup = async (req, res) => {
     try {
@@ -28,48 +30,50 @@ createGroup = async (req, res) => {
     }
 };
 
-sendMessage = async (data) => {
+sendMessage = async (req, res) => {
     try {
         let chat;
-        if (data.chatId == '' || data.chatId == undefined) {
-            for (let user of data.members) {
+        let result;
+        if (req.body.chatId == '' || req.body.chatId == undefined) {
+            for (let user of req.body.members) {
                 user = await UserModel.find({ _id: user });
                 if (user == null) throw new NullReferenceException("User not found");
             }
             chat = await ChatRoomModel.insert({
-                members: data.members,
+                members: req.body.members,
                 type: messageEnums.chat.value
             });
             if (chat != null) {
-                const result = await MessageModel.insert({
+                result = await MessageModel.insert({
                     chatId: chat._id,
-                    senderId: data.senderId,
-                    message: data.message
+                    senderId: req.body.senderId,
+                    message: req.body.message
                 });
-                return result;
             }
         } else {
-            chat = await ChatRoomModel.findChatRoom({ _id: data.chatId });
+            chat = await ChatRoomModel.findChatRoom({ _id: req.body.chatId });
             if (chat == null) throw new NullReferenceException("Chat room not found");
-            const result = await MessageModel.insert({
-                chatId: data.chatId,
-                senderId: data.senderId,
-                message: data.message
+            result = await MessageModel.insert({
+                chatId: req.body.chatId,
+                senderId: req.body.senderId,
+                message: req.body.message
             });
-            return result;
         }
+        sendChat(result._doc);
+        res.status(status.SUCCESS).json(result._doc);
     } catch (error) {
-        // res.status(status.ERROR).json({ error: error.message });
+        res.status(status.ERROR).json({ error: error.message });
     }
 };
 
-sendGroupMessage = async (data) => {
+sendGroupMessage = async (req, res) => {
     try {
-        let group = await ChatRoomModel.findChatRoom({ _id: data.chatId });
+        let group = await ChatRoomModel.findChatRoom({ _id: req.body.chatId });
         if (group == null) throw new NullReferenceException("Group not found")
 
-        const result = await MessageModel.insert(data);
-        return result;
+        const result = await MessageModel.insert(req.body);
+        sendGroupChat(result._doc);
+        res.status(status.SUCCESS).json(result);
     } catch (error) {
         // res.status(status.ERROR).json({ error: error.message });
     }

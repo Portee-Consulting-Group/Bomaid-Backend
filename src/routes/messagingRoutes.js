@@ -32,6 +32,20 @@ const AuthValidationMiddleware = require('../middleware/authValidationMiddleware
  *     type: array
  *     items: 
  *       type: string
+ * 
+ *  sendChat:
+ *   type: object
+ *   properties: 
+ *    chatId:
+ *     type: string
+ *    senderId:
+ *     type: string
+ *    message:
+ *     type: string
+ *    members:
+ *     type: array
+ *     items:
+ *       type: string
  */
 exports.routesConfig = function (app){
     /**
@@ -59,11 +73,12 @@ exports.routesConfig = function (app){
         MessagingController.createGroup
     ]);
 
+
     /**
      * @swagger
-     * /chat/sendMessage:
+     * /chat/sendChat:
      *  post:
-     *   summary: send chat
+     *   summary: send normal message
      *   tags: 
      *    - chat
      *   requestBody:
@@ -71,7 +86,7 @@ exports.routesConfig = function (app){
      *    content:
      *     application/json:
      *      schema:
-     *        $ref: '#/definitions/sendMessage'
+     *        $ref: '#/definitions/sendChat'
      *   security:
      *     - bearerAuth: []
      *   responses:
@@ -79,11 +94,35 @@ exports.routesConfig = function (app){
      *       description: successful response
      *      400:
      *       description: request failed
-     * 
      */
-    // app.post('/chat/sendMessage', [
-    //     MessagingController.sendMessage
-    // ])
+    app.post('/chat/sendChat', [
+        MessagingController.sendMessage
+    ]);
+
+    /**
+     * @swagger
+     * /chat/sendGroupChat:
+     *  post:
+     *   summary: send group message
+     *   tags: 
+     *    - chat
+     *   requestBody:
+     *    required: true
+     *    content:
+     *     application/json:
+     *      schema:
+     *        $ref: '#/definitions/sendChat'
+     *   security:
+     *     - bearerAuth: []
+     *   responses:
+     *      200:
+     *       description: successful response
+     *      400:
+     *       description: request failed
+     */
+    app.post('/chat/sendGroupChat', [
+        MessagingController.sendMessage
+    ]);
 
     /**
      * @swagger
