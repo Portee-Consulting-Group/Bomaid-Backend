@@ -7,7 +7,7 @@ const messageEnums = require('../common/enum').getMessageEnums();
 const SuccessResponse = require('../models/viewModels/responseModel');
 const clodinaryService = require('../services/CloudinaryService');
 const app = require("../../app");
-const { sendChat, sendGroupChat } = require('../services/messagingService');
+const { sendChat, sendGroupChat, sendAllMessagees } = require('../services/messagingService');
 
 createGroup = async (req, res) => {
     try {
@@ -75,13 +75,18 @@ sendGroupMessage = async (req, res) => {
         sendGroupChat(result._doc);
         res.status(status.SUCCESS).json(result);
     } catch (error) {
-        // res.status(status.ERROR).json({ error: error.message });
+        res.status(status.ERROR).json({ error: error.message });
     }
 }
 
-getMessages = async (data) => {
-    let messages = await MessageModel.findAll({ chatId: data })
-    return messages;
+getMessages = async (req, res) => {
+    try {
+        let messages = await MessageModel.findAll({ chatId: req.params.chatId });
+        sendAllMessagees(messages)
+        res.status(status.SUCCESS).json(messages);
+    } catch (error) {
+        res.status(status.ERROR).json({ error: error.message });
+    }
 }
 
 module.exports = {

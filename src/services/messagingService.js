@@ -16,9 +16,14 @@ sendGroupChat = (data) => {
         message: data.message
     });
 }
+sendAllMessagees = (data) => {
+    pusher.trigger(process.env.PUSHER_SUBSCRIBE, messageEnums.getChats, data);
+
+}
 
 
 module.exports = {
     sendChat,
-    sendGroupChat
+    sendGroupChat,
+    sendAllMessagees
 }

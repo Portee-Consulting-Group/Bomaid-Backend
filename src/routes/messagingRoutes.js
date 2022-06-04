@@ -126,6 +126,29 @@ exports.routesConfig = function (app){
 
     /**
      * @swagger
+     * /chat/getMessages/{chatId}:
+     *  get:
+     *   summary: get messages
+     *   tags:  
+     *     - chat
+     *   parameters:
+     *    - in: path
+     *      name: chatId
+     *      schema:
+     *       type: string
+     *      required: true
+     *   responses:
+     *      200:
+     *       description: successful response
+     *      400:
+     *       description: request failed
+     *    
+     */
+    app.get('/chat/getMessages/:chatId', [
+        MessagingController.getMessages
+    ]);
+
+    /**
      * /chat/getChats/{userId}/{page}/{pageSize}:
      *  get:
      *   summary: get user chats
