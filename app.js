@@ -11,8 +11,7 @@ const swaggerUi = require('swagger-ui-express');
 var http = require('http');
 const passport = require('passport');
 const { invalidOtpCronJob } = require('./src/services/CronJobService.js');
-const { messageEnums } = require('./src/common/constants.js');
-const messageController = require('./src/controllers/messagingController.js');
+const seeder  = require('./src/common/seeder.js');
 
 
 
@@ -183,3 +182,5 @@ function setEnvironment() {
     }
 }
 
+//seeders
+seeder

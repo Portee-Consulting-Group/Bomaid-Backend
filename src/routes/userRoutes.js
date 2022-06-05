@@ -27,6 +27,12 @@ const upload = require('../common/multer');
  *    companyRole:
  *     type: string
  *     example: Head of product
+ *    accountType:
+ *     type: number
+ *     example: 1
+ *    orgLevel:
+ *     type: number
+ *     example: 1
  *    profileImage:
  *     type: string
  *     example: data:image/jpeg;base64
@@ -71,9 +77,9 @@ exports.routesConfig = function (app) {
     *      400:
     *       description: request failed
     */
-    // app.post('/user/signup/local', [
-    //     UserController.addUser
-    // ]);
+    app.post('/user/signup/local', [
+        UserController.addUser
+    ]);
 
     /**
      * @swagger

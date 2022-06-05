@@ -4,6 +4,7 @@ const crypto = require('crypto');
 const { status } = require('../common/status');
 const SuccessResponse = require('../models/viewModels/responseModel');
 const UserModel = require('../models/EntityModels/userModel');
+const OrganizationLevelModel = require('../models/EntityModels/organizationalLevelModel');
 
 local_login = async (req, res) => {
     try {
@@ -58,7 +59,13 @@ generateJwtToken = async (email) => {
     // return tokenObject;
 };
 
+getOrganizationLevels = async (req, res) => {
+    const response = await OrganizationLevelModel.getAllLevels();
+    res.status(status.SUCCESS).json({ message: response})
+}
+
 module.exports = {
     local_login,
-    generateJwtToken
+    generateJwtToken,
+    getOrganizationLevels
 }

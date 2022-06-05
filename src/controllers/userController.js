@@ -1,8 +1,9 @@
 const { NullReferenceException, AlreadyExistsException, NotFoundException, CustomException } = require('../../errors/AppError');
 const UserModel = require('../models/EntityModels/userModel');
+const OrgLevelModel = require('../models/EntityModels/organizationalLevelModel');
 const SuccessResponse = require('../models/viewModels/responseModel');
 const { status } = require('../common/status');
-const { getGenderEnums } = require('../common/enum');
+const { getGenderEnums, getAccountTypeEnums } = require('../common/enum');
 const otpService = require('../services/OtpService');
 const emailService = require('../services/EmailService');
 const crypto = require('crypto');
@@ -25,9 +26,24 @@ addUser = async (req, res) => {
             throw new AlreadyExistsException("User with that email and phone no already exists");
         }
 
+        let levels = await OrgLevelModel.getAllLevels();
+        levels.some(level =>{
+            if(level.type == req.body.orgLevel){
+                return true;
+            }
+            throw new NotFoundException("That organization level does not exist");
+        });
+
+
+
         const genders = getGenderEnums();
         if (genders.get(Number(req.body.genderType)) == undefined) {
             throw new NotFoundException("gender not found");
+        }
+
+        const accountType = getAccountTypeEnums();
+        if(accountType.get(Number(req.body.accountType)) == undefined) {
+            throw new NotFoundException("type not found");
         }
 
 

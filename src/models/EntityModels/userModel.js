@@ -12,6 +12,8 @@ const userSchema = new Schema({
     password: { type: String, required: true, },
     uploadUrl: { type: String, default: "" },
     uploadId: { type: String, default: "" },
+    accountType: { type: Number, default: 0 },
+    orgLevel: { type: Number, default: 0 },
     userTypeId: { type: String, required: true, default: userEnum.user.value },
     // callingCodeId: { type: String, required: true },
     // phoneNo: { type: String, required: true, unique: true },

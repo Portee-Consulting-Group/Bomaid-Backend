@@ -48,5 +48,24 @@ exports.routesConfig = function (app) {
         AuthValidationMiddleware.validRefreshNeeded,
         AuthorizationController.local_login
     ]);
+
+    /**
+     * @swagger
+     * /auth/getOrgLevels:
+     *  get:
+     *   summary: get organization levels
+     *   tags:  
+     *     - auth
+     *   responses:
+     *      200:
+     *       description: successful response
+     *      400:
+     *       description: request failed
+     *    
+     * 
+     */
+    app.get('/auth/getOrgLevels',[
+        AuthorizationController.getOrganizationLevels
+    ]);
     
 };
