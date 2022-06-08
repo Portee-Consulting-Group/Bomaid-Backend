@@ -66,6 +66,18 @@ sendMessage = async (req, res) => {
     }
 };
 
+getUserChats = async (req, res)=> {
+    try {
+        let chats = await ChatRoomModel.findAll({members: req.params.userId});
+        if(chats == null) chats = [];
+        res.status(status.SUCCESS).json(chats);
+
+    } catch (error) {
+        res.status(status.ERROR).json({ error: error.message });
+    }
+}
+
+
 sendGroupMessage = async (req, res) => {
     try {
         let group = await ChatRoomModel.findChatRoom({ _id: req.body.chatId });
@@ -93,5 +105,6 @@ module.exports = {
     createGroup,
     sendMessage,
     sendGroupMessage,
-    getMessages
+    getMessages,
+    getUserChats
 };
