@@ -5,6 +5,9 @@ const { status } = require('../common/status');
 const SuccessResponse = require('../models/viewModels/responseModel');
 const UserModel = require('../models/EntityModels/userModel');
 const OrganizationLevelModel = require('../models/EntityModels/organizationalLevelModel');
+const SurveyResponseModel = require('../models/EntityModels/surveyResponseModel');
+const TargetModel = require('../models/EntityModels/targetModel');
+const { supportEmail } = require('../services/EmailService');
 
 local_login = async (req, res) => {
     try {
@@ -58,14 +61,33 @@ generateJwtToken = async (email) => {
     // };
     // return tokenObject;
 };
+sendSupportEmail = async (req,res)=>{
+    await supportEmail(req.body.message);
+    res.status(status.SUCCESS).json({message: "Message sent"});
+}
 
 getOrganizationLevels = async (req, res) => {
     const response = await OrganizationLevelModel.getAllLevels();
     res.status(status.SUCCESS).json({ message: response})
 }
 
+getSurveyTargets = async (req, res) => {
+    const response = await TargetModel.getAllTargets();
+    res.status(status.SUCCESS).json({ message: response})
+}
+
+getSurveyResponse = async (req, res) => {
+    const response = await SurveyResponseModel.getAllResponses();
+    res.status(status.SUCCESS).json({ message: response})
+}
+
+
+
 module.exports = {
     local_login,
     generateJwtToken,
-    getOrganizationLevels
+    sendSupportEmail,
+    getOrganizationLevels,
+    getSurveyTargets,
+    getSurveyResponse
 }

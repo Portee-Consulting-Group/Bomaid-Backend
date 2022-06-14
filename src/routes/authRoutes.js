@@ -48,6 +48,31 @@ exports.routesConfig = function (app) {
         AuthValidationMiddleware.validRefreshNeeded,
         AuthorizationController.local_login
     ]);
+    /**
+     * @swagger
+     * /auth/customerSupport:
+     *  post:
+     *   summary: sends email to customer support
+     *   tags:
+     *     - auth
+     *   requestBody:
+     *    required: true
+     *    content:
+     *     application/json:
+     *      schema:
+     *       type: object
+     *       properties:
+     *          message: 
+     *            type: string
+     *   responses:
+     *      200:
+     *       description: successful response
+     *      400:
+     *       description: request failed
+     */
+    app.post('/auth/customerSupport', [
+        AuthorizationController.sendSupportEmail
+    ]);
 
     /**
      * @swagger
@@ -64,7 +89,43 @@ exports.routesConfig = function (app) {
      *    
      * 
      */
-    app.get('/auth/getOrgLevels',[
+     app.get('/auth/getOrgLevels',[
+        AuthorizationController.getOrganizationLevels
+    ]);
+    /**
+     * @swagger
+     * /auth/getSurveyTargets:
+     *  get:
+     *   summary: get survey targets
+     *   tags:  
+     *     - auth
+     *   responses:
+     *      200:
+     *       description: successful response
+     *      400:
+     *       description: request failed
+     *    
+     * 
+     */
+    app.get('/auth/getSurveyTargets',[
+        AuthorizationController.getOrganizationLevels
+    ]);
+    /**
+     * @swagger
+     * /auth/getSurveyResponse:
+     *  get:
+     *   summary: get survey response
+     *   tags:  
+     *     - auth
+     *   responses:
+     *      200:
+     *       description: successful response
+     *      400:
+     *       description: request failed
+     *    
+     * 
+     */
+    app.get('/auth/getSurveyResponse',[
         AuthorizationController.getOrganizationLevels
     ]);
     

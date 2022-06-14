@@ -8,6 +8,9 @@ const surveySchema = new Schema({
     title: { type: String, required: true },
     questions: [{ type: String, required: true }],
     userId: { type: String, required: true },
+    category: [{type: Number}],
+    level: {type: Number, required: true},
+    surveyTarget: [{type: Number}],
     status: { type: Number, required: true, default: statusEnum.active.value },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now }

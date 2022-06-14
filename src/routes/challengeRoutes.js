@@ -182,10 +182,49 @@ const AuthValidationMiddleware = require('../middleware/authValidationMiddleware
      *    
      */
      app.get('/challenge/getChallenges/:page/:pageSize',[
-        // AuthValidationMiddleware.validJWTNeeded,
-        // AuthPermissionMiddleware.adminLevelRequired,
-        ChallengeController.getChallenges
-    ]);
+      // AuthValidationMiddleware.validJWTNeeded,
+      // AuthPermissionMiddleware.adminLevelRequired,
+      ChallengeController.getChallenges
+  ]);
+
+  /**
+   * @swagger
+   * /challenge/getChallengeByGoalType/{goalTypeId}/{page}/{pageSize}:
+   *  get:
+   *   summary: get all challenges by goal type
+   *   tags:  
+   *     - challenge
+   *   parameters:
+   *    - in: path
+   *      name: goalTypeId
+   *      schema:
+   *       type: string
+   *       example: fddfd
+   *      required: true
+   *    - in: path
+   *      name: page
+   *      schema:
+   *       type: number
+   *       example: 0
+   *      required: true
+   *    - in: path
+   *      name: pageSize
+   *      schema:
+   *       type: number
+   *       example: 10
+   *      required: true
+   *   responses:
+   *      200:
+   *       description: successful response
+   *      400:
+   *       description: request failed
+   *    
+   */
+   app.get('/challenge/getChallengeByGoalType/:goalTypeId/:page/:pageSize',[
+      // AuthValidationMiddleware.validJWTNeeded,
+      // AuthPermissionMiddleware.adminLevelRequired,
+      ChallengeController.getChallengeByGoalType
+  ]);
 
     /**
      * @swagger

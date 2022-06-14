@@ -102,6 +102,8 @@ exports.routesConfig = function (app) {
      *         type: string
      *        companyRole:
      *         type: string
+     *        level:
+     *         type: number
      *        profileImage:
      *         type: string
      *         example: data:image/jpeg;base64  
@@ -199,7 +201,43 @@ exports.routesConfig = function (app) {
      *       description: request failed
      *    
      */
-    app.get('/user/getAll/:page/:pageSize', [
+     app.get('/user/getAll/:page/:pageSize', [
+        UserController.getUsers
+    ]);
+    /**
+     * @swagger
+     * /user/getAllByLevel/{level}/{page}/{pageSize}:
+     *  get:
+     *   summary: get all users by level
+     *   tags:  
+     *     - user
+     *   parameters:
+     *    - in: path
+     *      name: level
+     *      schema:
+     *       type: number
+     *       example: 1
+     *      required: true
+     *    - in: path
+     *      name: page
+     *      schema:
+     *       type: number
+     *       example: 0
+     *      required: true
+     *    - in: path
+     *      name: pageSize
+     *      schema:
+     *       type: number
+     *       example: 10
+     *      required: true
+     *   responses:
+     *      200:
+     *       description: successful response
+     *      400:
+     *       description: request failed
+     *    
+     */
+    app.get('/user/getAllByLevel/:level/:page/:pageSize', [
         UserController.getUsers
     ]);
 

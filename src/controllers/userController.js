@@ -27,8 +27,8 @@ addUser = async (req, res) => {
         }
 
         let levels = await OrgLevelModel.getAllLevels();
-        levels.some(level =>{
-            if(level.type == req.body.orgLevel){
+        levels.some(level => {
+            if (level.type == req.body.orgLevel) {
                 return true;
             }
             throw new NotFoundException("That organization level does not exist");
@@ -42,12 +42,12 @@ addUser = async (req, res) => {
         }
 
         const accountType = getAccountTypeEnums();
-        if(accountType.get(Number(req.body.accountType)) == undefined) {
+        if (accountType.get(Number(req.body.accountType)) == undefined) {
             throw new NotFoundException("type not found");
         }
 
 
-        if (req.body.profileImage != undefined && req.body.profileImage !== '' ) {
+        if (req.body.profileImage != undefined && req.body.profileImage !== '') {
             const uploadedImage = await clodinaryService.uploadProfileImage(req.body.profileImage);
             req.body.uploadUrl = uploadedImage.url;
             req.body.uploadId = uploadedImage.public_id;
@@ -133,6 +133,14 @@ updateUser = async (req, res) => {
             req.body.uploadId = uploadedImage.public_id;
         }
 
+        const val = [];
+        let levels = await OrgLevelModel.getAllLevels()
+        levels.forEach(level => {
+            val.push(level.type)
+        });
+
+        if (!val.includes(req.body.level)) throw new NotFoundException("Please pass correct level");
+
         user = await UserModel.update({ _id: req.body.id }, req.body);
 
         const response = new SuccessResponse(user, 'updated user details');
@@ -145,6 +153,16 @@ updateUser = async (req, res) => {
 getUsers = async (req, res) => {
     try {
         let users = await UserModel.getActiveUsers({}, req.params.page, req.params.pageSize);
+        let response = new SuccessResponse(users, "All Users");
+        res.status(status.SUCCESS).json({ messge: response });
+    } catch (error) {
+        res.status(status.ERROR).json({ message: error.message });
+    }
+};
+
+getUsersByOrgLevel = async (req, res) => {
+    try {
+        let users = await UserModel.getActiveUsers({ orgLevel: req.params.level }, req.params.page, req.params.pageSize);
         let response = new SuccessResponse(users, "All Users");
         res.status(status.SUCCESS).json({ messge: response });
     } catch (error) {
@@ -171,6 +189,7 @@ module.exports = {
     getUsers,
     testEmail,
     hasher,
-    getUserById
+    getUserById,
+    getUsersByOrgLevel
 }
 

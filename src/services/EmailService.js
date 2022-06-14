@@ -78,6 +78,22 @@ async function SendOtpPasswordResetEmail(otpObject) {
     }
 }
 
+async function supportEmail(message){
+    try {
+        const sgMail = await setUpTransporter();
+        const msg = {
+            from: process.env.SENDER_EMAIL,
+            to: process.env.CUSTOMER_SUPPORT_EMAIL,
+            subject: 'Bomaid customer support message',
+            text: `${message}`
+        };
+        await sgMail.send(msg);
+        
+    } catch (error) {
+        return error;
+    }
+}
+
 
 async function Test() {
     try {
@@ -98,5 +114,6 @@ module.exports = {
     SendSuccessfulSignupEmail,
     SendRegistrationOtpEmail,
     SendOtpPasswordResetEmail,
+    supportEmail,
     Test
 }

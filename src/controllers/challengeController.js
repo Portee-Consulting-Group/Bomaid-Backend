@@ -27,7 +27,8 @@ addChallenge = async (req, res) => {
             req.body.uploadUrl = uploadedImage.url;
             req.body.uploadId = uploadedImage.public_id;
         } else {
-            throw new NullReferenceException("Image is required");
+            req.body.uploadUrl = "";
+            req.body.uploadId = "";
         }
 
         challenge = await ChallengeModel.insert(req.body);
@@ -74,6 +75,17 @@ getChallenges = async (req, res) => {
         res.status(status.ERROR).json({ error: err.message });
     }
 };
+
+getChallengeByGoalType = async(req, res)=>{
+    try {
+        const challenges = await ChallengeModel.getAllChallenges({goalTypeId:req.params.goalTypeId}, req.params.page, req.params.pageSize);
+        let response = new SuccessResponse(challenges, "all challenges")
+        res.status(status.SUCCESS).json(response);
+        
+    } catch (error) {
+        res.status(status.ERROR).json({ error: err.message });
+    }
+}
 
 addCircleChallenge = async (req, res) => {
     try {
@@ -302,6 +314,7 @@ module.exports = {
     addCircleChallenge,
     updateMemberData,
     getCircleChallenges,
+    getChallengeByGoalType,
     getCircleRanks,
     getCircleRanksByGoalTypeId,
     getIndividualFitData,
