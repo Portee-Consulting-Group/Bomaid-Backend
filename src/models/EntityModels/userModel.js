@@ -22,6 +22,8 @@ const userSchema = new Schema({
     genderType: { type: Number, default: 0 },
     status: { type: Number, default: statusEnum.inactive.value },
     token: { type: String, default: "" },
+    weight: { type: String, default: "" },
+    height: { type: String, default: "" },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now }
 });

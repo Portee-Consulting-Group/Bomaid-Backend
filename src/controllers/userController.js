@@ -15,9 +15,9 @@ addUser = async (req, res) => {
     try {
         let val = req.body.email.split("@");
         val = val[1].toLowerCase();
-        // if (val != constants.EMAIL_CHECK) {
-        //     throw new CustomException("Please use the correct email")
-        // }
+        if (val != constants.EMAIL_CHECK) {
+            throw new CustomException("Please use the correct email")
+        }
         if ((req.body.password !== req.body.confirmPassword) || (req.body.email == null)) {
             throw new NullReferenceException("please pass valid passwords");
         }
@@ -81,9 +81,6 @@ addUser = async (req, res) => {
         }
         await emailService.SendRegistrationOtpEmail(otpViewModel);
 
-        //phone no otp
-
-
         await emailService.SendSuccessfulSignupEmail(otpViewModel);
         const response = new SuccessResponse(user, 'user created');
         res.status(status.SUCCESS).json({ message: response });
@@ -133,14 +130,15 @@ updateUser = async (req, res) => {
             req.body.uploadId = uploadedImage.public_id;
         }
 
-        const val = [];
-        let levels = await OrgLevelModel.getAllLevels()
-        levels.forEach(level => {
-            val.push(level.type)
-        });
-
-        if (!val.includes(req.body.level)) throw new NotFoundException("Please pass correct level");
-
+        if (req.body.orgLevel != undefined) {
+            let levels = await OrgLevelModel.getAllLevels();
+            levels.some(level => {
+                if (level.type == req.body.orgLevel) {
+                    return true;
+                }
+                throw new NotFoundException("That organization level does not exist");
+            });
+        }
         user = await UserModel.update({ _id: req.body.id }, req.body);
 
         const response = new SuccessResponse(user, 'updated user details');

@@ -17,6 +17,12 @@ const upload = require('../common/multer');
  *    email:
  *     type: string
  *     example: john@bomaid.co.bw
+ *    weight:
+ *     type: string
+ *     example: 120
+ *    height:
+ *     type: string
+ *     example: 180
  *    genderType:
  *     type: number
  *     example: 1
@@ -107,7 +113,12 @@ exports.routesConfig = function (app) {
      *        profileImage:
      *         type: string
      *         example: data:image/jpeg;base64  
-     *  
+     *        orgLevel:
+     *         type: string
+     *        weight:
+     *         type: string
+     *        height:
+     *         type: string
      *   security:
      *     - bearerAuth: []
      *   responses:
