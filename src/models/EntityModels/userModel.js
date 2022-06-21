@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const statusEnum = require('../../common/enum').getStatusEnum();
 const Schema = mongoose.Schema;
 const fuzzySearching = require('mongoose-fuzzy-searching');
+const { DEFAULT_PIC_ID, DEFAULT_PIC_URL } = require('../../common/constants');
 const userEnum = require('../../common/enum').getUserEnum();
 
 
@@ -10,8 +11,8 @@ const userSchema = new Schema({
     lastName: { type: String, required: true },
     email: { type: String, required: true, match: /.+\@.+\..+/, unique: true, lowercase: true },
     password: { type: String, required: true, },
-    uploadUrl: { type: String, default: "" },
-    uploadId: { type: String, default: "" },
+    uploadUrl: { type: String, default: DEFAULT_PIC_URL },
+    uploadId: { type: String, default: DEFAULT_PIC_ID },
     accountType: { type: Number, default: 0 },
     orgLevel: { type: Number, default: 0 },
     userTypeId: { type: String, required: true, default: userEnum.user.value },

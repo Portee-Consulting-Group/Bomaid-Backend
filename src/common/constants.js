@@ -15,9 +15,13 @@ const messageEnums = {
 };
 
 const POINT_UNIT = 1250;
+const DEFAULT_PIC_URL = "http://res.cloudinary.com/mizi/image/upload/v1655820079/bomaid_profile_images/lcmisldquoglczmg7in8.jpg";
+const DEFAULT_PIC_ID = "bomaid_profile_images/lcmisldquoglczmg7in8";
 
 module.exports = {
     constants,
     messageEnums,
-    POINT_UNIT
+    POINT_UNIT,
+    DEFAULT_PIC_URL,
+    DEFAULT_PIC_ID
 };

@@ -108,8 +108,6 @@ exports.routesConfig = function (app) {
      *         type: string
      *        companyRole:
      *         type: string
-     *        level:
-     *         type: number
      *        profileImage:
      *         type: string
      *         example: data:image/jpeg;base64  

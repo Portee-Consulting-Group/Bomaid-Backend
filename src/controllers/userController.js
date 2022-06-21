@@ -26,15 +26,17 @@ addUser = async (req, res) => {
             throw new AlreadyExistsException("User with that email and phone no already exists");
         }
 
-        let levels = await OrgLevelModel.getAllLevels();
-        levels.some(level => {
-            if (level.type == req.body.orgLevel) {
-                return true;
-            }
-            throw new NotFoundException("That organization level does not exist");
-        });
-
-
+        if (req.body.orgLevel != undefined && req.body.orgLevel !== '') {
+            let levels = await OrgLevelModel.getAllLevels();
+            let levelExist = levels.some(level => {
+                if (level.type == req.body.orgLevel) {
+                    return true;
+                } else {
+                    return false;
+                }
+            });
+            if (levelExist != true) throw new NotFoundException("That organization level does not exist");
+        }
 
         const genders = getGenderEnums();
         if (genders.get(Number(req.body.genderType)) == undefined) {
@@ -124,20 +126,22 @@ updateUser = async (req, res) => {
         if (user == null) {
             throw new NullReferenceException("User not found");
         }
-        if (req.body.profileImage != undefined) {
+        if (req.body.profileImage != undefined && req.body.profileImage !== '') {
             const uploadedImage = await clodinaryService.uploadProfileImage(req.body.profileImage);
             req.body.uploadUrl = uploadedImage.url;
             req.body.uploadId = uploadedImage.public_id;
         }
 
-        if (req.body.orgLevel != undefined) {
+        if (req.body.orgLevel != undefined && req.body.orgLevel !== '') {
             let levels = await OrgLevelModel.getAllLevels();
-            levels.some(level => {
+            let levelExist = levels.some(level => {
                 if (level.type == req.body.orgLevel) {
                     return true;
+                } else {
+                    return false;
                 }
-                throw new NotFoundException("That organization level does not exist");
             });
+            if (levelExist != true) throw new NotFoundException("That organization level does not exist");
         }
         user = await UserModel.update({ _id: req.body.id }, req.body);
 
