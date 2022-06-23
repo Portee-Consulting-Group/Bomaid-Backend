@@ -47,6 +47,11 @@ update = async (query, data) => {
     return Message.findOneAndUpdate(query, data, { new: true });
 };
 
+deleteChats = async (query) => {
+    let result = await Message.deleteMany(query)
+    return result;
+}
+
 
 
 module.exports = {
@@ -54,5 +59,6 @@ module.exports = {
     findAll,
     findChatMessages,
     update,
-    getAllChatMessages
+    getAllChatMessages,
+    deleteChats
 };

@@ -17,9 +17,8 @@ const AuthValidationMiddleware = require('../middleware/authValidationMiddleware
  *    text:
  *     type: string
  *    file:
- *     type: array
- *     items:
- *       type: string
+ *     type: string
+ *     example: data:image/jpeg;base64
  * 
  *  createGroupChat:
  *   type: object
@@ -28,6 +27,9 @@ const AuthValidationMiddleware = require('../middleware/authValidationMiddleware
  *     type: string
  *    adminId:
  *     type: string
+ *    groupImage:
+ *     type: string
+ *     example: data:image/jpeg;base64
  *    members:
  *     type: array
  *     items: 
@@ -46,6 +48,35 @@ const AuthValidationMiddleware = require('../middleware/authValidationMiddleware
  *     type: array
  *     items:
  *       type: string
+ * 
+ *  updateGroup:
+ *   type: object
+ *   properties: 
+ *    chatId:
+ *     type: string
+ *    title:
+ *     type: string
+ * 
+ *  addGroupMember:
+ *   type: object
+ *   properties: 
+ *    chatId:
+ *     type: string
+ *    members:
+ *     type: array
+ *     items: 
+ *       type: string
+ * 
+ *  removeGroupMember:
+ *   type: object
+ *   properties: 
+ *    chatId:
+ *     type: string
+ *    members:
+ *     type: array
+ *     items: 
+ *       type: string
+ * 
  */
 exports.routesConfig = function (app){
     /**
@@ -171,6 +202,106 @@ exports.routesConfig = function (app){
      app.get('/chat/getChats/:userId', [
         MessagingController.getUserChats
     ]);
+
+    /**
+     * @swagger
+     * /chat/updateGroup:
+     *  patch:
+     *   summary: update group info
+     *   tags: 
+     *    - chat
+     *   requestBody: 
+     *    required: true
+     *    content:
+     *     application/json:
+     *      schema:
+     *        $ref: '#/definitions/updateGroup'
+     *   security:
+     *     - bearerAuth: []
+     *   responses:
+     *      200:
+     *       description: successful response
+     *      400:
+     *       description: request failed
+     */
+    app.patch('/chat/updateGroup', [
+        MessagingController.updateGroup
+    ]);
+
+
+    /**
+     * @swagger
+     * /chat/addMember:
+     *  patch:
+     *   summary: add new member
+     *   tags: 
+     *    - chat
+     *   requestBody: 
+     *    required: true
+     *    content:
+     *     application/json:
+     *      schema:
+     *        $ref: '#/definitions/addGroupMember'
+     *   security:
+     *     - bearerAuth: []
+     *   responses:
+     *      200:
+     *       description: successful response
+     *      400:
+     *       description: request failed
+     */
+     app.patch('/chat/addMember', [
+        MessagingController.addMember
+    ]);
+
+    /**
+     * @swagger
+     * /chat/removeMember:
+     *  patch:
+     *   summary: remove member
+     *   tags: 
+     *    - chat
+     *   requestBody: 
+     *    required: true
+     *    content:
+     *     application/json:
+     *      schema:
+     *        $ref: '#/definitions/removeGroupMember'
+     *   security:
+     *     - bearerAuth: []
+     *   responses:
+     *      200:
+     *       description: successful response
+     *      400:
+     *       description: request failed
+     */
+    app.patch('/chat/removeMember', [
+        MessagingController.removeMember
+    ]);
+
+    /**
+     * @swagger
+     * /chat/deleteGroup/{chatId}:
+     *  delete:
+     *   summary: delete group
+     *   tags:  
+     *     - chat
+     *   parameters:
+     *    - in: path
+     *      name: chatId
+     *      schema:
+     *       type: string
+     *      required: true
+     *   responses:
+     *      200:
+     *       description: successful response
+     *      400:
+     *       description: request failed
+     *    
+     */
+    app.delete('/chat/deleteGroup/:chatId', [
+        MessagingController.deleteGroup
+    ])
 
     /**
      * /chat/getChats/{userId}/{page}/{pageSize}:
