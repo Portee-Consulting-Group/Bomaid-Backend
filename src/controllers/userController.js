@@ -36,6 +36,8 @@ addUser = async (req, res) => {
                 }
             });
             if (levelExist != true) throw new NotFoundException("That organization level does not exist");
+        }else{
+            throw new NotFoundException("Please pass organization level");
         }
 
         const genders = getGenderEnums();
