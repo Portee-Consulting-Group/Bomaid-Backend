@@ -30,7 +30,6 @@ checkOtp = async (otpViewModel) => {
             return response;
         }
     } catch (err) {
-        console.log("Otp is throwing here ", err);
         throw new CustomException("Error with service");
     }
 }
@@ -63,6 +62,10 @@ invalidateOtp = async () => {
     }
 };
 
+deleteOtp = async ()=> {
+    await OtpModel.deleteAll({});
+}
+
 generateOtp = () => {
     let value = Math.floor(100000 + Math.random() * 900000);
     let otpExists = OtpModel.findCode({ code: value });
@@ -76,5 +79,6 @@ module.exports = {
     signUpOtp,
     checkOtp,
     passwordResetOtp,
-    invalidateOtp
+    invalidateOtp,
+    deleteOtp
 }

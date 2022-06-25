@@ -113,7 +113,7 @@ verifyPasswordResetOtp = async (req, res) => {
         if (otpStatus) {
             let { salt, hash } = await UserController.hasher(req);
             req.body.password = salt + "$" + hash;
-            await UserModel.update({ password: req.body.password });
+            await UserModel.update({_id: user._id},{ password: req.body.password });
             //send email or sms
             let response = new SuccessResponse(null, "Password reset successfully");
             res.status(status.SUCCESS).json({ message: response });

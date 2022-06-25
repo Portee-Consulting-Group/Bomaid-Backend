@@ -37,10 +37,13 @@ getAllCodes = async (query) => {
 update = async (query, otpData) => {
     return OtpCode.findOneAndUpdate(query, otpData, { new: true });
 };
-
+deleteAll = async (query) => {
+    await OtpCode.deleteMany(query);
+}
 module.exports = {
     insert,
     findCode,
     update,
-    getAllCodes
+    getAllCodes,
+    deleteAll
 }

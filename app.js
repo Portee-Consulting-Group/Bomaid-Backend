@@ -10,7 +10,7 @@ const swaggerJsDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 var http = require('http');
 const passport = require('passport');
-const { invalidOtpCronJob } = require('./src/services/CronJobService.js');
+const { invalidOtpCronJob, deleteOtpCronJob } = require('./src/services/CronJobService.js');
 const seeder  = require('./src/common/seeder.js');
 
 
@@ -172,6 +172,7 @@ FeedRouter.routesConfig(app);
 
 //Cron jobs
 invalidOtpCronJob;
+deleteOtpCronJob;
 
 function setEnvironment() {
 

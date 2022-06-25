@@ -14,7 +14,7 @@ const userSchema = new Schema({
     uploadUrl: { type: String, default: DEFAULT_PIC_URL },
     uploadId: { type: String, default: DEFAULT_PIC_ID },
     accountType: { type: Number, default: 0 },
-    orgLevel: { type: Number, default: 0 },
+    orgLevel: { type: Number, required:true },
     userTypeId: { type: String, required: true, default: userEnum.user.value },
     // callingCodeId: { type: String, required: true },
     // phoneNo: { type: String, required: true, unique: true },
