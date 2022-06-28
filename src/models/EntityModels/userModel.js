@@ -57,11 +57,15 @@ getActiveUsers = async (page, pageSize) => {
         .limit(pageSize);
 };
 
+deleteAccount = async (userId) => {
+    await User.findByIdAndDelete(userId)
+}
 
 module.exports = {
     add,
     update,
     find,
     findAll,
-    getActiveUsers
+    getActiveUsers,
+    deleteAccount
 }

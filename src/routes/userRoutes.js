@@ -250,6 +250,31 @@ exports.routesConfig = function (app) {
         UserController.getUsers
     ]);
 
+    /**
+     * @swagger
+     * /user/deleteAccount/{userId}:
+     *  delete:
+     *   summary: delete user account
+     *   tags:  
+     *     - user
+     *   parameters:
+     *    - in: path
+     *      name: userId
+     *      schema:
+     *       type: string
+     *       example: 92jh22
+     *      required: true
+     *   responses:
+     *      200:
+     *       description: successful response
+     *      400:
+     *       description: request failed
+     *    
+     */
+    app.delete('/user/deleteAccount/:userId', [
+        UserController.deleteAccount
+    ])
+
 
     /**
     * @swagger

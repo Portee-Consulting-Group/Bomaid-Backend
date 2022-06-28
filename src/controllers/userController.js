@@ -36,7 +36,7 @@ addUser = async (req, res) => {
                 }
             });
             if (levelExist != true) throw new NotFoundException("That organization level does not exist");
-        }else{
+        } else {
             throw new NotFoundException("Please pass organization level");
         }
 
@@ -174,6 +174,17 @@ getUsersByOrgLevel = async (req, res) => {
     }
 };
 
+deleteAccount = async (req, res) => {
+    try {
+        let user = await UserModel.find({ _id: req.params.userId });
+        if (user == null) throw new NotFoundException("User not found");
+        await UserModel.deleteAccount(req.params.userId);
+        res.status(status.SUCCESS).json({ messge: "Account deleted" })
+    } catch (error) {
+        res.status(status.ERROR).json({ message: error.message });
+    }
+};
+
 
 testEmail = async (req, res) => {
     await emailService.Test();
@@ -194,6 +205,7 @@ module.exports = {
     testEmail,
     hasher,
     getUserById,
-    getUsersByOrgLevel
+    getUsersByOrgLevel,
+    deleteAccount
 }
 
