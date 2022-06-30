@@ -19,7 +19,7 @@ const chatRoomSchema = new Schema({
 
 const ChatRoom = mongoose.model('ChatRooms', chatRoomSchema);
 
-insert = (data) => {
+insert = async (data) => {
     const chat = new ChatRoom(data);
     chat.save();
     return chat;

@@ -11,8 +11,13 @@ const messageEnums = {
     userChat: 'USER_CHAT', // receive user message
     sendChat: 'SEND_CHAT', // send user chat
     sendGroupChat: 'SEND_GROUP_CHAT', //send group chat
-    disconnect: 'disconnect'
+    disconnect: 'disconnect',
 };
+
+const defaultMessages = {
+    welcomeText: 'You were added by ',
+    removedText: 'You were removed by ',
+}
 
 const POINT_UNIT = 4000;
 const DEFAULT_PIC_URL = "http://res.cloudinary.com/mizi/image/upload/v1655820079/bomaid_profile_images/lcmisldquoglczmg7in8.jpg";
@@ -23,5 +28,6 @@ module.exports = {
     messageEnums,
     POINT_UNIT,
     DEFAULT_PIC_URL,
-    DEFAULT_PIC_ID
+    DEFAULT_PIC_ID,
+    defaultMessages
 };

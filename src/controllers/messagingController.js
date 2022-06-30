@@ -7,13 +7,14 @@ const messageEnums = require('../common/enum').getMessageEnums();
 const SuccessResponse = require('../models/viewModels/responseModel');
 const { sendChat, sendGroupChat, sendAllMessagees } = require('../services/messagingService');
 const clodinaryService = require('../services/CloudinaryService');
+const { defaultMessages } = require('../common/constants');
+
 
 createGroup = async (req, res) => {
     try {
         let admin = await UserModel.find({ _id: req.body.adminId });
-        if (admin == null) {
-            throw new NullReferenceException("User not found");
-        }
+        if (admin == null) throw new NullReferenceException("User not found");
+
         for (let user of req.body.members) {
             user = await UserModel.find({ _id: user });
             if (user == null) {
@@ -29,6 +30,13 @@ createGroup = async (req, res) => {
         }
 
         let chatRoom = await ChatRoomModel.insert(req.body);
+        if (chatRoom == null) { throw new NullReferenceException("Chat room not found") };
+        let msg = MessageModel.insert({
+            chatId: chatRoom.id,
+            senderId: req.body.senderId,
+            message: `${defaultMessages.welcomeText} ${admin.firstName} ${admin.lastName}`,
+            defaultMsg: true
+        });
         let response = new SuccessResponse(chatRoom, "chat created");
         res.status(status.SUCCESS).json(response);
     } catch (error) {
@@ -58,6 +66,8 @@ addMember = async (req, res) => {
         let chat = await ChatRoomModel.findChatRoom({ _id: req.body.chatId });
         if (chat == null) throw new NullReferenceException("Chat not found");
 
+        let admin = await UserModel.find({ _id: chat.adminId });
+        if (admin == null) throw new NullReferenceException("User not found");
         let members = req.body.members;
 
         for (const member of members) {
@@ -75,6 +85,12 @@ addMember = async (req, res) => {
             {
                 members: allMembers
             });
+        let msg = MessageModel.insert({
+            chatId: ChatRoomModel._id,
+            senderId: req.body.senderId,
+            message: `${defaultMessages.welcomeText} ${admin.firstName} ${admin.lastName}`,
+            defaultMsg: true
+        });
         let response = new SuccessResponse(chat, "group updated");
         res.status(status.SUCCESS).json(response);
     } catch (error) {
@@ -87,6 +103,9 @@ removeMember = async (req, res) => {
         let chat = await ChatRoomModel.findChatRoom({ _id: req.body.chatId });
         if (chat == null) throw new NullReferenceException("Chat not found");
 
+        let admin = await UserModel.find({ _id: chat.adminId });
+        if (admin == null) throw new NullReferenceException("User not found");
+
         let members = req.body.members;
         for (const member of members) {
             let index = chat.members.indexOf(member);
@@ -98,6 +117,13 @@ removeMember = async (req, res) => {
             {
                 members: newMembers
             });
+
+        let msg = MessageModel.insert({
+            chatId: chat._id,
+            senderId: req.body.senderId,
+            message: `${defaultMessages.removedText} ${admin.firstName} ${admin.lastName}`,
+            defaultMsg: true
+        });
         let response = new SuccessResponse(chat, "group updated");
         res.status(status.SUCCESS).json(response);
     } catch (error) {
