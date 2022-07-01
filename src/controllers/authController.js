@@ -7,6 +7,7 @@ const UserModel = require('../models/EntityModels/userModel');
 const OrganizationLevelModel = require('../models/EntityModels/organizationalLevelModel');
 const SurveyResponseModel = require('../models/EntityModels/surveyResponseModel');
 const TargetModel = require('../models/EntityModels/targetModel');
+const PermissionModel = require('../models/EntityModels/permissionModel');
 const { supportEmail } = require('../services/EmailService');
 
 local_login = async (req, res) => {
@@ -33,52 +34,82 @@ refresh_token = (req, res) => {
 
 generateJwtToken = async (email) => {
     const token = jwt.sign(
-        { email: email},
+        { email: email },
         process.env.SESSION_SECRET,
         {
             expiresIn: "24h"
         }
     )
     return token;
-
-
-    // let refreshId = req.userId + jwtSecret;
-    // let salt = crypto.randomBytes(16).toString('base64');
-    // let hash = crypto.createHmac('sha512', salt).update(refreshId).digest("base64");
-    // req.refreshKey = salt;
-    // const reqBody = {
-    //     body: {
-    //         refreshId: refreshId,
-    //         refreshKey: req.refreshKey
-    //     }
-    // };
-    // let token = jwt.sign(reqBody, jwtSecret);
-    // let b = Buffer.from(hash);
-    // let refresh_token = b.toString('base64');
-    // let tokenObject = {
-    //     accessToken: token,
-    //     refreshToken: refresh_token
-    // };
-    // return tokenObject;
-};
-sendSupportEmail = async (req,res)=>{
+}
+sendSupportEmail = async (req, res) => {
     await supportEmail(req.body.message);
-    res.status(status.SUCCESS).json({message: "Message sent"});
+    res.status(status.SUCCESS).json({ message: "Message sent" });
 }
 
 getOrganizationLevels = async (req, res) => {
     const response = await OrganizationLevelModel.getAllLevels();
-    res.status(status.SUCCESS).json({ message: response})
+    res.status(status.SUCCESS).json({ message: response })
 }
 
 getSurveyTargets = async (req, res) => {
     const response = await TargetModel.getAllTargets();
-    res.status(status.SUCCESS).json({ message: response})
+    res.status(status.SUCCESS).json({ message: response })
 }
 
 getSurveyResponse = async (req, res) => {
     const response = await SurveyResponseModel.getAllResponses();
-    res.status(status.SUCCESS).json({ message: response})
+    res.status(status.SUCCESS).json({ message: response })
+}
+
+
+createPermission = async (req, res) => {
+    try {
+        let users = await UserModel.findAll({});
+        if (users.length < 1) throw new NotFoundException("no users found");
+
+        for (const user of users) {
+            let permit = await PermissionModel.find({ userId: user._id })
+            if (permit != null) return;
+            await PermissionModel.add({
+                userId: user._id
+            });
+        }
+        res.status(status.SUCCESS).json({ message: "done" });
+    } catch (error) {
+        res.status(status.ERROR).json({ message: err.message });
+    }
+}
+
+updatePermission = async (req, res) => {
+    try {
+        let permit = await PermissionModel.find({ userId: req.body.userId })
+        if (permit == null) {
+            permit = await PermissionModel.add({
+                userId: req.body.userId
+            });
+        } else {
+            permit = await PermissionModel.update({ userId: req.body.userId }, req.body)
+        }
+
+        let response = new SuccessResponse(permit, "Permission updated");
+        res.status(status.SUCCESS).json({ message: response });
+
+    } catch (error) {
+        res.status(status.ERROR).json({ message: error.message });
+    }
+}
+
+getUserPermission = async (req, res) => {
+    try {
+        let permit = await PermissionModel.find({ userId: req.params.userId })
+        if (permit == null) throw new NotFoundException("Permission not found");
+
+        let response = new SuccessResponse(permit, "Permission updated");
+        res.status(status.SUCCESS).json({ message: response });
+    } catch (error) {
+        res.status(status.ERROR).json({ message: err.message });
+    }
 }
 
 
@@ -89,5 +120,8 @@ module.exports = {
     sendSupportEmail,
     getOrganizationLevels,
     getSurveyTargets,
-    getSurveyResponse
+    getSurveyResponse,
+    createPermission,
+    updatePermission,
+    getUserPermission
 }

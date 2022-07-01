@@ -64,6 +64,9 @@ addUser = async (req, res) => {
         const token = await AuthController.generateJwtToken(user.email);
 
         await UserModel.update({ _id: user._id }, { token: token });
+        
+        req.body.userId = user._id
+        await AuthController.updatePermission(req.body.userId);//add user permission
 
         user.password = undefined;
         user._id = undefined;
