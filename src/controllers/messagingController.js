@@ -52,7 +52,9 @@ updateGroup = async (req, res) => {
             req.body.uploadId = uploadedImage.public_id;
         }
 
-        let group = await ChatRoomModel.update({ _id: req.body.chatId }, body);
+        let group = await ChatRoomModel.update({ _id: req.body.chatId }, {
+            title: req.body.title
+        });
         if (group == null) throw new NullReferenceException("Group not found");
         let response = new SuccessResponse(group, "group uodated");
         res.status(status.SUCCESS).json(response);
