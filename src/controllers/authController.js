@@ -100,6 +100,22 @@ updatePermission = async (req, res) => {
     }
 }
 
+addNewPermission = async (userId) => {
+    try {
+        let permit = await PermissionModel.find({ userId: userId })
+        if (permit == null) {
+            permit = await PermissionModel.add({
+                userId: userId
+            });
+        } else {
+            permit = await PermissionModel.update({ userId: userId }, req.body)
+        }
+        
+    } catch (error) {
+        res.status(status.ERROR).json({ message: error.message });
+    }
+}
+
 getUserPermission = async (req, res) => {
     try {
         let permit = await PermissionModel.find({ userId: req.params.userId })
@@ -123,5 +139,6 @@ module.exports = {
     getSurveyResponse,
     createPermission,
     updatePermission,
+    addNewPermission,
     getUserPermission
 }

@@ -21,7 +21,7 @@ const userSchema = new Schema({
     companyRole: { type: String, required: true},
     dateOfBirth: { type: Date, default: "" },
     genderType: { type: Number, default: 0 },
-    status: { type: Number, default: statusEnum.inactive.value },
+    status: { type: Number, default: statusEnum.active.value },
     token: { type: String, default: "" },
     weight: { type: String, default: "" },
     height: { type: String, default: "" },

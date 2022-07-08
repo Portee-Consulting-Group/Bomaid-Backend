@@ -11,5 +11,4 @@ const deleteOtpCronJob = cron.schedule("00 00 * * *", () => { //runs at midnight
 
 module.exports = {
     invalidOtpCronJob,
-    deleteOtpCronJob
 }

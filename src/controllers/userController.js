@@ -66,7 +66,7 @@ addUser = async (req, res) => {
         await UserModel.update({ _id: user._id }, { token: token });
         
         req.body.userId = user._id
-        await AuthController.updatePermission(req.body.userId);//add user permission
+        await AuthController.addNewPermission(user._id);//add user permission
 
         user.password = undefined;
         user._id = undefined;
