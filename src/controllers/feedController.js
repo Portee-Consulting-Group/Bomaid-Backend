@@ -48,7 +48,7 @@ likeFeed = async (req, res) => {
 
 getUserFeeds = async (req, res) => {
     try {
-        var types = await FeedModel.getFeeds({ userId: req.params.userId }, req.page, req.pageSize);
+        var types = await FeedModel.getFeeds({ userId: req.params.userId }, req.params.page, req.params.pageSize);
         let response = new SuccessResponse(types, "feeds")
         res.status(status.SUCCESS).json(response);
     } catch (err) {
@@ -58,7 +58,7 @@ getUserFeeds = async (req, res) => {
 
 getFeeds = async (req, res) => {
     try {
-        var feeds = await FeedModel.getFeeds({}, req.page, req.pageSize);
+        var feeds = await FeedModel.getFeeds({}, req.params.page, req.params.pageSize);
         let allFeeds = [];
 
         for (const feed of feeds) {

@@ -28,7 +28,7 @@ addGoalType = async (req, res) => {
 
 getTypes = async (req, res) => {
     try{
-        var types = await GoalTypeModel.getActiveTypes(req.page, req.pageSize);
+        var types = await GoalTypeModel.getActiveTypes(req.params.page, req.params.pageSize);
         let response = new SuccessResponse(types, "goal types")
         res.status(status.SUCCESS).json(response);
     }catch (err) {

@@ -25,6 +25,7 @@ const userSchema = new Schema({
     token: { type: String, default: "" },
     weight: { type: String, default: "" },
     height: { type: String, default: "" },
+    garminUserToken: { type: String, default: "" },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now }
 });
