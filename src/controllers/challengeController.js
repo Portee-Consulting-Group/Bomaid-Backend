@@ -76,12 +76,12 @@ getChallenges = async (req, res) => {
     }
 };
 
-getChallengeByGoalType = async(req, res)=>{
+getChallengeByGoalType = async (req, res) => {
     try {
-        const challenges = await ChallengeModel.getAllChallenges({goalTypeId:req.params.goalTypeId}, req.params.page, req.params.pageSize);
+        const challenges = await ChallengeModel.getAllChallenges({ goalTypeId: req.params.goalTypeId }, req.params.page, req.params.pageSize);
         let response = new SuccessResponse(challenges, "all challenges")
         res.status(status.SUCCESS).json(response);
-        
+
     } catch (error) {
         res.status(status.ERROR).json({ error: err.message });
     }
@@ -210,10 +210,9 @@ getCircleRanksByGoalTypeId = async (req, res) => {
                 });
             }
         }
-        newCircles.sort((a, b) => {
-            return b.aggregatedResult - a.aggregatedResult
-        });
-        let response = new SuccessResponse(newCircles, "circle ranks");
+        console.log(newCircles)
+        const sortedCircle = newCircles.sort((a, b) => b.circleData.aggregatedResult - a.circleData.aggregatedResult);
+        let response = new SuccessResponse(sortedCircle, "circle ranks");
         res.status(status.SUCCESS).json(response);
     } catch (err) {
         res.status(status.ERROR).json({ error: err.message });
