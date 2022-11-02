@@ -1,8 +1,9 @@
 const { NullReferenceException, AlreadyExistsException, NotFoundException, CustomException } = require('../../errors/AppError');
 const UserModel = require('../models/EntityModels/userModel');
+const OrgLevelModel = require('../models/EntityModels/organizationalLevelModel');
 const SuccessResponse = require('../models/viewModels/responseModel');
 const { status } = require('../common/status');
-const { getGenderEnums } = require('../common/enum');
+const { getGenderEnums, getAccountTypeEnums } = require('../common/enum');
 const otpService = require('../services/OtpService');
 const emailService = require('../services/EmailService');
 const crypto = require('crypto');
@@ -25,10 +26,35 @@ addUser = async (req, res) => {
             throw new AlreadyExistsException("User with that email and phone no already exists");
         }
 
+        if (req.body.orgLevel != undefined && req.body.orgLevel !== '') {
+            let levels = await OrgLevelModel.getAllLevels();
+            let levelExist = levels.some(level => {
+                if (level.type == req.body.orgLevel) {
+                    return true;
+                } else {
+                    return false;
+                }
+            });
+            if (levelExist != true) throw new NotFoundException("That organization level does not exist");
+        } else {
+            throw new NotFoundException("Please pass organization level");
+        }
 
         const genders = getGenderEnums();
         if (genders.get(Number(req.body.genderType)) == undefined) {
             throw new NotFoundException("gender not found");
+        }
+
+        const accountType = getAccountTypeEnums();
+        if (accountType.get(Number(req.body.accountType)) == undefined) {
+            throw new NotFoundException("type not found");
+        }
+
+
+        if (req.body.profileImage != undefined && req.body.profileImage !== '') {
+            const uploadedImage = await clodinaryService.uploadProfileImage(req.body.profileImage);
+            req.body.uploadUrl = uploadedImage.url;
+            req.body.uploadId = uploadedImage.public_id;
         }
 
         let { salt, hash } = hasher(req);
@@ -38,6 +64,9 @@ addUser = async (req, res) => {
         const token = await AuthController.generateJwtToken(user.email);
 
         await UserModel.update({ _id: user._id }, { token: token });
+        
+        req.body.userId = user._id
+        await AuthController.addNewPermission(user._id);//add user permission
 
         user.password = undefined;
         user._id = undefined;
@@ -59,9 +88,6 @@ addUser = async (req, res) => {
         }
         await emailService.SendRegistrationOtpEmail(otpViewModel);
 
-        //phone no otp
-
-
         await emailService.SendSuccessfulSignupEmail(otpViewModel);
         const response = new SuccessResponse(user, 'user created');
         res.status(status.SUCCESS).json({ message: response });
@@ -72,10 +98,25 @@ addUser = async (req, res) => {
 
 getUser = async (req, res) => {
     try {
-        let user = await UserModel.find({ email: req.body.email });
+        let user = await UserModel.find({ email: req.params.email });
         if (user == null) {
             throw new NotFoundException("User not found");
         }
+        user.password = undefined;
+        const response = new SuccessResponse(user, 'user details');
+        res.status(status.SUCCESS).json({ message: response });
+    } catch (error) {
+        res.status(status.ERROR).json({ message: error.message });
+    }
+}
+getUserById = async (req, res) => {
+    try {
+        let user = await UserModel.find({ _id: req.params.userId });
+        if (user == null) {
+            throw new NotFoundException("User not found");
+        }
+        user.password = undefined;
+        user.token = undefined;
         const response = new SuccessResponse(user, 'user details');
         res.status(status.SUCCESS).json({ message: response });
     } catch (error) {
@@ -86,19 +127,27 @@ getUser = async (req, res) => {
 
 updateUser = async (req, res) => {
     try {
-        let user = UserModel.getOne({ id: req.body.id });
+        let user = UserModel.find({ id: req.body.id });
         if (user == null) {
             throw new NullReferenceException("User not found");
         }
-        if (req.file != undefined) {
-            const uploadedImage = await clodinaryService.uploadProfileImage(req.file.path);
+        if (req.body.profileImage != undefined && req.body.profileImage !== '') {
+            const uploadedImage = await clodinaryService.uploadProfileImage(req.body.profileImage);
             req.body.uploadUrl = uploadedImage.url;
             req.body.uploadId = uploadedImage.public_id;
-        } else {
-            req.body.uploadUrl = "";
-            req.body.uploadId = "";
         }
 
+        if (req.body.orgLevel != undefined && req.body.orgLevel !== '') {
+            let levels = await OrgLevelModel.getAllLevels();
+            let levelExist = levels.some(level => {
+                if (level.type == req.body.orgLevel) {
+                    return true;
+                } else {
+                    return false;
+                }
+            });
+            if (levelExist != true) throw new NotFoundException("That organization level does not exist");
+        }
         user = await UserModel.update({ _id: req.body.id }, req.body);
 
         const response = new SuccessResponse(user, 'updated user details');
@@ -110,9 +159,30 @@ updateUser = async (req, res) => {
 
 getUsers = async (req, res) => {
     try {
-        let kycs = await UserModel.getActiveUsers({}, req.params.page, req.params.pageSize);
-        let response = new SuccessResponse(kycs, "All Users");
+        let users = await UserModel.getActiveUsers({}, req.params.page, req.params.pageSize);
+        let response = new SuccessResponse(users, "All Users");
         res.status(status.SUCCESS).json({ messge: response });
+    } catch (error) {
+        res.status(status.ERROR).json({ message: error.message });
+    }
+};
+
+getUsersByOrgLevel = async (req, res) => {
+    try {
+        let users = await UserModel.getActiveUsers({ orgLevel: req.params.level }, req.params.page, req.params.pageSize);
+        let response = new SuccessResponse(users, "All Users");
+        res.status(status.SUCCESS).json({ messge: response });
+    } catch (error) {
+        res.status(status.ERROR).json({ message: error.message });
+    }
+};
+
+deleteAccount = async (req, res) => {
+    try {
+        let user = await UserModel.find({ _id: req.params.userId });
+        if (user == null) throw new NotFoundException("User not found");
+        await UserModel.deleteAccount(req.params.userId);
+        res.status(status.SUCCESS).json({ messge: "Account deleted" })
     } catch (error) {
         res.status(status.ERROR).json({ message: error.message });
     }
@@ -133,8 +203,12 @@ hasher = (req) => {
 module.exports = {
     addUser,
     updateUser,
+    getUser,
     getUsers,
     testEmail,
-    hasher
+    hasher,
+    getUserById,
+    getUsersByOrgLevel,
+    deleteAccount
 }
 

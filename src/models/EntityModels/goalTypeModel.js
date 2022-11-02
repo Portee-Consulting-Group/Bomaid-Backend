@@ -5,10 +5,12 @@ const statusEnum = require('../../common/enum').getStatusEnum();
 const goalTypeSchema = new Schema({
     name: { type: String, required: true },
     description: { type: String, required: true },
-    goalTypeId: { type: String, required: true },
     uploadUrl: { type: String, default: "" },
     uploadId: { type: String, default: "" },
-    value: { type: String, required: true, unique: true },
+    value: { type: Number, required: true, unique: true },
+    target: { type: Number, required: true},
+    unitPoint: { type: Number, required: true, default: 10},
+    totalPoint: { type: Number, required: true, default: 100000},
     status: { type: Number, default: statusEnum.active.value },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now }
@@ -31,8 +33,8 @@ find = async (query) => {
     return GoalType.findOne(query);
 };
 
-getOne = async (query) => {
-
+findAll = async (query) => {
+    return GoalType.find(query);
 };
 
 getActiveTypes = async (page, pageSize) => {
@@ -46,6 +48,6 @@ module.exports = {
     add,
     update,
     find,
-    getOne,
+    findAll,
     getActiveTypes
 }

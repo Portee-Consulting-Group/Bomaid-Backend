@@ -18,9 +18,7 @@ const OtpController = require('../controllers/otpController');
  *  verifyRegistrationOtpModel:
  *   type: object
  *   properties:
- *    phoneNo:
- *     type: string
- *    callingCodeId:
+ *    email:
  *     type: string
  *    code:
  *     type: string
@@ -96,7 +94,7 @@ exports.routesConfig = function (app) {
      * @swagger
      * /otp/verifyRegistrationOtp:
      *  post:
-     *   summary: verify phone no confirmation
+     *   summary: verify email confirmation
      *   tags:
      *     - otp
      *   requestBody:
@@ -112,5 +110,5 @@ exports.routesConfig = function (app) {
      *       description: request failed
      * 
      */
-    app.post('/otp/verifyRegistrationOtp', OtpController.verifyPhoneConfirmationOtp);
+    app.post('/otp/verifyRegistrationOtp', OtpController.verifyEmailConfirmationOtp);
 }

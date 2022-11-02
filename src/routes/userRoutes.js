@@ -17,6 +17,12 @@ const upload = require('../common/multer');
  *    email:
  *     type: string
  *     example: john@bomaid.co.bw
+ *    weight:
+ *     type: string
+ *     example: 120
+ *    height:
+ *     type: string
+ *     example: 180
  *    genderType:
  *     type: number
  *     example: 1
@@ -27,6 +33,15 @@ const upload = require('../common/multer');
  *    companyRole:
  *     type: string
  *     example: Head of product
+ *    accountType:
+ *     type: number
+ *     example: 1
+ *    orgLevel:
+ *     type: number
+ *     example: 1
+ *    profileImage:
+ *     type: string
+ *     example: data:image/jpeg;base64
  *    password:
  *     type: string
  *     example: 12345   
@@ -81,7 +96,7 @@ exports.routesConfig = function (app) {
      *     - user
      *   requestBody:
      *    content:
-     *     multipart/form-data:
+     *     application/json:
      *      schema: 
      *       type: object
      *       properties:
@@ -95,8 +110,13 @@ exports.routesConfig = function (app) {
      *         type: string
      *        profileImage:
      *         type: string
-     *         format: binary 
-     *  
+     *         example: data:image/jpeg;base64  
+     *        orgLevel:
+     *         type: string
+     *        weight:
+     *         type: string
+     *        height:
+     *         type: string
      *   security:
      *     - bearerAuth: []
      *   responses:
@@ -106,9 +126,60 @@ exports.routesConfig = function (app) {
      *       description: request failed
      *   
      */
-    app.patch('/user/update', upload.single('profileImage'), [
+    app.patch('/user/update', [
         // AuthValidationMiddleware.validJWTNeeded,
         UserController.updateUser
+    ]);
+
+    /**
+     * @swagger
+     * /user/getUser/{email}:
+     *  get:
+     *   summary: get user details
+     *   tags:  
+     *     - user
+     *   parameters:
+     *    - in: path
+     *      name: email
+     *      schema:
+     *       type: string
+     *       example: user@bomaid.co.bw
+     *      required: true
+     *   responses:
+     *      200:
+     *       description: successful response
+     *      400:
+     *       description: request failed
+     *    
+     * 
+     */
+    app.get('/user/getUser/:email', [
+        UserController.getUser
+    ]);
+
+    /**
+     * @swagger
+     * /user/getUserById/{userId}:
+     *  get:
+     *   summary: get user details by id
+     *   tags:  
+     *     - user
+     *   parameters:
+     *    - in: path
+     *      name: userId
+     *      schema:
+     *       type: string
+     *      required: true
+     *   responses:
+     *      200:
+     *       description: successful response
+     *      400:
+     *       description: request failed
+     *    
+     * 
+     */
+    app.get('/user/getUserById/:userId', [
+        UserController.getUserById
     ]);
 
 
@@ -139,9 +210,70 @@ exports.routesConfig = function (app) {
      *       description: request failed
      *    
      */
-    app.get('/user/getAll/:page/:pageSize', [
+     app.get('/user/getAll/:page/:pageSize', [
         UserController.getUsers
     ]);
+    /**
+     * @swagger
+     * /user/getAllByLevel/{level}/{page}/{pageSize}:
+     *  get:
+     *   summary: get all users by level
+     *   tags:  
+     *     - user
+     *   parameters:
+     *    - in: path
+     *      name: level
+     *      schema:
+     *       type: number
+     *       example: 1
+     *      required: true
+     *    - in: path
+     *      name: page
+     *      schema:
+     *       type: number
+     *       example: 0
+     *      required: true
+     *    - in: path
+     *      name: pageSize
+     *      schema:
+     *       type: number
+     *       example: 10
+     *      required: true
+     *   responses:
+     *      200:
+     *       description: successful response
+     *      400:
+     *       description: request failed
+     *    
+     */
+    app.get('/user/getAllByLevel/:level/:page/:pageSize', [
+        UserController.getUsers
+    ]);
+
+    /**
+     * @swagger
+     * /user/deleteAccount/{userId}:
+     *  delete:
+     *   summary: delete user account
+     *   tags:  
+     *     - user
+     *   parameters:
+     *    - in: path
+     *      name: userId
+     *      schema:
+     *       type: string
+     *       example: 92jh22
+     *      required: true
+     *   responses:
+     *      200:
+     *       description: successful response
+     *      400:
+     *       description: request failed
+     *    
+     */
+    app.delete('/user/deleteAccount/:userId', [
+        UserController.deleteAccount
+    ])
 
 
     /**

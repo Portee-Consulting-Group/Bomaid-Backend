@@ -5,6 +5,10 @@ const invalidOtpCronJob = cron.schedule("*/10 * * * *", () => {
     OtpService.invalidateOtp();
 });
 
+const deleteOtpCronJob = cron.schedule("00 00 * * *", () => { //runs at midnight
+    OtpService.deleteOtp();
+});
+
 module.exports = {
-    invalidOtpCronJob
+    invalidOtpCronJob,
 }

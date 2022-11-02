@@ -6,8 +6,10 @@ const userGoalSchema = new Schema({
     name: { type: String, required: true },
     description: { type: String, required: true },
     userId: { type: String, required: true },
+    goalTypeId: { type: String, required: true },
     status: { type: Number, default: statusEnum.active.value },
     reminderTimes: [{ type: String }],
+    goalValue: { type: Number, default: 0 },
     uploadUrl: { type: String, default: "" },
     uploadId: { type: String, default: "" },
     endDate: { type: Date, default: Date.now },
@@ -31,9 +33,6 @@ find = async (query) => {
     return UserGoal.findOne(query);
 };
 
-getOne = async (query) => {
-};
-
 getGoals = async (query, page, pageSize) => {
     return UserGoal.find(query)
         .sort({ _id: -1 })
@@ -49,7 +48,6 @@ module.exports = {
     add,
     update,
     find,
-    getOne,
     getGoals,
     getActiveTypes
 }

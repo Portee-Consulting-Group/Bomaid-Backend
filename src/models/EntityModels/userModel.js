@@ -2,24 +2,30 @@ const mongoose = require('mongoose');
 const statusEnum = require('../../common/enum').getStatusEnum();
 const Schema = mongoose.Schema;
 const fuzzySearching = require('mongoose-fuzzy-searching');
+const { DEFAULT_PIC_ID, DEFAULT_PIC_URL } = require('../../common/constants');
 const userEnum = require('../../common/enum').getUserEnum();
 
 
 const userSchema = new Schema({
-    firstName: { type: String, required: true, uppercase: true },
-    lastName: { type: String, required: true, uppercase: true },
+    firstName: { type: String, required: true },
+    lastName: { type: String, required: true },
     email: { type: String, required: true, match: /.+\@.+\..+/, unique: true, lowercase: true },
     password: { type: String, required: true, },
-    uploadUrl: { type: String, default: "" },
-    uploadId: { type: String, default: "" },
+    uploadUrl: { type: String, default: DEFAULT_PIC_URL },
+    uploadId: { type: String, default: DEFAULT_PIC_ID },
+    accountType: { type: Number, default: 0 },
+    orgLevel: { type: Number, required:true },
     userTypeId: { type: String, required: true, default: userEnum.user.value },
     // callingCodeId: { type: String, required: true },
     // phoneNo: { type: String, required: true, unique: true },
-    companyRole: { type: String, required: true, unique: true },
+    companyRole: { type: String, required: true},
     dateOfBirth: { type: Date, default: "" },
     genderType: { type: Number, default: 0 },
-    status: { type: Number, default: statusEnum.inactive.value },
+    status: { type: Number, default: statusEnum.active.value },
     token: { type: String, default: "" },
+    weight: { type: String, default: "" },
+    height: { type: String, default: "" },
+    garminUserToken: { type: String, default: "" },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now }
 });
@@ -40,23 +46,27 @@ update = async (query, data) => {
 find = async (query) => {
     return User.findOne(query);
 };
-
-getOne = async (query) => {
-
+findAll = async (query) => {
+    return User.find(query);
 };
 
+
 getActiveUsers = async (page, pageSize) => {
-    return User.find({ status: statusEnum.active.value }, { _id: 0, __v: 0, password: 0 })
+    return User.find({ status: statusEnum.active.value }, { __v: 0, password: 0 })
         .sort({ _id: -1 })
         .skip(page)
         .limit(pageSize);
 };
 
+deleteAccount = async (userId) => {
+    await User.findByIdAndDelete(userId)
+}
 
 module.exports = {
     add,
     update,
     find,
-    getOne,
-    getActiveUsers
+    findAll,
+    getActiveUsers,
+    deleteAccount
 }

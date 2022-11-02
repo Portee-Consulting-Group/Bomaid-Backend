@@ -18,7 +18,6 @@ signUpOtp = async (model) => {
     if (otpValue == null) {
         throw new NullReferenceException("otp not created");
     }
-    await emailService.SendOtpConfirmationEmail({email: model.email, otpCode: otpValue.code})
     return otpValue;
 }
 
@@ -31,7 +30,6 @@ checkOtp = async (otpViewModel) => {
             return response;
         }
     } catch (err) {
-        console.log("Otp is throwing here ", err);
         throw new CustomException("Error with service");
     }
 }
@@ -57,12 +55,16 @@ passwordResetOtp = async (otpViewModel) => {
 
 invalidateOtp = async () => {
     let otps = await OtpModel.getAllCodes({ status: statusEnums.active.value });
-    if (otps > 0) {
-        otps.forEach(element => {
-            OtpModel.update({ _id: element.id }, { status: statusEnums.inactive.value });
-        });
+    if (otps.length > 0) {
+        for (const element of otps) {
+            await OtpModel.update({ _id: element.id }, { status: statusEnums.inactive.value });
+        }
     }
 };
+
+deleteOtp = async ()=> {
+    await OtpModel.deleteAll({});
+}
 
 generateOtp = () => {
     let value = Math.floor(100000 + Math.random() * 900000);
@@ -77,5 +79,6 @@ module.exports = {
     signUpOtp,
     checkOtp,
     passwordResetOtp,
-    invalidateOtp
+    invalidateOtp,
+    deleteOtp
 }

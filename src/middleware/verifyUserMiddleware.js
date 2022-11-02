@@ -48,7 +48,7 @@ exports.isPasswordAndUserMatch = async (req, res, next) => {
             }
         }
     } catch (error) {
-        throw error;
+        res.status(status.ERROR).json({message:  error.message });
     }
 };
 
