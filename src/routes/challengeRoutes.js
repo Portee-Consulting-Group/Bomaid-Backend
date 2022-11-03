@@ -414,7 +414,7 @@ const AuthValidationMiddleware = require('../middleware/authValidationMiddleware
 
   /**
    * @swagger
-   * /challenge/getIndividualFitData/{circleId}/{goalTypeId}:
+   * /challenge/getIndividualFitData/{circleId}/{goalTypeId}/{challengeId}:
    *  get:
    *   summary: get all individual fit data by circleId and goalTypeId
    *   tags:  
@@ -422,6 +422,11 @@ const AuthValidationMiddleware = require('../middleware/authValidationMiddleware
    *   parameters:
    *    - in: path
    *      name: goalTypeId
+   *      schema:
+   *       type: string
+   *      required: true
+   *    - in: path
+   *      name: challengeId
    *      schema:
    *       type: string
    *      required: true
@@ -437,7 +442,7 @@ const AuthValidationMiddleware = require('../middleware/authValidationMiddleware
    *       description: request failed
    *    
    */
-   app.get('/challenge/getIndividualFitData/:circleId/:goalTypeId',[
+   app.get('/challenge/getIndividualFitData/:circleId/:goalTypeId/:challengeId',[
       // AuthValidationMiddleware.validJWTNeeded,
       // AuthPermissionMiddleware.adminLevelRequired,
       ChallengeController.getIndividualFitData

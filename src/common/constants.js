@@ -2,7 +2,8 @@ const constants = {
     PLUS: '+',
     minQuantity: 5,
     initialSale: 0,
-    EMAIL_CHECK: "bomaid.co.bw"
+    EMAIL_CHECK: "bomaid.co.bw",
+    KILO_M:1000
 };
 
 const messageEnums = {
