@@ -5,6 +5,7 @@ const ChallengeModel = require('../models/EntityModels/challengeModel');
 const FitModel = require('../models/EntityModels/fitModel');
 const CircleModel = require('../models/EntityModels/circleModel');
 const CircleChallengeModel = require('../models/EntityModels/CirclechallengeModel');
+const UserChallengeModel = require('../models/EntityModels/userChallengeModel');
 const GoalTypeModel = require('../models/EntityModels/goalTypeModel');
 const SuccessResponse = require('../models/viewModels/responseModel');
 const clodinaryService = require('../services/CloudinaryService');
@@ -160,6 +161,23 @@ updateMemberData = async (req, res) => {
         res.status(status.ERROR).json({ error: err.message });
     }
 }
+
+addUserChallenge = async (req, res) => {
+    try {
+        const user = await UserModel.find({_id: req.body.userId});
+        const challenge = await ChallengeModel.findChallenge({_id: req.body.challengeId});
+        const goalType = await GoalTypeModel.find({_id: req.body.goalTypeId});
+        if(user === null || challenge == null || goalType == null  ){
+            throw new NotFoundException("User or goaltype or challenge not found");
+        }
+        const data = await UserChallengeModel.insert(req.body)
+        
+        let response = new SuccessResponse(data, "data")
+        res.status(status.SUCCESS).json(response);
+    } catch (err) {
+        res.status(status.ERROR).json({ error: err.message });
+    }
+}
 getCircleChallenges = async (req, res) => {
     try {
         const challenges = await CircleChallengeModel.getResults({ circleId: req.params.circleId }, req.params.page, req.params.pageSize);
@@ -227,7 +245,11 @@ getIndividualFitData = async (req, res) => {
         if (circle.results.length < 1) {
             throw new NotFoundException("No members found");
         }
-        await formatIndividualData(circle, circleMembers, memberData);
+
+        circle.results.forEach((result) => {
+            circleMembers.push(result.userId);
+        });
+        await formatIndividualData(circle.goalTypeId, circleMembers, memberData);
 
         let response = new SuccessResponse(memberData, "circle member fit values");
         res.status(status.SUCCESS).json(response);
@@ -238,25 +260,23 @@ getIndividualFitData = async (req, res) => {
 
 getIndividualFitDataByGoalTypeId = async (req, res) => {
     try {
-        let circle = await CircleChallengeModel.findCircleChallenge({ goalTypeId: req.params.goalTypeId });
         let memberData = [];
-        let circleMembers = [];
-        if (circle.results.length < 1) {
-            throw new NotFoundException("No members found");
-        }
-        await formatIndividualData(circle, circleMembers, memberData);
+        let members = []
+        let allUsers = await UserModel.getAll();
 
-        let response = new SuccessResponse(memberData, "circle member fit values");
+        allUsers.forEach((result) => {
+            members.push(result._id);
+        });
+        await formatIndividualData(req.params.goalTypeId, members, memberData);
+
+        let response = new SuccessResponse(memberData, "user fit values");
         res.status(status.SUCCESS).json(response);
     } catch (err) {
         res.status(status.ERROR).json({ error: err.message });
     }
 };
 
-async function formatIndividualData(circle, circleMembers, memberData) {
-    circle.results.forEach((result) => {
-        circleMembers.push(result.userId);
-    });
+async function formatIndividualData(goalTypeId, circleMembers, memberData) {
 
     var dateObj = new Date();
     var month = dateObj.getUTCMonth() + 1; //months from 1-12
@@ -270,7 +290,7 @@ async function formatIndividualData(circle, circleMembers, memberData) {
     for (const member of circleMembers) {
         let fit = await FitModel.findRecentFit({
             userId: member,
-            goalTypeId: circle.goalTypeId,
+            goalTypeId: goalTypeId,
             createdAt: {
                 $gte: new Date(startDate).setHours(00, 00, 00),
                 $lt: new Date(endDate).setHours(23, 59, 59)
@@ -286,6 +306,12 @@ async function formatIndividualData(circle, circleMembers, memberData) {
 
 
         if (fit == null || fit.length == 0) {
+            memberData.push({
+                userData: user,
+                fitValue: 0,
+                totalFitValue: 0, //sum of fit values
+                dataAdded: 0
+            });
             continue;
         } else {
             let totalFit = 0;
@@ -317,5 +343,6 @@ module.exports = {
     getCircleRanks,
     getCircleRanksByGoalTypeId,
     getIndividualFitData,
-    getIndividualFitDataByGoalTypeId
+    getIndividualFitDataByGoalTypeId,
+    addUserChallenge
 }

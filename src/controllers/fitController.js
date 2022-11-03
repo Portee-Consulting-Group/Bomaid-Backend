@@ -4,6 +4,7 @@ const FitModel = require('../models/EntityModels/fitModel');
 const UserModel = require('../models/EntityModels/userModel');
 const GoalTypeModel = require('../models/EntityModels/goalTypeModel');
 const CirclechallengeModel = require('../models/EntityModels/CirclechallengeModel');
+const UserchallengeModel = require('../models/EntityModels/userChallengeModel');
 const UserGoalModel = require('../models/EntityModels/userGoalModel');
 const SuccessResponse = require('../models/viewModels/responseModel');
 const clodinaryService = require('../services/CloudinaryService');
@@ -25,7 +26,7 @@ addFit = async (req, res) => {
         if (userGoal == null) {
             req.body.statistic = statisticEnum.good.value;
         } else {
-            const value = Math.round((req.body.fitValue / goaltype.target) * 100); //convert fit points to percentage to seee where user statistic lies
+            const value = Math.round((req.body.fitValue / goaltype.target) * 100); //convert fit points to percentage to see where user statistic lies
             if (value >= 70 || value >= 100) {
                 req.body.statistic = statisticEnum.good.value;
             } else if (value >= 30 && value < 70) {
@@ -36,6 +37,19 @@ addFit = async (req, res) => {
             else {
                 throw new CustomException("Pass correct value");
             }
+        }
+        //if user belongs to challenge add fit result
+        let userChallenge = await UserchallengeModel.findUserChallenge({ userId: req.body.userId, challengeId: req.body.challengeId })
+        if (userChallenge != null) {
+            const newRecord = {
+                value: req.body.fitValue,
+                dateEntered: Date.now()
+            }
+            userChallenge.results.push(newRecord)
+            console.log(userChallenge.results)
+            await UserchallengeModel.update({ userId: req.body.userId }, {
+                results: userChallenge.results
+            })
         }
 
         //update all circlechallenge user belongs to
@@ -66,7 +80,7 @@ addFit = async (req, res) => {
             let fit = await FitModel.insert(req.body);
             let response = new SuccessResponse(fit, "fit added");
             res.status(status.SUCCESS).json(response);
-        }else{
+        } else {
             res.status(status.ERROR).json({ error: "Failed to add fit" });
         }
     } catch (err) {
@@ -112,12 +126,10 @@ getFitStatistics = async (req, res) => {
             for (const data of fit) {
                 sum += data.fitValue;
             }
-
-
             let fitStat = {
                 goalTypeId: goalType._id,
                 statistic: sum,
-                points: Math.floor(sum/POINT_UNIT) 
+                points: Math.floor(sum / POINT_UNIT)
             };
             statistics.push(fitStat);
         }

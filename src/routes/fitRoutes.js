@@ -43,6 +43,10 @@ const AuthValidationMiddleware = require('../middleware/authValidationMiddleware
  *     type: string
  *     example: 8327299
  *     required: true
+ *    challengeId:
+ *     type: string
+ *     example: 8327299
+ *     required: true
  *    userId:
  *     type: string
  *     example: 8327299

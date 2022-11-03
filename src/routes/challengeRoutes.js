@@ -36,6 +36,22 @@ const AuthValidationMiddleware = require('../middleware/authValidationMiddleware
  *     type: date
  *     example: 2022-05-17
  * 
+ *  adduserchallenge:
+ *   type: object
+ *   properties:
+ *    challengeId:
+ *     type: string
+ *     example: 6292982
+ *     required: true
+ *    goalTypeId:
+ *     type: string
+ *     example: 6292982
+ *     required: true
+ *    userId:
+ *     type: string
+ *     example: 6292982
+ *     required: true
+ * 
  *  updateChallenge:
  *   type: object
  *   properties:
@@ -250,6 +266,33 @@ const AuthValidationMiddleware = require('../middleware/authValidationMiddleware
     app.post('/circlechallenge/add', [
        ChallengeController.addCircleChallenge
     ]);
+
+
+
+    /**
+     * @swagger
+     * /userchallenge/add:
+     *  post:
+     *   summary: add user challenge
+     *   tags: 
+     *    - challenge
+     *   requestBody:
+     *    required: true
+     *    content:
+     *     application/json:
+     *      schema:
+     *        $ref: '#/definitions/adduserchallenge'
+     *   security:
+     *     - bearerAuth: []
+     *   responses:
+     *      200:
+     *       description: successful response
+     *      400:
+     *       description: request failed
+     */
+     app.post('/userchallenge/add', [
+      ChallengeController.addUserChallenge
+   ]);
 
 
 

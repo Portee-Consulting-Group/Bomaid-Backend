@@ -50,6 +50,10 @@ findAll = async (query) => {
     return User.find(query);
 };
 
+getAll = async ()=>{
+    return User.find({})
+}
+
 
 getActiveUsers = async (page, pageSize) => {
     return User.find({ status: statusEnum.active.value }, { __v: 0, password: 0 })
@@ -66,6 +70,7 @@ module.exports = {
     add,
     update,
     find,
+    getAll,
     findAll,
     getActiveUsers,
     deleteAccount
