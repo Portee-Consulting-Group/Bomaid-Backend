@@ -473,4 +473,30 @@ const AuthValidationMiddleware = require('../middleware/authValidationMiddleware
       // AuthPermissionMiddleware.adminLevelRequired,
       ChallengeController.getIndividualFitDataByGoalTypeId
   ]);
+
+  /**
+   * @swagger
+   * /challenge/getIndividualFitDataByChallenge/{challengeId}:
+   *  get:
+   *   summary: get individual fit data by challengeId
+   *   tags:  
+   *     - challenge
+   *   parameters:
+   *    - in: path
+   *      name: challengeId
+   *      schema:
+   *       type: string
+   *      required: true
+   *   responses:
+   *      200:
+   *       description: successful response
+   *      400:
+   *       description: request failed
+   *    
+   */
+   app.get('/challenge/getIndividualFitDataByChallenge/:challengeId',[
+      // AuthValidationMiddleware.validJWTNeeded,
+      // AuthPermissionMiddleware.adminLevelRequired,
+      ChallengeController.getIndividualFitDataByChallenge
+  ]);
  }
