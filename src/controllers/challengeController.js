@@ -277,7 +277,7 @@ getIndividualFitDataByGoalTypeId = async (req, res) => {
     try {
         let memberData = [];
         let members = []
-        let allUsers = await UserChallengeModel.findUserChallenge({ challengeId: req.params.challengeId })
+        let allUsers = await UserModel.getAll()
 
         allUsers.forEach((result) => {
             members.push(result._id);

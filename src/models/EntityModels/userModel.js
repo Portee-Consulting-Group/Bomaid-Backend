@@ -29,6 +29,7 @@ const userSchema = new Schema({
     updatedAt: { type: Date, default: Date.now }
 });
 
+const User = mongoose.models.Users || mongoose.model('Users', userSchema);
 
 add = async (data) => {
     const user = new User(data);
