@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const statusEnum = require('../../common/enum').getStatusEnum();
 const Schema = mongoose.Schema;
-const fuzzySearching = require('mongoose-fuzzy-searching');
 const { DEFAULT_PIC_ID, DEFAULT_PIC_URL } = require('../../common/constants');
 const userEnum = require('../../common/enum').getUserEnum();
 
@@ -30,8 +29,6 @@ const userSchema = new Schema({
     updatedAt: { type: Date, default: Date.now }
 });
 
-userSchema.plugin(fuzzySearching, { fields: ['firstName', 'lastName', 'username'] })
-const User = mongoose.models.Users || mongoose.model('Users', userSchema);
 
 add = async (data) => {
     const user = new User(data);
