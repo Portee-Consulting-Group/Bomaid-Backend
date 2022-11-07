@@ -179,6 +179,20 @@ addUserChallenge = async (req, res) => {
         res.status(status.ERROR).json({ error: err.message });
     }
 }
+
+userInChallenge = async (req, res) => {
+    try {
+        let user = await UserChallengeModel.findUserChallenge({ userId: req.params.userId, challengeId: req.params.challengeId, })
+        let isPresent = false
+        if (user !== null) {
+            isPresent = true;
+        }
+        let response = new SuccessResponse(isPresent, "User is challenge")
+        res.status(status.SUCCESS).json(response);
+    } catch (error) {
+        res.status(status.ERROR).json({ error: err.message });
+    }
+}
 getCircleChallenges = async (req, res) => {
     try {
         const challenges = await CircleChallengeModel.getResults({ circleId: req.params.circleId }, req.params.page, req.params.pageSize);
@@ -295,7 +309,7 @@ getIndividualFitDataByChallenge = async (req, res) => {
         let members = []
         let challenge = await ChallengeModel.findChallenge({ _id: req.params.challengeId })
         if (!challenge) throw new NullReferenceException("Challenge id is required")
-        let userChallengeData = await UserChallengeModel.findAll({ challengeId: req.params.challengeId, userId: req.params.userId})
+        let userChallengeData = await UserChallengeModel.findAll({ challengeId: req.params.challengeId, userId: req.params.userId })
         members.push(req.params.userId)
         let sum = 0
         userChallengeData.forEach(element => {
@@ -387,5 +401,6 @@ module.exports = {
     getIndividualFitData,
     getIndividualFitDataByGoalTypeId,
     addUserChallenge,
-    getIndividualFitDataByChallenge
+    getIndividualFitDataByChallenge,
+    userInChallenge
 }

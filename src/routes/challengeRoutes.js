@@ -363,12 +363,17 @@ const AuthValidationMiddleware = require('../middleware/authValidationMiddleware
 
     /**
      * @swagger
-     * /challenge/getCircleRanking/{challengeId}:
+     * /challenge/userInChallenge/{userId}/{challengeId}:
      *  get:
-     *   summary: get all circle ranks in a challenge
+     *   summary: check if user is in circle
      *   tags:  
      *     - challenge
      *   parameters:
+     *    - in: path
+     *      name: userId
+     *      schema:
+     *       type: string
+     *      required: true
      *    - in: path
      *      name: challengeId
      *      schema:
@@ -381,11 +386,37 @@ const AuthValidationMiddleware = require('../middleware/authValidationMiddleware
      *       description: request failed
      *    
      */
-     app.get('/challenge/getCircleRanking/:challengeId',[
+     app.get('/challenge/userInChallenge/:userId/:challengeId',[
       // AuthValidationMiddleware.validJWTNeeded,
       // AuthPermissionMiddleware.adminLevelRequired,
-      ChallengeController.getCircleRanks
+      ChallengeController.userInChallenge
   ]);
+  
+  /**
+   * @swagger
+   * /challenge/getCircleRanking/{challengeId}:
+   *  get:
+   *   summary: get all circle ranks in a challenge
+   *   tags:  
+   *     - challenge
+   *   parameters:
+   *    - in: path
+   *      name: challengeId
+   *      schema:
+   *       type: string
+   *      required: true
+   *   responses:
+   *      200:
+   *       description: successful response
+   *      400:
+   *       description: request failed
+   *    
+   */
+   app.get('/challenge/getCircleRanking/:challengeId',[
+    // AuthValidationMiddleware.validJWTNeeded,
+    // AuthPermissionMiddleware.adminLevelRequired,
+    ChallengeController.getCircleRanks
+]);
 
     /**
      * @swagger
