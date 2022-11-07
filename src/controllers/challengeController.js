@@ -292,18 +292,22 @@ getIndividualFitDataByGoalTypeId = async (req, res) => {
 };
 getIndividualFitDataByChallenge = async (req, res) => {
     try {
-        let memberData = [];
         let members = []
-        let allUsers = await UserChallengeModel.findAll({ challengeId: req.params.challengeId })
         let challenge = await ChallengeModel.findChallenge({ _id: req.params.challengeId })
         if (!challenge) throw new NullReferenceException("Challenge id is required")
-
-        allUsers.forEach((result) => {
-            members.push(result.userId);
+        let userChallengeData = await UserChallengeModel.findAll({ challengeId: req.params.challengeId, userId: req.params.userId})
+        members.push(req.params.userId)
+        let sum = 0
+        userChallengeData.forEach(element => {
+            for (const iterator of element.results) {
+                sum += iterator.value
+            }
         });
-        await formatIndividualData(challenge.goalTypeId, members, memberData);
-
-        let response = new SuccessResponse(memberData, "user challenge values");
+        let totalFitData = {
+            userData: userChallengeData,
+            totalFitValue: sum
+        }
+        let response = new SuccessResponse(totalFitData, "user challenge values");
         res.status(status.SUCCESS).json(response);
     } catch (err) {
         res.status(status.ERROR).json({ error: err.message });
