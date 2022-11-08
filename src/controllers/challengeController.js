@@ -182,12 +182,12 @@ addUserChallenge = async (req, res) => {
 
 userInChallenge = async (req, res) => {
     try {
-        let user = await UserChallengeModel.findUserChallenge({ userId: req.params.userId, challengeId: req.params.challengeId, })
+        let user = await UserChallengeModel.findUserChallenge({ userId: req.params.userId, challengeId: req.params.challengeId})
         let isPresent = false
         if (user !== null) {
             isPresent = true;
         }
-        let response = new SuccessResponse(isPresent, "User is challenge")
+        let response = new SuccessResponse(isPresent, "User in challenge")
         res.status(status.SUCCESS).json(response);
     } catch (error) {
         res.status(status.ERROR).json({ error: err.message });
