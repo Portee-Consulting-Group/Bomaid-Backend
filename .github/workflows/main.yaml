@@ -1,22 +1,3 @@
-name: Deploy
-on:
-  push:
-    branches:
-      - main
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: akhileshns/heroku-deploy@v3.12.12
-        with:
-          branch: "main"
-          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: "node-heroku-jmm-testing"
-          heroku_email: ${{secrets.HEROKU_EMAIL}}
-
-
 name: Node.js CI/CD
 
 on:
