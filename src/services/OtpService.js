@@ -69,7 +69,7 @@ deleteOtp = async ()=> {
 generateOtp = () => {
     let value = Math.floor(100000 + Math.random() * 900000);
     let otpExists = OtpModel.findCode({ code: value });
-    if (otpExists == null) {
+    if (otpExists != null) {
         generateOtp();
     }
     return value;

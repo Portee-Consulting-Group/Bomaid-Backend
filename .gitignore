@@ -37,4 +37,4 @@ lerna-debug.log*
 config/
 chat-client/
 .vscode
-src/common/pusherInit.js
+# src/common/pusherInit.js
