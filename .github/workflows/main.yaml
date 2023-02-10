@@ -1,36 +1,17 @@
-name: Node.js CI
+name: Deploy
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [12.x, 14.x, 16.x, 18.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
-      steps:
-        - uses: actions/checkout@v3
-        - name: Use Node.js ${{ matrix.node-version }}
-          uses: actions/setup-node@v3
-          with:
-            node-version: ${{ matrix.node-version }}
-            cache: 'npm'
-        - run: npm ci
-        - run: npm run start --if-present
-
-  deploy: ## <-- this is the new stuff
-    needs: build
-    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3  
+      - uses: actions/checkout@v2
       - uses: akhileshns/heroku-deploy@v3.12.12
         with:
+          branch: "main"
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: ${{secrets.HEROKU_APP_NAME}}
+          heroku_app_name: "node-heroku-jmm-testing"
           heroku_email: ${{secrets.HEROKU_EMAIL}}
-          remote_branch: main
