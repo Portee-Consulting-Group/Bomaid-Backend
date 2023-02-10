@@ -38,3 +38,4 @@ config/
 chat-client/
 .vscode
 # src/common/pusherInit.js
+github.env 
