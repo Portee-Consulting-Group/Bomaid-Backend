@@ -19,7 +19,7 @@ addUser = async (req, res) => {
             throw new CustomException("Please use the correct email")
         }
         if ((req.body.password !== req.body.confirmPassword) || (req.body.email == null)) {
-            throw new NullReferenceException("please pass valid passwords");
+            throw new NullReferenceException("Please pass valid passwords");
         }
         const userExist = await UserModel.find({ email: req.body.email, phoneNo: req.body.phoneNo });
         if (userExist != null) {
@@ -47,9 +47,8 @@ addUser = async (req, res) => {
 
         const accountType = getAccountTypeEnums();
         if (accountType.get(Number(req.body.accountType)) == undefined) {
-            throw new NotFoundException("type not found");
+            throw new NotFoundException("account type not found");
         }
-
 
         if (req.body.profileImage != undefined && req.body.profileImage !== '') {
             const uploadedImage = await clodinaryService.uploadProfileImage(req.body.profileImage);
@@ -57,11 +56,29 @@ addUser = async (req, res) => {
             req.body.uploadId = uploadedImage.public_id;
         }
 
+
+        const otp = {
+            email: req.body.email,
+            name: `${req.body.firstName} ${req.body.lastName}`
+        }
+        const otpData = await otpService.signUpOtp(otp);
+
+        const otpViewModel = {
+            email: req.body.email,
+            otpCode: otpData.code,
+            name: otp.name
+        }
+
+
         let { salt, hash } = hasher(req);
         req.body.password = salt + "$" + hash;
-        const user = await UserModel.add(req.body);
+
+        const user = await UserModel.add(req.body);//create user after otp has been sent 
         req.user = user;
         const token = await AuthController.generateJwtToken(user.email);
+
+
+        await emailService.SendRegistrationOtpEmail(otpViewModel);
 
         await UserModel.update({ _id: user._id }, { token: token });
         
@@ -75,19 +92,6 @@ addUser = async (req, res) => {
         if (user == null) {
             throw new NullReferenceException('User not added');
         }
-        const otp = {
-            email: user.email,
-            name: `${user.firstName} ${user.lastName}`
-        }
-        const otpData = await otpService.signUpOtp(otp);
-
-        const otpViewModel = {
-            email: user.email,
-            otpCode: otpData.code,
-            name: otp.name
-        }
-        await emailService.SendRegistrationOtpEmail(otpViewModel);
-
         await emailService.SendSuccessfulSignupEmail(otpViewModel);
         const response = new SuccessResponse(user, 'user created');
         res.status(status.SUCCESS).json({ message: response });

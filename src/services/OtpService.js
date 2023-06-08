@@ -66,14 +66,16 @@ deleteOtp = async ()=> {
     await OtpModel.deleteAll({});
 }
 
-generateOtp = () => {
-    let value = Math.floor(100000 + Math.random() * 900000);
-    let otpExists = OtpModel.findCode({ code: value });
-    if (otpExists != null) {
-        generateOtp();
-    }
+generateOtp = async () => {
+    let value;
+    let otpExists;
+    do {
+        value = Math.floor(100000 + Math.random() * 900000);
+        otpExists = await OtpModel.findCode({ code: value });
+    } while (otpExists != null);
     return value;
 };
+
 
 module.exports = {
     signUpOtp,
