@@ -32,6 +32,9 @@ const AuthValidationMiddleware = require('../middleware/authValidationMiddleware
  *     type: Number
  *     example: 10
  *     required: true
+ *    startDate:
+ *     type: date
+ *     example: 2022-05-17
  *    endDate:
  *     type: date
  *     example: 2022-05-17

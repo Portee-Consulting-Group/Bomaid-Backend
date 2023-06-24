@@ -24,7 +24,7 @@ addChallenge = async (req, res) => {
             throw new AlreadyExistsException("Challenge has been added");
         }
 
-        if (req.body.challengeImage != undefined) {
+        if (req.body.challengeImage != undefined && req.body.challengeImage != '' ) {
             const uploadedImage = await clodinaryService.uploadChallengeImage(req.body.challengeImage);
             req.body.uploadUrl = uploadedImage.url;
             req.body.uploadId = uploadedImage.public_id;
@@ -344,7 +344,7 @@ async function formatIndividualData(goalTypeId, circleMembers, memberData, circl
             userId: member,
             goalTypeId: goalTypeId,
             createdAt: {
-                $gte: new Date(startDate).setHours(00, 00, 00),
+                $gte: new Date(startDate).setHours(0o0, 0o0, 0o0),
                 $lt: new Date(endDate).setHours(23, 59, 59)
             }
         });
