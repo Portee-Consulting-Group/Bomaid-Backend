@@ -5,13 +5,14 @@ const statusEnum = require('../../common/enum').getStatusEnum();
 
 
 const challengeSchema = new Schema({
-    title: { type: String, required: true, lowercase: true},
-    description: { type: String, required: true },
-    info: { type: String, required: true },
+    title: { type: String, lowercase: true},
+    description: { type: String },
+    info: { type: String },
     goalTypeId: { type: String, required: true },
     challengeTarget: { type: Number, required: true },
     uploadUrl: { type: String, default: "" },
     uploadId: { type: String, default: "" },
+    startDate: {type:String, default: "" },
     endDate: {type:String, default: "" },
     status: { type: Number, required: true, default: statusEnum.active.value },
     createdAt: { type: Date, default: Date.now },
