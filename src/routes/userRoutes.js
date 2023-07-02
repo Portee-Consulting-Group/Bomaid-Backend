@@ -49,6 +49,19 @@ const upload = require('../common/multer');
  *     type: string
  *     example: 12345
  * 
+ *  changePassword:
+ *   type: object
+ *   properties:
+ *    email:
+ *     type: string
+ *     example: john@bomaid.co.bw
+ *    password:
+ *     type: string
+ *     example: 12345   
+ *    confirmPassword:
+ *     type: string
+ *     example: 12345
+ * 
  * 
  * components:
  *  securitySchemes:
@@ -85,6 +98,29 @@ exports.routesConfig = function (app) {
     */
     app.post('/user/signup/local', [
         UserController.addUser
+    ]);
+
+    /**
+    * @swagger
+    * /user/changePassword:
+    *  post:
+    *   summary: change password
+    *   tags:
+    *     - user
+    *   requestBody:
+    *    required: true
+    *    content:
+    *     application/json:
+    *      schema:
+    *        $ref: '#/definitions/changePassword'
+    *   responses:
+    *      200:
+    *       description: successful response
+    *      400:
+    *       description: request failed
+    */
+    app.post('/user/changePassword', [
+        UserController.changePassword
     ]);
 
     /**

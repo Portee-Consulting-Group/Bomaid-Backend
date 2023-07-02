@@ -9,6 +9,7 @@ const SurveyResponseModel = require('../models/EntityModels/surveyResponseModel'
 const TargetModel = require('../models/EntityModels/targetModel');
 const PermissionModel = require('../models/EntityModels/permissionModel');
 const { supportEmail } = require('../services/EmailService');
+const { NotFoundException, CustomException } = require('../../errors/AppError');
 
 local_login = async (req, res) => {
     try {
@@ -110,7 +111,7 @@ addNewPermission = async (userId) => {
         } else {
             permit = await PermissionModel.update({ userId: userId }, req.body)
         }
-        
+
     } catch (error) {
         res.status(status.ERROR).json({ message: error.message });
     }
@@ -127,8 +128,6 @@ getUserPermission = async (req, res) => {
         res.status(status.ERROR).json({ message: err.message });
     }
 }
-
-
 
 module.exports = {
     local_login,
