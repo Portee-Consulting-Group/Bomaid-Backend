@@ -81,7 +81,7 @@ addUser = async (req, res) => {
         await emailService.SendRegistrationOtpEmail(otpViewModel);
 
         await UserModel.update({ _id: user._id }, { token: token });
-        
+
         req.body.userId = user._id
         await AuthController.addNewPermission(user._id);//add user permission
 
@@ -193,6 +193,31 @@ deleteAccount = async (req, res) => {
 };
 
 
+changePassword = async (req, res) => {
+    try {
+        if (req.body.password !== req.body.confirmPassword)
+            throw new CustomException('Both passwords must match');
+
+        const user = await UserModel.find({ email: req.body.email })
+        if (user == null)
+            throw new NotFoundException('User not found');
+
+        let { salt, hash } = hasher(req);
+        const newPassword = salt + "$" + hash;
+
+        await UserModel.update({ _id: user.id }, {
+            password: newPassword
+        })
+
+        let response = new SuccessResponse(null, "password reset");
+        res.status(status.SUCCESS).json({ message: response });
+    } catch (error) {
+        res.status(status.ERROR).json({ message: error.message });
+    }
+}
+
+
+
 testEmail = async (req, res) => {
     await emailService.Test();
     res.status(200).json({ message: 'yes' });
@@ -207,6 +232,7 @@ hasher = (req) => {
 module.exports = {
     addUser,
     updateUser,
+    changePassword,
     getUser,
     getUsers,
     testEmail,

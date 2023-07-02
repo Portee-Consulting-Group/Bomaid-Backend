@@ -21,7 +21,7 @@ addChallenge = async (req, res) => {
         }
         let challenge = await ChallengeModel.findChallenge({ title: req.body.title.toLowerCase() })
         if (challenge != null) {
-            throw new AlreadyExistsException("Challenge has been added");
+            throw new AlreadyExistsException("Challenge has already been added");
         }
 
         if (req.body.challengeImage != undefined && req.body.challengeImage != '' ) {
