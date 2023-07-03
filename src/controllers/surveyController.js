@@ -17,8 +17,8 @@ addSurvey = async (req, res) => {
         if (user == null) throw new NullReferenceException("User not found");
 
 
-        let level = await OrgLevelModel.findLevel({ type: req.body.level });
-        if (level == null) throw new NullReferenceException("Level not found");
+        // let level = await OrgLevelModel.findLevel({ type: req.body.level });
+        // if (level == null) throw new NullReferenceException("Level not found");
 
 
         let categories = await CategoryModel.getAllCategories();
