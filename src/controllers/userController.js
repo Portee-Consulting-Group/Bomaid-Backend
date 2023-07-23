@@ -13,11 +13,11 @@ const clodinaryService = require('../services/CloudinaryService');
 
 addUser = async (req, res) => {
     try {
-        let val = req.body.email.split("@");
-        val = val[1].toLowerCase();
-        if (val != constants.EMAIL_CHECK) {
-            throw new CustomException("Please use the correct email")
-        }
+        // let val = req.body.email.split("@");
+        // val = val[1].toLowerCase();
+        // if (val != constants.EMAIL_CHECK) {
+        //     throw new CustomException("Please use the correct email")
+        // }
         if ((req.body.password !== req.body.confirmPassword) || (req.body.email == null)) {
             throw new NullReferenceException("Please pass valid passwords");
         }
@@ -216,6 +216,10 @@ changePassword = async (req, res) => {
     }
 }
 
+testCallback = async (req, res) => {
+    console.log('test', req.body)
+    res.status(200).json({message: req.body})
+}
 
 
 testEmail = async (req, res) => {
@@ -229,6 +233,7 @@ hasher = (req) => {
     return { salt, hash };
 }
 
+
 module.exports = {
     addUser,
     updateUser,
@@ -239,6 +244,7 @@ module.exports = {
     hasher,
     getUserById,
     getUsersByOrgLevel,
-    deleteAccount
+    deleteAccount,
+    testCallback
 }
 
