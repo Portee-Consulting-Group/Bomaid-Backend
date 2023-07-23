@@ -329,5 +329,7 @@ exports.routesConfig = function (app) {
         UserController.testEmail
     ]);
 
-
+    app.post('/user/testing', [
+        UserController.testCallback
+    ])
 }
