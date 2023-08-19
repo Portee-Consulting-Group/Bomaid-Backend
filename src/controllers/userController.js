@@ -73,7 +73,7 @@ addUser = async (req, res) => {
         let { salt, hash } = hasher(req);
         req.body.password = salt + "$" + hash;
 
-        const user = await UserModel.add(req.body);//create user after otp has been sent 
+        let user = await UserModel.add(req.body);//create user after otp has been sent 
         req.user = user;
         const token = await AuthController.generateJwtToken(user.email);
 
@@ -88,6 +88,7 @@ addUser = async (req, res) => {
         user.password = undefined;
         user._id = undefined;
         user.userTypeId = undefined;
+        user.token = token;
 
         if (user == null) {
             throw new NullReferenceException('User not added');
