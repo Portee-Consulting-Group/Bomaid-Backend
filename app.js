@@ -122,6 +122,8 @@ const ChallengeRouter = require('./src/routes/challengeRoutes');
 const PointRouter = require('./src/routes/pointRoutes');
 const MessageRouter = require('./src/routes/messagingRoutes');
 const FeedRouter = require('./src/routes/feedRoutes');
+const SwimStyleRouter = require('./src/routes/swimStyleRoutes.js');
+const SwimProgramRouter = require('./src/routes/swimProgramRoutes.js');
 
 UserRouter.routesConfig(app);
 AuthRouter.routesConfig(app);
@@ -135,6 +137,8 @@ ChallengeRouter.routesConfig(app);
 PointRouter.routesConfig(app);
 MessageRouter.routesConfig(app);
 FeedRouter.routesConfig(app);
+SwimStyleRouter.routesConfig(app);
+SwimProgramRouter.routesConfig(app);
 
 //Cron jobs
 invalidOtpCronJob;

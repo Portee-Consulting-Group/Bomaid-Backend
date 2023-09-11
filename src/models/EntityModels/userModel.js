@@ -71,5 +71,6 @@ module.exports = {
     getAll,
     findAll,
     getActiveUsers,
-    deleteAccount
+    deleteAccount,
+    User
 }
