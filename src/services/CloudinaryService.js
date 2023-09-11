@@ -84,6 +84,42 @@ const uploadGroupImage = async (file)=> {
     }
 }
 
+const uploadSwimStyleImage = async (file)=> {
+    try {
+        let result = await cloudinary.uploader.upload(file, { folder: 'bomaid_swim_style_file' });
+        return result;
+    } catch (err) {
+        throw err;
+    }
+}
+
+const uploadSwimProgramImage = async (file)=> {
+    try {
+        let result = await cloudinary.uploader.upload(file, { folder: 'bomaid_swim_program_file' });
+        return result;
+    } catch (err) {
+        throw err;
+    }
+}
+
+const uploadGymTargetBodyImage = async (file)=> {
+    try {
+        let result = await cloudinary.uploader.upload(file, { folder: 'bomaid_gym_target_body_program_file' });
+        return result;
+    } catch (err) {
+        throw err;
+    }
+}
+
+const uploadGymProgramImage = async (file)=> {
+    try {
+        let result = await cloudinary.uploader.upload(file, { folder: 'bomaid_gym_program_file' });
+        return result;
+    } catch (err) {
+        throw err;
+    }
+}
+
 
 
 
@@ -96,5 +132,9 @@ module.exports = {
     uploadChallengeImage,
     uploadChatFile,
     uploadFeedImage,
-    uploadGroupImage
+    uploadGroupImage,
+    uploadSwimStyleImage,
+    uploadSwimProgramImage,
+    uploadGymTargetBodyImage,
+    uploadGymProgramImage
 };
