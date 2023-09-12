@@ -81,7 +81,7 @@ exports.routesConfig = function (app) {
      *      name: userId
      *      schema:
      *       type: string
-     *       example: 0
+     *       example: 64fee2c4583f0848196ef479
      *      required: true
      *    - in: path
      *      name: page
