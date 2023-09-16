@@ -119,6 +119,14 @@ const uploadGymProgramImage = async (file)=> {
         throw err;
     }
 }
+const uploadGymExerciseImage = async (file)=> {
+    try {
+        let result = await cloudinary.uploader.upload(file, { folder: 'bomaid_gym_exercise_file' });
+        return result;
+    } catch (err) {
+        throw err;
+    }
+}
 
 
 
@@ -136,5 +144,6 @@ module.exports = {
     uploadSwimStyleImage,
     uploadSwimProgramImage,
     uploadGymTargetBodyImage,
-    uploadGymProgramImage
+    uploadGymProgramImage,
+    uploadGymExerciseImage
 };
