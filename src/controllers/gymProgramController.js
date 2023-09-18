@@ -21,8 +21,12 @@ add = async (req, res) => {
         req.body.programData = [];
         let user = await UserModel.find({ userId: req.body.userId });
         if (user == null) throw new NotFoundException("User not found");
-        let exercise = await ExerciseModel.find({ _id: req.body.exerciseId });
-        if (exercise == null) throw new NotFoundException("Exercise not found");
+
+        for (const item of req.body.programDetails) {
+            let exercise = await ExerciseModel.find({ _id: item.exerciseId });
+            if (exercise == null) throw new NotFoundException("Exercise not found");
+        }
+
         req.body.programData.push(...req.body.programDetails);
         for (const image of req.body.imageUrls) {
             const uploadedImage = await clodinaryService.uploadGymExerciseImage(image);
