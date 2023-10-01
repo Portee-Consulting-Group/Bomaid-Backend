@@ -29,7 +29,7 @@ const AuthValidationMiddleware = require('../middleware/authValidationMiddleware
  *           format: int32
  *         restTime:
  *           type: string
- *         exerciseId:
+ *         exercise:
  *           type: string
  *
  *    imageUrls:
