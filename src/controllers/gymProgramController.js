@@ -12,7 +12,7 @@ let programDetails = {
     reps: Number,
     weight: Number,
     restTime: String,
-    exerciseId: String
+    exercise: String
 }
 
 add = async (req, res) => {
@@ -22,10 +22,10 @@ add = async (req, res) => {
         let user = await UserModel.find({ userId: req.body.userId });
         if (user == null) throw new NotFoundException("User not found");
 
-        for (const item of req.body.programDetails) {
-            let exercise = await ExerciseModel.find({ _id: item.exerciseId });
-            if (exercise == null) throw new NotFoundException("Exercise not found");
-        }
+        // for (const item of req.body.programDetails) {
+        //     let exercise = await ExerciseModel.find({ _id: item.exerciseId });
+        //     if (exercise == null) throw new NotFoundException("Exercise not found");
+        // }
 
         req.body.programData.push(...req.body.programDetails);
         for (const image of req.body.imageUrls) {
