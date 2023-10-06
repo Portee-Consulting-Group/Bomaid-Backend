@@ -4,6 +4,7 @@ const statusEnum = require('../../common/enum').getStatusEnum();
 
 const gymProgramSchema = new Schema({
     duration: {type: String, default: ""},
+    calories: {type: String, default: 0},
     photoUrls: { type: [String], default: [] },
     programData: { type: [], default: [] },
     userId: { type: String, required: true },
