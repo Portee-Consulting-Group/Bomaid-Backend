@@ -43,7 +43,7 @@ add = async (req, res) => {
 
 getAll = async (req, res) => {
     try {
-        var styles = await GymProgramModel.getStyles({}, req.params.page, req.params.pageSize);
+        var styles = await GymProgramModel.getGymPrograms({}, req.params.page, req.params.pageSize);
         let response = new SuccessResponse(styles, "all gym programs")
         res.status(status.SUCCESS).json(response);
     } catch (err) {
