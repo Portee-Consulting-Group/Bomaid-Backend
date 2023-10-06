@@ -7,14 +7,6 @@ const SuccessResponse = require('../models/viewModels/responseModel');
 const clodinaryService = require('../services/CloudinaryService');
 
 
-let programDetails = {
-    set: String,
-    reps: Number,
-    weight: Number,
-    restTime: String,
-    exercise: String
-}
-
 add = async (req, res) => {
     try {
         req.body.photoUrls = [];
@@ -43,7 +35,7 @@ add = async (req, res) => {
 
 getAll = async (req, res) => {
     try {
-        var styles = await GymProgramModel.getGymPrograms({}, req.params.page, req.params.pageSize);
+        var styles = await GymProgramModel.getGymPrograms({userId: req.params.userId}, req.params.page, req.params.pageSize);
         let response = new SuccessResponse(styles, "all gym programs")
         res.status(status.SUCCESS).json(response);
     } catch (err) {
