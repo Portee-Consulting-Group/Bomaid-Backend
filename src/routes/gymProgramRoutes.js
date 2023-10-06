@@ -24,6 +24,9 @@ const AuthValidationMiddleware = require('../middleware/authValidationMiddleware
  *         reps:
  *           type: integer
  *           format: int32
+ *         calories:
+ *           type: integer
+ *           format: int32
  *         weight:
  *           type: integer
  *           format: int32
