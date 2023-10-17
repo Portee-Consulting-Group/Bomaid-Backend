@@ -154,6 +154,21 @@ getFits = async (req, res) => {
     }
 };
 
+getFitSumByDateRange = async (req, res) => {
+    try {
+        const { startDate, endDate } = req.query
+        var fits = await FitModel.findAll({
+            createdAt: { $gte: new Date(startDate), $lte: new Date(endDate) }
+        });
+        const sum = fits.reduce((acc, curr) => acc + curr.fitValue, 0);
+
+        let response = new SuccessResponse(sum, "sum of fits")
+        res.status(status.SUCCESS).json(response);
+    } catch (err) {
+        res.status(status.ERROR).json({ error: err.message });
+    }
+};
+
 getAllFits = async (req, res) => {
     try {
         var fits = await FitModel.getAllFits({}, req.params.page, req.params.pageSize);
@@ -180,5 +195,6 @@ module.exports = {
     getFits,
     getAllFits,
     getAllFitsByGoalType,
-    getFitStatistics
+    getFitStatistics,
+    getFitSumByDateRange
 };

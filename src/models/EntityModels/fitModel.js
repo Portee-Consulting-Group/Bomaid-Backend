@@ -68,8 +68,6 @@ update = async (query, fitData) => {
     return Fit.findOneAndUpdate(query, fitData, { new: true });
 };
 
-
-
 module.exports = {
     insert,
     findFit,

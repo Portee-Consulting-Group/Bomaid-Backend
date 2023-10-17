@@ -241,4 +241,33 @@ exports.routesConfig = function (app) {
     app.get('/fit/getFitStatistics/:userId', [
         FitController.getFitStatistics
     ]);
+
+    /**
+     * @swagger
+     * /fit/getFitSumByDateRange:
+     *  get:
+     *   summary: get fit sum by date range 
+     *   tags:  
+     *     - fit
+     *   parameters:
+     *    - in: query
+     *      name: startDate
+     *      schema:
+     *       type: string
+     *      required: true
+     *    - in: query
+     *      name: endDate
+     *      schema:
+     *       type: string
+     *      required: true
+     *   responses:
+     *      200:
+     *       description: successful response
+     *      400:
+     *       description: request failed
+     *    
+     */
+    app.get('/fit/getFitSumByDateRange', [
+        FitController.getFitSumByDateRange
+    ]);
 };
